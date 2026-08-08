@@ -3,6 +3,18 @@ import mockProducts from "../data/mockProducts.json";
 
 const BASE_URL = "https://dummyjson.com";
 
+const supportedCategories = [
+  "womens-bags",
+  "womens-dresses",
+  "womens-jewellery",
+  "womens-shoes",
+  "womens-watches",
+  "tops",
+  "skin-care",
+  "beauty",
+  "sunglasses",
+];
+
 function normalizeCategory(category) {
   if (!category) return null; // undefined, null, "" → no filter
   const normalized = String(category).trim().toLowerCase();
@@ -28,7 +40,9 @@ async function fetchScopedCatalog() {
         "Malformed response: expected data.products to be an array",
       );
     }
-    const items = data.products
+    const items = data.products.filter((p) =>
+      supportedCategories.includes(p.category),
+    );
     return { items, fromMock: false };
   } catch (error) {
     console.warn(`[productsAPI] Falling back to mock data — ${error.message}`);
