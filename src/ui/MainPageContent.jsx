@@ -13,7 +13,6 @@ const MainPageContent = () => {
       <Products />
       {/* <RoomInspirationSection /> */}
       <FuniroFurnitureSection />
-      <Footer />
     </div>
   );
 };
