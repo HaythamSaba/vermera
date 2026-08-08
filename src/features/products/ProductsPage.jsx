@@ -1,7 +1,7 @@
 import { SlidersHorizontal } from "lucide-react";
 import CoverBackgroundSection from "../../ui/CoverBackgroundSection";
 import Products from "./Products";
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import CategoriesList from "./CategoriesList";
@@ -9,6 +9,8 @@ import CategoriesList from "./CategoriesList";
 const ProductsPage = () => {
   const loaderProducts = useLoaderData();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get("category");
   const username = useSelector((state) => state.user.username);
   const [products, setProducts] = useState(loaderProducts || []);
   const [loading, setLoading] = useState(false);
@@ -38,6 +40,7 @@ const ProductsPage = () => {
       <Products
         navigate={navigate}
         username={username}
+        category={category}
         displayCount={displayCount}
         setDisplayCount={setDisplayCount}
         products={products}

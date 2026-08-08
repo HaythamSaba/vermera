@@ -3,7 +3,6 @@ import ProductItem from "./ProductItem";
 import MainButton from "../../ui/MainButton";
 import LoadingSpinner from "../../ui/LoadingSpinner";
 import { getProducts } from "../../services/apiProducts";
-import { getCategories } from "../../services/apiProducts";
 import CartOverview from "../cart/CartOverview";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -42,17 +41,6 @@ const Products = ({
 
   const totalCartQuantity = useSelector(getTotalCartQuantity);
 
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const data = await getCategories();
-      setCategories(data);
-    };
-    fetchCategories();
-  }, []);
-
-  console.log("categories", categories);
   useEffect(() => {
     // Self-managed mode: fetch once on mount since no external loader supplied the data.
     if (!isControlled) {
@@ -66,16 +54,16 @@ const Products = ({
       return;
     }
 
-    if (category) {
-      // Only re-fetch if filtering by category
-      const fetchByCategory = async () => {
-        setLoading(true);
-        const data = await getProducts({ category });
-        setProducts(data);
-        setLoading(false);
-      };
-      fetchByCategory();
-    }
+    // Controlled mode: re-fetch whenever the selected category changes,
+    // including back to no category (falsy `category` still means "show
+    // everything" per getProducts' own contract).
+    const fetchByCategory = async () => {
+      setLoading(true);
+      const data = await getProducts({ category });
+      setProducts(data);
+      setLoading(false);
+    };
+    fetchByCategory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, isControlled]);
 

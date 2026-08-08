@@ -3,7 +3,7 @@ import mockProducts from "../data/mockProducts.json";
 
 const BASE_URL = "https://dummyjson.com";
 
-const supportedCategories = [
+export const supportedCategories = [
   "womens-bags",
   "womens-dresses",
   "womens-jewellery",
@@ -104,7 +104,7 @@ function transformProduct(item) {
     NewPrice: round2(item.price), // DummyJSON's price IS the current/effective price
     OldPrice: hasDiscount
       ? round2(item.price / (1 - discountPercentage / 100))
-      : null,
+      : undefined,
     isNew: false, // DummyJSON has no trustworthy "new" signal — never derived from id/rating/stock/order
     isDiscount: hasDiscount,
     DiscountPercentage: discountPercentage,
@@ -151,11 +151,15 @@ export async function getProductsByCategory(category, limit = 20) {
   return getProducts({ category, limit });
 }
 
-// Categories supported by this storefront (DummyJSON slugs):
-// 'furniture', 'home-decoration', 'kitchen-accessories'
+// Categories supported by this storefront (DummyJSON slugs): see
+// `supportedCategories` above — womens-bags, womens-dresses,
+// womens-jewellery, womens-shoes, womens-watches, tops, skin-care, beauty,
+// sunglasses.
 
 export async function getCategories() {
-  //fetch the full catalog from DummyJSON, all of them
+  // Fetch DummyJSON's full category list, then narrow it to the slugs this
+  // storefront actually carries (DummyJSON may return plain strings or
+  // {slug, name, url} objects depending on the endpoint version).
   try {
     const res = await fetch(`${BASE_URL}/products/category-list`);
     if (!res.ok) {
@@ -166,7 +170,9 @@ export async function getCategories() {
       throw new Error("Malformed response: expected an array");
     }
 
-    return data;
+    return data.filter((c) =>
+      supportedCategories.includes(typeof c === "string" ? c : c?.slug),
+    );
   } catch (error) {
     console.error("Error fetching categories:", error);
     return [];

@@ -1,25 +1,55 @@
-import { useEffect, useState } from "react";
-import { getCategories, getProductsByCategory } from "../../services/apiProducts";
+import { useNavigate, useSearchParams } from "react-router";
+import { supportedCategories } from "../../services/apiProducts";
+
+const CATEGORY_LABELS = {
+  "womens-bags": "Bags",
+  "womens-dresses": "Dresses",
+  "womens-jewellery": "Jewellery",
+  "womens-shoes": "Shoes",
+  "womens-watches": "Watches",
+  tops: "Tops",
+  "skin-care": "Skin Care",
+  beauty: "Beauty",
+  sunglasses: "Sunglasses",
+};
 
 function CategoriesList() {
-  const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const activeCategory = searchParams.get("category") || "all";
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const data = await getCategories();
-      setCategories(data);
-    };
-    fetchCategories();
-  }, []);
+  const handleSelect = (slug) => {
+    if (slug === "all") {
+      navigate("/products");
+    } else {
+      navigate(`/products?category=${slug}`);
+    }
+  };
+
   return (
     <div className="flex gap-4 py-6 px-8 mb-8 bg-primary-100 overflow-x-auto">
-      {categories.map((category) => (
+      <span
+        key="all"
+        className={`py-2 px-4 w-full rounded-3xl text-center whitespace-nowrap cursor-pointer transition-colors duration-300 ${
+          activeCategory === "all"
+            ? "bg-primary-600 text-white"
+            : "bg-primary-500 text-white hover:bg-primary-600"
+        }`}
+        onClick={() => handleSelect("all")}
+      >
+        All
+      </span>
+      {supportedCategories.map((slug) => (
         <span
-          key={category.id}
-          className="py-2 px-4 bg-primary-500 text-white w-full rounded-3xl text-center whitespace-nowrap cursor-pointer hover:bg-primary-600 transition-colors duration-300"
-          onClick={() => getProductsByCategory(category.name)}
+          key={slug}
+          className={`py-2 px-4 w-full rounded-3xl text-center whitespace-nowrap cursor-pointer transition-colors duration-300 ${
+            activeCategory === slug
+              ? "bg-primary-600 text-white"
+              : "bg-primary-500 text-white hover:bg-primary-600"
+          }`}
+          onClick={() => handleSelect(slug)}
         >
-          {category}
+          {CATEGORY_LABELS[slug] ?? slug}
         </span>
       ))}
     </div>

@@ -1,9 +1,10 @@
-/* eslint-disable react-refresh/only-export-components */
 import { useLoaderData } from "react-router";
-import { getProductById } from "../../services/apiProducts";
+import { useDispatch } from "react-redux";
+import { addItem } from "../cart/cartSlice";
 
 const ProductPage = () => {
   const product = useLoaderData();
+  const dispatch = useDispatch();
 
   const {
     productName,
@@ -16,6 +17,13 @@ const ProductPage = () => {
     dimensions,
     stock,
   } = product;
+
+  const isOutOfStock = stock === 0;
+
+  const handleAddToCart = () => {
+    if (isOutOfStock) return;
+    dispatch(addItem(product));
+  };
 
   return (
     <div className="container mx-auto p-8 mt-12 ">
@@ -55,18 +63,17 @@ const ProductPage = () => {
             <strong>Stock:</strong> {stock} available
           </p>
 
-          <button className="bg-primary-500 text-white px-8 py-3 rounded-lg hover:bg-primary-600 transition">
-            Add to Cart
+          <button
+            onClick={handleAddToCart}
+            disabled={isOutOfStock}
+            className="bg-primary-500 text-white px-8 py-3 rounded-lg hover:bg-primary-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isOutOfStock ? "Sold Out" : "Add to Cart"}
           </button>
         </div>
       </div>
     </div>
   );
 };
-
-export async function loader({ params }) {
-  const product = await getProductById(params.sku);
-  return product;
-}
 
 export default ProductPage;
