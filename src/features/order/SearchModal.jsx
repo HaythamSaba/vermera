@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import useClickOutside from "../../hooks/useClickOutside";
 import useLockBodyScroll from "../../hooks/useLockBodyScroll";
@@ -14,19 +14,32 @@ const SearchModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const modalRef = useRef();
 
-  useClickOutside(modalRef, () => {
+  // Every close path (X button, click outside, Escape, submit) goes through
+  // this so the query is always cleared alongside notifying the parent.
+  const handleClose = () => {
     onClose();
     setQuery("");
-  });
+  };
+
+  useClickOutside(modalRef, handleClose);
 
   useLockBodyScroll(isOpen);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") handleClose();
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (!query) return;
     navigate(`/order/${query}`);
-    onClose();
-    setQuery("");
+    handleClose();
   };
 
   if (!isOpen) return null;
@@ -39,13 +52,12 @@ const SearchModal = ({ isOpen, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          onClick={() => {
-            onClose();
-            setQuery("");
-          }}
+          type="button"
+          onClick={handleClose}
+          aria-label="Close search"
           className="absolute top-4 right-4 text-gray-500 hover:text-black transition-colors"
         >
-          <X size={24} className="cursor-pointer"/>
+          <X size={24} className="cursor-pointer" aria-hidden="true" />
         </button>
 
         <SectionHeader title={"Search Your Order"} icon={""} />
