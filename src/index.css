@@ -1,5 +1,4 @@
 @import "tailwindcss";
-/* @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"); */
 
 @theme {
   --color-primary-50: #faf8ec;
@@ -13,10 +12,52 @@
   --color-primary-800: #6f4724;
   --color-primary-900: #603c23;
   --color-primary-950: #371f11;
+
+  /* Quiet-luxury visual foundation */
+  --color-ivory: #f6f3ee;
+  --color-cream: #fbf9f5;
+  --color-charcoal: #1c1c1c;
+  --color-espresso: #2b211c;
+  --color-taupe: #8b8178;
+  --color-stone: #d9d1c7;
+  --color-brass: #a3845b;
+
+  --font-serif: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-soft:
+    0 1px 2px rgba(28, 28, 28, 0.04), 0 10px 28px -16px rgba(28, 28, 28, 0.18);
 }
 
-* {
-  font-family: "Poppins", sans-serif;
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-charcoal);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brass);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 .template {
@@ -26,4 +67,17 @@
   margin-right: auto;
   padding-top: 30px;
   padding-bottom: 30px;
+}
+
+/* Responsive content-width container for the redesigned homepage sections */
+.container-foundation {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 5rem);
+}
+
+/* Consistent vertical rhythm between homepage sections */
+.section {
+  padding-block: clamp(3.5rem, 6vw, 6.5rem);
 }

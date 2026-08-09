@@ -30,6 +30,8 @@ const MainButton = ({
     ghost:
       "bg-transparent text-primary-500 hover:bg-primary-500 hover:bg-opacity-10",
     danger: "bg-white text-red-600 hover:text-white hover:bg-red-700",
+    quiet:
+      "bg-espresso border border-espresso text-cream hover:bg-transparent hover:text-espresso",
   };
 
   // Base styles

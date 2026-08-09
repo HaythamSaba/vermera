@@ -2,8 +2,8 @@ const FuniroFurnitureSection = () => {
   return (
     <div className="flex flex-col items-center">
       <div className="text-center mb-12">
-        <p className="font-semibold text-xl leading-[1.2] text-[#3A3A3A]">Share your setup with</p>
-        <h2 className="font-bold text-[40px] leading-[1.2] text-[#3A3A3A]">#FuniroFurniture</h2>
+        <p className="font-medium text-xl leading-[1.2] text-taupe">Share your setup with</p>
+        <h2 className="font-serif font-medium text-[40px] leading-[1.2] text-charcoal">#FuniroFurniture</h2>
       </div>
       <div className="grid grid-cols-12 grid-rows-8 gap-4 h-screen">
         {/* img:first-child => grid-area: 1 / 1 / 5 / 2 */}

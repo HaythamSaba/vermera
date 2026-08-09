@@ -32,7 +32,9 @@ const Header = () => {
     <>
       <header
         className={`top-0 left-0 right-0 z-60 py-6 font-medium px-8 lg:px-20 w-full transition-all duration-700 ${
-          isScrolled ? "bg-[#333333] shadow-lg fixed text-white" : "bg-white"
+          isScrolled
+            ? "bg-espresso fixed text-cream shadow-soft border-b border-espresso"
+            : "bg-cream text-charcoal border-b border-stone"
         }`}
       >
         <div className="flex w-full justify-between items-center">
@@ -43,16 +45,16 @@ const Header = () => {
 
           {/* Desktop nav */}
           <ul className="gap-10 lg:gap-12 xl:gap-20 items-center justify-between hidden lg:flex">
-            <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-black after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
+            <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-brass after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
               <Link to="/">Home</Link>
             </li>
-            <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-black after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
+            <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-brass after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
               <Link to="/products">Shop</Link>
             </li>
-            <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-black after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
+            <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-brass after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
               <Link to="/about">About</Link>
             </li>
-            <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-black after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
+            <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-brass after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
               <Link to="/contact">Contact</Link>
             </li>
           </ul>
@@ -93,11 +95,11 @@ const Header = () => {
       {/* Mobile Slide Menu */}
       <div
         ref={mobileMenuRef}
-        className={`fixed top-0 right-0 h-full w-64 bg-white shadow-xl z-70 transform transition-transform duration-500 ${
+        className={`fixed top-0 right-0 h-full w-64 bg-cream text-charcoal shadow-soft z-70 transform transition-transform duration-500 ${
           isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex justify-between items-center px-6 py-5 border-b">
+        <div className="flex justify-between items-center px-6 py-5 border-b border-stone">
           <p className="text-xl font-bold">Menu</p>
           <X
             className="cursor-pointer"
@@ -106,16 +108,16 @@ const Header = () => {
         </div>
 
         <ul className="flex flex-col gap-6 px-6 py-8 text-lg">
-          <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-black after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
+          <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-brass after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
             <Link to="/">Home</Link>
           </li>
-          <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-black after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
+          <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-brass after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
             <Link to="/products">Shop</Link>
           </li>
-          <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-black after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
+          <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-brass after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
             <Link to="/about">About</Link>
           </li>
-          <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-black after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
+          <li className="cursor-pointer relative after:content-[''] after:absolute after:bg-brass after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]">
             <Link to="/contact">Contact</Link>
           </li>
 
@@ -145,7 +147,7 @@ const Header = () => {
       {/* Overlay */}
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-60"
+          className="fixed inset-0 bg-charcoal/40 z-60"
           // onClick={() => setIsMobileMenuOpen(false)}
         ></div>
       )}
