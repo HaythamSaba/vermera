@@ -19,7 +19,6 @@ const AppLayout = () => {
   return (
     <div>
       <AnnouncementBar />
-      <Header />
       <main>
         {/* Main content will be rendered here */}
         <Outlet />

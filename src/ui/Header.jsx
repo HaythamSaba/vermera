@@ -117,7 +117,7 @@ const Header = () => {
     <>
       {/* Primary header — always in normal document flow, so nav/cart/search
           stay reachable even on pages too short to trigger the scrolled state. */}
-      <header className="top-0 left-0 right-0 z-60 py-6 font-medium px-8 lg:px-20 w-full bg-cream text-charcoal border-b border-stone">
+      <header className="top-0 left-0 right-0 z-60 py-6 font-medium px-8 lg:px-20 w-full bg-transparent text-charcoal">
         <div className="flex w-full justify-between items-center">
           <Link to="/" className="flex items-center gap-2">
             <img src="./images/main-logo.png" alt="logo" />
