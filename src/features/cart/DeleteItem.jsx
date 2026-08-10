@@ -10,7 +10,7 @@ const DeleteItem = ({ sku }) => {
   return (
     <button
       onClick={handleDelete}
-      className="text-red-500 hover:text-red-700 transition ml-2 p-4 bg-white rounded-full hover:bg-red-100"
+      className="text-red-500 hover:text-red-700 transition ml-2 p-4 bg-cream rounded-full hover:bg-red-100"
       title="Remove item"
     >
       <Trash2 className="w-4 h-4" />

@@ -26,7 +26,7 @@ const MainButton = ({
     secondary:
       "bg-white text-primary-500 border border-primary-500 hover:bg-primary-500 hover:text-white",
     outline:
-      "bg-transparent text-primary-500 border border-primary-500 hover:bg-primary-500 hover:text-white",
+      "bg-transparent text-espresso border border-espresso hover:bg-espresso hover:text-cream",
     ghost:
       "bg-transparent text-primary-500 hover:bg-primary-500 hover:bg-opacity-10",
     danger: "bg-white text-red-600 hover:text-white hover:bg-red-700",

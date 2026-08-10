@@ -13,18 +13,18 @@ const UpdateItemQuantity = ({ sku, quantity }) => {
     dispatch(decreaseItemQuantity(sku));
   };
   return (
-    <div className="flex items-center gap-2 border border-gray-300 bg-white rounded-md">
+    <div className="flex items-center gap-2 border border-stone bg-cream rounded-md">
       <button
         onClick={handleDecrease}
-        className="p-1 hover:bg-gray-100 transition"
+        className="p-1 hover:bg-stone/30 transition"
         title="Decrease quantity"
       >
         <Minus className="w-4 h-4" />
       </button>
-      <span className="px-3 font-medium">{quantity}</span>
+      <span className="px-3 font-medium text-charcoal">{quantity}</span>
       <button
         onClick={handleIncrease}
-        className="p-1 hover:bg-gray-100 transition"
+        className="p-1 hover:bg-stone/30 transition"
         title="Increase quantity"
       >
         <Plus className="w-4 h-4" />
