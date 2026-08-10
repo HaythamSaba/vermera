@@ -1,73 +1,71 @@
+import { Link } from "react-router";
+import { supportedCategories } from "../services/apiProducts";
+import { CATEGORY_LABELS } from "../features/products/categoryLabels";
+
+const linkClass = "hover:text-brass transition-colors duration-300";
+
 const Footer = () => {
-  const navItems = ["Home", "Shop", "About", "Contact"];
   return (
-    <div className="pt-20 bg-cream text-charcoal">
+    <footer className="bg-cream text-charcoal">
       <hr className="border-t border-stone" />
-      <footer className="container-foundation grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 py-8 lg:py-20">
-        <div className="flex flex-col lg:items-center">
-          <div className="flex flex-col gap-6 lg:gap-12">
-            <p className="text-2xl font-serif font-medium">Vermera.</p>
-            <p className="text-taupe">
-              400 University Drive Suite 200 Coral Gables, <br />
-              FL 33134 USA
-            </p>
-          </div>
+
+      <div className="container-foundation grid gap-10 sm:grid-cols-2 lg:grid-cols-3 py-12 lg:py-20">
+        {/* Brand */}
+        <div>
+          <p className="text-2xl font-serif font-medium mb-4">Vermera.</p>
+          <p className="text-taupe max-w-xs">
+            Considered pieces for everyday living.
+          </p>
         </div>
 
-        <div className="flex flex-col lg:items-center">
-          <div className="flex flex-col gap-6 lg:gap-12">
-            <p className="text-taupe">Links</p>
-            <ul className="flex flex-col gap-3 lg:gap-10 font-medium">
-              {navItems.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
-          </div>
+        {/* Shop */}
+        <div aria-label="Shop">
+          <p className="text-taupe font-medium mb-4">Shop</p>
+          <ul className="grid grid-cols-2 gap-3 ">
+            <li>
+              <Link to="/products" className={linkClass}>
+                All Products
+              </Link>
+            </li>
+            {supportedCategories.map((slug) => (
+              <li key={slug}>
+                <Link to={`/products?category=${slug}`} className={linkClass}>
+                  {CATEGORY_LABELS[slug] ?? slug}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <div className="flex flex-col lg:items-center">
-          <div className="flex flex-col gap-6 lg:gap-12">
-            <p className="text-taupe">Help</p>
-            <ul className="flex flex-col gap-3 lg:gap-10 font-medium">
-              <li>Payment Options</li>
-              <li>Returns</li>
-              <li>Privacy Policies</li>
-            </ul>
-          </div>
+        {/* Customer care */}
+        <div aria-label="Customer care">
+          <p className="text-taupe font-medium mb-4">Customer Care</p>
+          <ul className="flex flex-col gap-3">
+            <li>
+              <Link to="/cart" className={linkClass}>
+                Cart
+              </Link>
+            </li>
+            <li>
+              <Link to="/profile" className={linkClass}>
+                My Account
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className={linkClass}>
+                Contact Us
+              </Link>
+            </li>
+          </ul>
         </div>
+      </div>
 
-        <div className="flex flex-col lg:items-center">
-          <div className="flex flex-col gap-6 lg:gap-12">
-            <p className="text-taupe">Newsletter</p>
-            <form className="flex gap-4">
-              <div className="relative">
-                <input
-                  type="text"
-                  id="email"
-                  className="peer w-full border-b border-stone py-2"
-                  placeholder=" "
-                />
-                <label
-                  htmlFor="email"
-                  className="absolute left-0 top-2 text-taupe transition-all
-                  duration-300 peer-focus:-top-1.5 peer-focus:text-xs peer-focus:text-charcoal
-                  peer-placeholder-shown:top-2 peer-placeholder-shown:text-base"
-                >
-                  Enter your email
-                </label>
-              </div>
-
-              <button
-                type="submit"
-                className="border-b border-stone hover:text-brass transition-colors duration-300"
-              >
-                Subscribe
-              </button>
-            </form>
-          </div>
+      <div className="border-t border-stone">
+        <div className="container-foundation py-6 text-sm text-taupe text-center">
+          © {new Date().getFullYear()} Vermera. All rights reserved.
         </div>
-      </footer>
-    </div>
+      </div>
+    </footer>
   );
 };
 
