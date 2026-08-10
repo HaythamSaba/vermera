@@ -1,17 +1,6 @@
 import { useNavigate, useSearchParams } from "react-router";
 import { supportedCategories } from "../../services/apiProducts";
-
-const CATEGORY_LABELS = {
-  "womens-bags": "Bags",
-  "womens-dresses": "Dresses",
-  "womens-jewellery": "Jewellery",
-  "womens-shoes": "Shoes",
-  "womens-watches": "Watches",
-  tops: "Tops",
-  "skin-care": "Skin Care",
-  beauty: "Beauty",
-  sunglasses: "Sunglasses",
-};
+import { CATEGORY_LABELS } from "./categoryLabels";
 
 function CategoriesList() {
   const navigate = useNavigate();

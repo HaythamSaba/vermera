@@ -1,5 +1,5 @@
-import Home from "./Home";
-import BrowseRangeSection from "./BrowseRangeSection";
+import Hero from "./Hero";
+import CategoryShowcase from "./CategoryShowcase";
 import Products from "../features/products/Products";
 import FuniroFurnitureSection from "./FuniroFurnitureSection";
 import RoomInspirationSection from "./RoomInspirationSection";
@@ -7,8 +7,8 @@ import RoomInspirationSection from "./RoomInspirationSection";
 const MainPageContent = () => {
   return (
     <div>
-      <Home />
-      <BrowseRangeSection />
+      <Hero />
+      <CategoryShowcase />
       <Products />
       {/* <RoomInspirationSection /> */}
       <FuniroFurnitureSection />

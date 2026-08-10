@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { ImageOff } from "lucide-react";
 import MainButton from "./MainButton";
 
-const Home = () => {
+const Hero = () => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -61,4 +61,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Hero;
