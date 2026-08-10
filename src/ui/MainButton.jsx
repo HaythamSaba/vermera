@@ -38,7 +38,6 @@ const MainButton = ({
   const baseStyle = `
     flex items-center justify-center gap-2 
     capitalize font-bold
-    rounded-3xl
     cursor-pointer
     outline-none 
     transition-all duration-300 
