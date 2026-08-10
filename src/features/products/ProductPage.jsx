@@ -1,10 +1,15 @@
+import { useState } from "react";
 import { useLoaderData } from "react-router";
 import { useDispatch } from "react-redux";
+import { ImageOff } from "lucide-react";
 import { addItem } from "../cart/cartSlice";
+import MainButton from "../../ui/MainButton";
 
 const ProductPage = () => {
   const product = useLoaderData();
   const dispatch = useDispatch();
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const {
     productName,
@@ -18,6 +23,8 @@ const ProductPage = () => {
     stock,
   } = product;
 
+  let formattedCategory = category.replace(/-/g, " ");
+
   const isOutOfStock = stock === 0;
 
   const handleAddToCart = () => {
@@ -26,50 +33,72 @@ const ProductPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-8 mt-12 ">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="flex justify-center items-center">
-          <img
-            src={image}
-            alt={productName}
-            className=" w-[550px] object-cover rounded-lg"
-          />
+    <div className="container-foundation section">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+        <div className="relative aspect-square bg-stone/20 border border-stone overflow-hidden">
+          {!imageLoaded && !imageError && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-8 h-8 border-4 border-stone border-t-brass rounded-full animate-spin"></div>
+            </div>
+          )}
+          {imageError ? (
+            <div className="absolute inset-0 flex items-center justify-center text-taupe">
+              <div className="text-center px-6">
+                <ImageOff size={40} className="mx-auto mb-2 opacity-60" aria-hidden="true" />
+                <p className="text-sm">Image unavailable</p>
+              </div>
+            </div>
+          ) : (
+            <img
+              src={image}
+              alt={productName}
+              onLoad={() => setImageLoaded(true)}
+              onError={() => setImageError(true)}
+              className={`w-full h-full object-cover transition-opacity duration-300 ${
+                imageLoaded ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          )}
         </div>
+
         <div>
-          <h1 className="text-4xl font-bold mb-4">{productName}</h1>
-          <p className="text-gray-600 mb-4 capitalize">Category: {category}</p>
-          <p className="text-2xl font-bold mb-4">
+          <p className="text-taupe capitalize mb-2">{formattedCategory}</p>
+          <h1 className="font-serif text-espresso font-semibold text-3xl sm:text-4xl leading-tight mb-4">
+            {productName}
+          </h1>
+          <p className="text-2xl font-semibold text-charcoal mb-6">
             ${NewPrice.toFixed(2)}
             {OldPrice && (
-              <span className="text-gray-500 line-through ml-2">
+              <span className="text-taupe line-through ml-3 text-lg font-normal">
                 ${OldPrice.toFixed(2)}
               </span>
             )}
           </p>
-          <p className="text-gray-700 mb-6">{description}</p>
+          <p className="text-taupe leading-relaxed mb-8">{description}</p>
 
           {woodType && (
-            <p className="mb-2">
-              <strong>Wood Type:</strong> {woodType}
+            <p className="mb-2 text-charcoal">
+              <strong className="font-medium">Wood Type:</strong> {woodType}
             </p>
           )}
           {dimensions && (
-            <p className="mb-2">
-              <strong>Dimensions:</strong> {dimensions.width}W x{" "}
-              {dimensions.height}H x {dimensions.depth}D cm
+            <p className="mb-2 text-charcoal">
+              <strong className="font-medium">Dimensions:</strong>{" "}
+              {dimensions.width}W x {dimensions.height}H x {dimensions.depth}D
+              cm
             </p>
           )}
-          <p className="mb-4">
-            <strong>Stock:</strong> {stock} available
+          <p className="mb-8 text-charcoal">
+            <strong className="font-medium">Stock:</strong>{" "}
+            {isOutOfStock ? "Out of stock" : `${stock} available`}
           </p>
 
-          <button
-            onClick={handleAddToCart}
+          <MainButton
+            content={isOutOfStock ? "Sold Out" : "Add to Cart"}
+            variant="quiet"
             disabled={isOutOfStock}
-            className="bg-primary-500 text-white px-8 py-3 rounded-lg hover:bg-primary-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isOutOfStock ? "Sold Out" : "Add to Cart"}
-          </button>
+            onClick={handleAddToCart}
+          />
         </div>
       </div>
     </div>

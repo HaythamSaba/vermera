@@ -32,6 +32,11 @@ const MainButton = ({
     danger: "bg-white text-red-600 hover:text-white hover:bg-red-700",
     quiet:
       "bg-espresso border border-espresso text-cream hover:bg-transparent hover:text-espresso",
+    // Same idea as "quiet", inverted for use on dark surfaces (e.g. the
+    // product-card hover overlay) where a solid espresso button would
+    // disappear into the background.
+    light:
+      "bg-cream border border-cream text-espresso hover:bg-transparent hover:text-cream",
   };
 
   // Base styles
