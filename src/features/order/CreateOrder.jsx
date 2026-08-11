@@ -65,11 +65,13 @@ const CreateOrder = () => {
   if (cart.length === 0) return <EmptyCart />;
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div className="container-foundation section">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Checkout</h1>
-          <p className="text-gray-600">Complete your order</p>
+          <h1 className="text-4xl font-serif font-semibold text-espresso mb-2">
+            Checkout
+          </h1>
+          <p className="text-taupe">Complete your order</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -109,13 +111,13 @@ const CreateOrder = () => {
               <MainButton
                 type="submit"
                 fullWidth
+                variant="quiet"
                 loading={isSubmitting}
                 disabled={
                   isSubmitting || (!isExpressShipping && isLoadingAddress)
                 }
                 content={isSubmitting ? "Processing..." : "Place Order"}
                 size="large"
-                className="shadow-lg"
               />
             </Form>
           </div>

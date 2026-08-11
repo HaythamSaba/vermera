@@ -7,6 +7,7 @@ import {
   Truck,
   MapPin,
   Phone,
+  Mail,
   User,
   CreditCard,
   Calendar,
@@ -19,23 +20,19 @@ const OrderConfirmation = () => {
   const order = useLoaderData();
   const navigate = useNavigate();
 
-  // Debug: Log the order to see what we got
-  console.log("Order data:", order);
-
   // Safely check if order and items exist
   if (!order || !order.items) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12 px-4 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">
-            Order Not Found
-          </h1>
-          <p className="text-gray-600 mb-6">We couldn't find this order.</p>
-          <MainButton
-            content="Go to Products"
-            onClick={() => navigate("/products")}
-          />
-        </div>
+      <div className="container-foundation section text-center">
+        <h1 className="text-2xl font-serif font-semibold text-espresso mb-4">
+          Order Not Found
+        </h1>
+        <p className="text-taupe mb-6">We couldn't find this order.</p>
+        <MainButton
+          variant="quiet"
+          content="Go to Products"
+          onClick={() => navigate("/products")}
+        />
       </div>
     );
   }
@@ -66,49 +63,44 @@ const OrderConfirmation = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="container-foundation section">
       <div className="max-w-4xl mx-auto">
         {/* Success Header */}
         <div className="text-center mb-10">
           <div className="flex justify-center mb-4">
-            <CheckCircle className="w-20 h-20 text-green-500" />
+            <CheckCircle className="w-20 h-20 text-brass" aria-hidden="true" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl font-serif font-semibold text-espresso mb-2">
             Order Confirmed!
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-taupe">
             Thank you for your purchase, {order.customer.name}
           </p>
-          {order.orderNumber && (
-            <p className="text-sm text-gray-500 mt-2">
-              Order #{order.orderNumber}
-            </p>
-          )}
         </div>
 
         {/* Order Status */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <ChartNoAxesColumn className="w-5 h-5 mr-2 text-primary-500" />
+        <div className="bg-cream border border-stone p-6 mb-6">
+          <h3 className="text-lg font-serif font-medium text-espresso mb-4 flex items-center">
+            <ChartNoAxesColumn className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
             Order Status #{order.id}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-start gap-3">
-              <Calendar className="w-5 h-5 text-gray-400 mt-1" />
+              <Calendar className="w-5 h-5 text-taupe mt-1" aria-hidden="true" />
               <div>
-                <p className="text-sm text-gray-600">Order Date</p>
-                <p className="font-medium text-gray-900">{orderDate}</p>
+                <p className="text-sm text-taupe">Order Date</p>
+                <p className="font-medium text-charcoal">{orderDate}</p>
               </div>
             </div>
 
             <div className="flex items-start gap-3">
-              <Truck className="w-5 h-5 text-gray-400 mt-1" />
+              <Truck className="w-5 h-5 text-taupe mt-1" aria-hidden="true" />
               <div>
-                <p className="text-sm text-gray-600">Estimated Delivery</p>
-                <p className="font-medium text-gray-900">
+                <p className="text-sm text-taupe">Estimated Delivery</p>
+                <p className="font-medium text-charcoal">
                   {deliveryDate}
                   {order.fastOrder && (
-                    <span className="ml-2 text-xs bg-primary-100 text-primary-700 px-2 py-1 rounded">
+                    <span className="ml-2 text-xs bg-brass/15 text-espresso px-2 py-1 rounded">
                       Express
                     </span>
                   )}
@@ -121,32 +113,33 @@ const OrderConfirmation = () => {
         {/* Customer & Shipping Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {/* Customer Info */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <User className="w-5 h-5 mr-2 text-primary-500" />
+          <div className="bg-cream border border-stone p-6">
+            <h3 className="text-lg font-serif font-medium text-espresso mb-4 flex items-center">
+              <User className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
               Customer Information
             </h3>
             <div className="space-y-2 text-sm">
-              <p className="text-gray-900 font-medium">
-                Customer Name: {order.customer.name}
-              </p>
-              <p className="text-gray-600 flex items-center">
-                <Phone className="w-4 h-4 mr-2" />
+              <p className="text-charcoal font-medium">{order.customer.name}</p>
+              <p className="text-taupe flex items-center">
+                <Phone className="w-4 h-4 mr-2" aria-hidden="true" />
                 {order.customer.phone}
               </p>
               {order.customer.email && (
-                <p className="text-gray-600">📧 {order.customer.email}</p>
+                <p className="text-taupe flex items-center">
+                  <Mail className="w-4 h-4 mr-2" aria-hidden="true" />
+                  {order.customer.email}
+                </p>
               )}
             </div>
           </div>
 
           {/* Shipping Address */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <MapPin className="w-5 h-5 mr-2 text-primary-500" />
+          <div className="bg-cream border border-stone p-6">
+            <h3 className="text-lg font-serif font-medium text-espresso mb-4 flex items-center">
+              <MapPin className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
               Shipping Address
             </h3>
-            <div className="space-y-1 text-sm text-gray-600">
+            <div className="space-y-1 text-sm text-taupe">
               <p>{order.customer.address}</p>
               <p>
                 {order.customer.city}, {order.customer.zipCode}
@@ -157,9 +150,9 @@ const OrderConfirmation = () => {
         </div>
 
         {/* Order Items */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <Package className="w-5 h-5 mr-2 text-primary-500" />
+        <div className="bg-cream border border-stone p-6 mb-6">
+          <h3 className="text-lg font-serif font-medium text-espresso mb-4 flex items-center">
+            <Package className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
             Order Items ({order.items.length})
           </h3>
 
@@ -167,25 +160,25 @@ const OrderConfirmation = () => {
             {order.items.map((item) => (
               <div
                 key={item.sku}
-                className="flex gap-4 pb-4 border-b border-gray-200 last:border-0"
+                className="flex gap-4 pb-4 border-b border-stone last:border-0"
               >
                 <img
                   src={item.image}
                   alt={item.productName}
-                  className="w-20 h-20 object-cover rounded-lg"
+                  className="w-20 h-20 object-cover border border-stone"
                 />
                 <div className="flex-1">
-                  <h4 className="font-medium text-gray-900">
+                  <h4 className="font-medium text-charcoal">
                     {item.productName}
                   </h4>
-                  <p className="text-sm text-gray-500 capitalize">
+                  <p className="text-sm text-taupe capitalize">
                     Category: {item.category}
                   </p>
                   <div className="flex justify-between items-center mt-2">
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-taupe">
                       ${item.price.toFixed(2)} × {item.quantity}
                     </span>
-                    <span className="font-semibold text-primary-500">
+                    <span className="font-semibold text-espresso">
                       ${item.totalPrice.toFixed(2)}
                     </span>
                   </div>
@@ -195,11 +188,11 @@ const OrderConfirmation = () => {
           </div>
         </div>
 
-        {/* Order Summary */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <CreditCard className="w-5 h-5 mr-2 text-primary-500" />
+        {/* Payment Summary */}
+        <div className="bg-cream border border-stone p-6 mb-6">
+          <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
+            <h3 className="text-lg font-serif font-medium text-espresso flex items-center">
+              <CreditCard className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
               Payment Summary
             </h3>
             <UpdateOrder order={order} />
@@ -207,28 +200,40 @@ const OrderConfirmation = () => {
 
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">Subtotal</span>
-              <span className="font-medium">${subtotal.toFixed(2)}</span>
+              <span className="text-taupe">Subtotal</span>
+              <span className="font-medium text-charcoal">
+                ${subtotal.toFixed(2)}
+              </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">
+              <span className="text-taupe">
                 Shipping {order.fastOrder && "(Express)"}
               </span>
-              <span className="font-medium">${shipping.toFixed(2)}</span>
+              <span className="font-medium text-charcoal">
+                ${shipping.toFixed(2)}
+              </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">Tax</span>
-              <span className="font-medium">${tax.toFixed(2)}</span>
+              <span className="text-taupe">Tax</span>
+              <span className="font-medium text-charcoal">
+                ${tax.toFixed(2)}
+              </span>
             </div>
-            <div className="flex justify-between text-lg font-bold pt-3 border-t border-gray-200">
-              <p>Total Price <span className="text-md text-gray-500 font-light">(you will pay this amount on delivery)</span></p>
-              <span className="text-primary-500">${total.toFixed(2)}</span>
+            <div className="flex justify-between text-lg font-semibold pt-3 border-t border-stone">
+              <p className="text-charcoal">
+                Total Price{" "}
+                <span className="text-sm text-taupe font-normal">
+                  (you will pay this amount on delivery)
+                </span>
+              </p>
+              <span className="text-espresso">${total.toFixed(2)}</span>
             </div>
           </div>
         </div>
 
         <MainButton
           fullWidth
+          variant="quiet"
           content="Continue Shopping"
           onClick={() => navigate("/products")}
         >

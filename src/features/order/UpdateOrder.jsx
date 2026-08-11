@@ -11,9 +11,9 @@ const UpdateOrder = ({ order }) => {
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-sm font-medium text-gray-700">Shipping Speed:</p>
+      <p className="text-sm font-medium text-charcoal">Shipping Speed:</p>
 
-      <div className="flex gap-3">
+      <div className="flex gap-3 flex-wrap">
         {/* Standard Shipping Option */}
         <fetcher.Form method="PATCH">
           <input type="hidden" name="orderId" value={order.id} />
@@ -21,23 +21,23 @@ const UpdateOrder = ({ order }) => {
           <button
             type="submit"
             disabled={isUpdating || !currentlyExpress}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 border transition-all ${
               !currentlyExpress
-                ? "border-primary-500 bg-primary-50 text-primary-700"
-                : "border-gray-300 bg-white text-gray-700 hover:border-primary-300"
+                ? "border-brass bg-brass/10 text-espresso"
+                : "border-stone bg-cream text-charcoal hover:border-brass"
             } ${
               isUpdating || !currentlyExpress
                 ? "opacity-50 cursor-not-allowed"
                 : "cursor-pointer"
             }`}
           >
-            <Truck className="w-4 h-4" />
+            <Truck className="w-4 h-4" aria-hidden="true" />
             <div className="text-left">
               <p className="font-semibold text-sm">Standard</p>
               <p className="text-xs">5-7 days • $15.00</p>
             </div>
             {!currentlyExpress && (
-              <span className="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
+              <span className="ml-2 text-xs bg-brass/20 text-espresso px-2 py-0.5 rounded">
                 Active
               </span>
             )}
@@ -51,23 +51,23 @@ const UpdateOrder = ({ order }) => {
           <button
             type="submit"
             disabled={isUpdating || currentlyExpress}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 border transition-all ${
               currentlyExpress
-                ? "border-primary-500 bg-primary-50 text-primary-700"
-                : "border-gray-300 bg-white text-gray-700 hover:border-primary-300"
+                ? "border-brass bg-brass/10 text-espresso"
+                : "border-stone bg-cream text-charcoal hover:border-brass"
             } ${
               isUpdating || currentlyExpress
                 ? "opacity-50 cursor-not-allowed"
                 : "cursor-pointer"
             }`}
           >
-            <Zap className="w-4 h-4" />
+            <Zap className="w-4 h-4" aria-hidden="true" />
             <div className="text-left">
               <p className="font-semibold text-sm">Express</p>
               <p className="text-xs">1-2 days • $40.00</p>
             </div>
             {currentlyExpress && (
-              <span className="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
+              <span className="ml-2 text-xs bg-brass/20 text-espresso px-2 py-0.5 rounded">
                 Active
               </span>
             )}
@@ -76,7 +76,7 @@ const UpdateOrder = ({ order }) => {
       </div>
 
       {isUpdating && (
-        <p className="text-sm text-gray-600 animate-pulse">
+        <p className="text-sm text-taupe animate-pulse">
           Updating shipping method...
         </p>
       )}

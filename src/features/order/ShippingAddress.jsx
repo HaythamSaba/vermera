@@ -13,16 +13,17 @@ const ShippingAddress = ({
   position,
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="bg-cream border border-stone p-6">
+      <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
         <SectionHeader
           title="Shipping Address"
-          icon={<MapPin className="w-6 h-6 mr-2 text-primary-500" />}
+          icon={<MapPin className="w-6 h-6 mr-2 text-brass" aria-hidden="true" />}
         />
 
         {!position.latitude && !position.longitude && (
           <MainButton
-            type="secondary"
+            type="button"
+            variant="outline"
             size="small"
             onClick={(e) => {
               e.preventDefault();

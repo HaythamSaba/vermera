@@ -3,31 +3,31 @@ import { Truck } from "lucide-react";
 
 const ShippingOptions = ({ isExpressShipping, setIsExpressShipping }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-cream border border-stone p-6">
       <SectionHeader
         title="Shipping Options"
-        icon={<Truck className="w-6 h-6 mr-2 text-primary-500" />}
+        icon={<Truck className="w-6 h-6 mr-2 text-brass" aria-hidden="true" />}
       />
 
-      <div className="flex items-center p-4 border-2 border-gray-300 rounded-lg hover:border-primary-500 transition cursor-pointer">
+      <div className="flex items-center p-4 border border-stone hover:border-brass transition cursor-pointer">
         <input
           type="checkbox"
           name="fastOrder"
           id="fastOrder"
           checked={isExpressShipping}
           onChange={(e) => setIsExpressShipping(e.target.checked)}
-          className="w-5 h-5 text-primary-500"
+          className="w-5 h-5 accent-brass"
         />
 
         <label htmlFor="fastOrder" className="ml-3 cursor-pointer flex-1">
           <div className="flex justify-between items-center">
             <div>
-              <p className="font-semibold text-gray-900">Express Shipping</p>
-              <p className="text-sm text-gray-600">
+              <p className="font-semibold text-charcoal">Express Shipping</p>
+              <p className="text-sm text-taupe">
                 Delivery in 1-2 business days
               </p>
             </div>
-            <span className="font-semibold text-primary-500">+ $25.00</span>
+            <span className="font-semibold text-espresso">+ $25.00</span>
           </div>
         </label>
       </div>
