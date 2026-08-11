@@ -11,7 +11,9 @@ import {
 import MainButton from "../../ui/MainButton";
 import EmptyCart from "./EmptyCart";
 
-const Cart = () => {
+// `embedded`: render just the card, without the standalone-page container, for
+// reuse inside another page's own layout (e.g. the Profile sidebar).
+const Cart = ({ embedded = false }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -35,15 +37,14 @@ const Cart = () => {
   };
 
   // Empty cart state
-  if (cart.length === 0) return <EmptyCart />;
+  if (cart.length === 0) return <EmptyCart embedded={embedded} />;
 
-  return (
-    <div className="container-foundation section max-w-2xl mx-auto">
-      <div className="bg-cream border border-stone p-6 sm:p-8">
+  const card = (
+    <div className="bg-cream border border-stone p-6 sm:p-8">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-serif font-medium text-espresso flex items-center">
             <ShoppingCart className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
-            Cart Summary{username && `, ${username}`}
+            Cart Summary{!embedded && username && `, ${username}`}
           </h2>
           {cart.length > 0 && (
             <MainButton
@@ -63,7 +64,7 @@ const Cart = () => {
           ))}
         </div>
 
-        <div className="border-t border-stone pt-4 space-y-2 w-xl flex flex-col m-auto">
+        <div className="border-t border-stone pt-4 space-y-2 max-w-xl w-full flex flex-col m-auto">
           <div className="flex justify-between text-sm">
             <span className="text-taupe">Items</span>
             <span className="font-medium text-charcoal">{cartItemCount}</span>
@@ -97,8 +98,13 @@ const Cart = () => {
           className="mt-4"
           onClick={() => navigate("/products")}
         />
-      </div>
     </div>
+  );
+
+  if (embedded) return card;
+
+  return (
+    <div className="container-foundation section max-w-2xl mx-auto">{card}</div>
   );
 };
 

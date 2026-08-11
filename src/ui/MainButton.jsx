@@ -46,7 +46,7 @@ const MainButton = ({
     cursor-pointer
     outline-none 
     transition-all duration-300 
-    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary-500 disabled:hover:text-white disabled:hover:border-0
+    disabled:opacity-50 disabled:cursor-not-allowed disabled:border disabled:border-stone disabled:hover:bg-primary-500 disabled:hover:text-white 
     ${sizeStyles[size]} 
     ${variantStyles[variant]}
     ${fullWidth ? "w-full" : ""}
