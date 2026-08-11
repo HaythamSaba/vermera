@@ -14,6 +14,9 @@ import { getTotalCartQuantity } from "../cart/cartSlice";
 // (e.g. when embedded standalone on the home page).
 const Products = ({
   category = null,
+  sort = "newest",
+  minPrice = null,
+  maxPrice = null,
   setProducts: setProductsProp,
   products: productsProp,
   loading: loadingProp,
@@ -46,7 +49,7 @@ const Products = ({
     if (!isControlled) {
       const fetchInitial = async () => {
         setLoading(true);
-        const data = await getProducts({ category });
+        const data = await getProducts({ category, sort, minPrice, maxPrice });
         setProducts(data);
         setLoading(false);
       };
@@ -54,26 +57,26 @@ const Products = ({
       return;
     }
 
-    // Controlled mode: re-fetch whenever the selected category changes,
-    // including back to no category (falsy `category` still means "show
+    // Controlled mode: re-fetch whenever category, sort, or price filters
+    // change, including back to "no filter" (falsy values still mean "show
     // everything" per getProducts' own contract).
-    const fetchByCategory = async () => {
+    const fetchFiltered = async () => {
       setLoading(true);
-      const data = await getProducts({ category });
+      const data = await getProducts({ category, sort, minPrice, maxPrice });
       setProducts(data);
       setLoading(false);
     };
-    fetchByCategory();
+    fetchFiltered();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, isControlled]);
+  }, [category, sort, minPrice, maxPrice, isControlled]);
 
   const handleLoadMore = () => {
     setDisplayCount((prev) => prev + 8);
-    console.log("displayCount", displayCount);
   };
 
   const displayedProducts = products?.slice(0, displayCount);
   const hasMore = displayCount < products?.length;
+  const hasActiveFilters = category || minPrice != null || maxPrice != null;
 
   const handleVeiwCart = () => {
     if (!username) return navigate("/profile");
@@ -86,11 +89,12 @@ const Products = ({
 
   if (error) {
     return (
-      <section className="template flex flex-col items-center">
+      <section className="container-foundation section flex flex-col items-center">
         <div className="text-center py-16">
           <p className="text-red-600 text-lg mb-4">{error}</p>
           <MainButton
             content="Retry"
+            variant="quiet"
             onClick={() => window.location.reload()}
           />
         </div>
@@ -100,13 +104,15 @@ const Products = ({
 
   if (products.length === 0) {
     return (
-      <section className="template flex flex-col items-center">
+      <section className="container-foundation section flex flex-col items-center">
         <div className="text-center py-16">
-          <h2 className="text-[40px] font-bold text-[#3A3A3A] mb-4">
+          <h2 className="text-[40px] font-serif font-medium text-espresso mb-4">
             Our Products
           </h2>
-          <p className="text-gray-600 text-lg">
-            No products available at the moment.
+          <p className="text-taupe text-lg">
+            {hasActiveFilters
+              ? "No products match your current filters."
+              : "No products available at the moment."}
           </p>
         </div>
       </section>
@@ -115,12 +121,14 @@ const Products = ({
 
   return (
     <>
-      <section className="template flex flex-col items-center relative my-20">
+      <section className="container-foundation section flex flex-col items-center relative">
         <CartOverview />
         <div className="text-center mb-16">
-          <h2 className="text-[40px] font-bold text-[#3A3A3A]">Our Products</h2>
+          <h2 className="text-[40px] font-serif font-medium text-espresso">
+            Our Products
+          </h2>
           {category && (
-            <p className="text-gray-600 mt-2 text-lg capitalize">
+            <p className="text-taupe mt-2 text-lg capitalize">
               Showing {category} collection
             </p>
           )}
@@ -134,7 +142,11 @@ const Products = ({
 
         <div className="flex items-center justify-center my-8">
           {hasMore && (
-            <MainButton content="Load More" onClick={handleLoadMore} />
+            <MainButton
+              content="Load More"
+              variant="quiet"
+              onClick={handleLoadMore}
+            />
           )}
           {totalCartQuantity > 0 && (
             <MainButton
@@ -147,7 +159,7 @@ const Products = ({
         </div>
 
         {!hasMore && products.length > 8 && (
-          <p className="text-gray-500 mt-4">
+          <p className="text-taupe mt-4">
             Showing all {products.length} products
           </p>
         )}

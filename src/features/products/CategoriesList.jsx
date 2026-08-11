@@ -7,22 +7,26 @@ function CategoriesList() {
   const [searchParams] = useSearchParams();
   const activeCategory = searchParams.get("category") || "all";
 
+  // Preserve any existing sort/price-filter params — only category changes.
   const handleSelect = (slug) => {
+    const next = new URLSearchParams(searchParams);
     if (slug === "all") {
-      navigate("/products");
+      next.delete("category");
     } else {
-      navigate(`/products?category=${slug}`);
+      next.set("category", slug);
     }
+    const query = next.toString();
+    navigate(query ? `/products?${query}` : "/products");
   };
 
   return (
-    <div className="flex gap-4 py-6 px-8 mb-8 bg-primary-100 overflow-x-auto">
+    <div className="flex gap-3 py-6 px-8 mb-8 bg-cream border-b border-stone overflow-x-auto">
       <span
         key="all"
-        className={`py-2 px-4 w-full rounded-3xl text-center whitespace-nowrap cursor-pointer transition-colors duration-300 ${
+        className={`py-2 px-4 w-full text-center whitespace-nowrap cursor-pointer transition-colors duration-300 border ${
           activeCategory === "all"
-            ? "bg-primary-600 text-white"
-            : "bg-primary-500 text-white hover:bg-primary-600"
+            ? "bg-espresso text-cream border-espresso"
+            : "bg-cream text-charcoal border-stone hover:border-brass"
         }`}
         onClick={() => handleSelect("all")}
       >
@@ -31,10 +35,10 @@ function CategoriesList() {
       {supportedCategories.map((slug) => (
         <span
           key={slug}
-          className={`py-2 px-4 w-full rounded-3xl text-center whitespace-nowrap cursor-pointer transition-colors duration-300 ${
+          className={`py-2 px-4 w-full text-center whitespace-nowrap cursor-pointer transition-colors duration-300 border ${
             activeCategory === slug
-              ? "bg-primary-600 text-white"
-              : "bg-primary-500 text-white hover:bg-primary-600"
+              ? "bg-espresso text-cream border-espresso"
+              : "bg-cream text-charcoal border-stone hover:border-brass"
           }`}
           onClick={() => handleSelect(slug)}
         >
