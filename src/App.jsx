@@ -21,6 +21,7 @@ import ProductPage from "./features/products/ProductPage";
 import { action as updateOrderAction } from "./features/order/UpdateOrder";
 import Contact from "./ui/Contact";
 import ProductsPage from "./features/products/ProductsPage";
+import { Analytics } from "@vercel/analytics/next";
 
 const router = createBrowserRouter([
   {
@@ -74,7 +75,12 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <Analytics />
+    </>
+  );
 };
 
 export default App;
