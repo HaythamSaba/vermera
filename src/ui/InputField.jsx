@@ -12,7 +12,7 @@ const InputField = ({
   className,
 }) => {
   return (
-    <>
+    <div>
       {hasLabel && (
         <label
           htmlFor={id}
@@ -32,7 +32,7 @@ const InputField = ({
         onKeyDown={onKeyDown}
         className={`${className} w-full border border-stone bg-cream outline-none p-3 transition`}
       />
-    </>
+    </div>
   );
 };
 
