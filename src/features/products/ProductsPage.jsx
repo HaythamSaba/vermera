@@ -40,7 +40,7 @@ const ProductsPage = () => {
 
   return (
     <div>
-      <CoverBackgroundSection title={"Shop"} path={["Home", "products"]} />
+      <CoverBackgroundSection title={"Shop"} path={["Home", "Shop"]} />
 
       <ProductsSection
         navigate={navigate}
