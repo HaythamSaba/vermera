@@ -21,7 +21,7 @@ import ProductPage from "./features/products/ProductPage";
 import { action as updateOrderAction } from "./features/order/UpdateOrder";
 import Contact from "./ui/Contact";
 import ProductsPage from "./features/products/ProductsPage";
-import { Analytics } from "@vercel/analytics/next";
+import { Analytics } from "@vercel/analytics/react";
 
 const router = createBrowserRouter([
   {
