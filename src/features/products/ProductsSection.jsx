@@ -1,6 +1,7 @@
 import CategoriesList from "./CategoriesList";
 import Products from "./Products";
 import PriceFilterPanel from "./PriceFilterPanel";
+import CartOverview from "../cart/CartOverview";
 
 // Matches the sort values apiProducts.js's getProducts() already supports.
 const SORT_OPTIONS = [
@@ -72,6 +73,8 @@ function ProductsSection({
         loading={loading}
         setLoading={setLoading}
       />
+      <CartOverview />
+
       <Products
         navigate={navigate}
         username={username}

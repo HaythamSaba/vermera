@@ -78,7 +78,7 @@ const Products = ({
   const hasMore = displayCount < products?.length;
   const hasActiveFilters = category || minPrice != null || maxPrice != null;
 
-  const handleVeiwCart = () => {
+  const handleViewCart = () => {
     if (!username) return navigate("/profile");
     navigate("/cart");
   };
@@ -121,8 +121,7 @@ const Products = ({
 
   return (
     <>
-      <section className="container-foundation section flex flex-col items-center relative">
-        <CartOverview />
+      <section className="container-foundation section flex flex-col">
         <div className="text-center mb-16">
           <h2 className="text-[40px] font-serif font-medium text-espresso">
             Our Products
@@ -151,7 +150,7 @@ const Products = ({
           {totalCartQuantity > 0 && (
             <MainButton
               content={`View Cart (${totalCartQuantity})`}
-              onClick={() => handleVeiwCart()}
+              onClick={handleViewCart}
               className="ml-4"
               variant="outline"
             />
