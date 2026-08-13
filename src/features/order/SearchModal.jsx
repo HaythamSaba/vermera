@@ -45,17 +45,17 @@ const SearchModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 bg-opacity-50 z-50 flex items-start justify-center pt-32">
+    <div className="fixed inset-0 bg-charcoal/50 z-50 flex items-start justify-center pt-32">
       <div
         ref={modalRef}
-        className="bg-white rounded-lg shadow-xl p-8 w-full max-w-2xl mx-4 relative"
+        className="bg-cream shadow-soft p-8 w-full max-w-2xl mx-4 relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           type="button"
           onClick={handleClose}
           aria-label="Close search"
-          className="absolute top-4 right-4 text-gray-500 hover:text-black transition-colors"
+          className="absolute top-4 right-4 text-taupe hover:text-charcoal transition-colors"
         >
           <X size={24} className="cursor-pointer" aria-hidden="true" />
         </button>
@@ -63,24 +63,27 @@ const SearchModal = ({ isOpen, onClose }) => {
         <SectionHeader title={"Search Your Order"} icon={""} />
 
         <div className="flex gap-3 md:flex-row flex-col">
-          <InputField
-            id={"orderId"}
-            type={"text"}
-            name={"orderId"}
-            placeholder={"Enter your order ID..."}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSearchSubmit(e);
-              }
-            }}
-            required
-          />
+          <div className="flex-1">
+            <InputField
+              id={"orderId"}
+              type={"text"}
+              name={"orderId"}
+              placeholder={"Enter your order ID..."}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearchSubmit(e);
+                }
+              }}
+              isRequired
+            />
+          </div>
           <MainButton
             onClick={handleSearchSubmit}
             content={"Search"}
             size="medium"
+            variant="quiet"
           />
         </div>
       </div>
