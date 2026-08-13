@@ -20,9 +20,15 @@ function CategoriesList() {
   };
 
   return (
-    <div className="flex gap-3 py-6 px-8 mb-8 bg-cream border-b border-stone overflow-x-auto">
-      <span
+    <div
+      role="group"
+      aria-label="Filter by category"
+      className="flex gap-3 py-6 px-8 mb-8 bg-cream border-b border-stone overflow-x-auto"
+    >
+      <button
+        type="button"
         key="all"
+        aria-pressed={activeCategory === "all"}
         className={`py-2 px-4 w-full text-center whitespace-nowrap cursor-pointer transition-colors duration-300 border ${
           activeCategory === "all"
             ? "bg-espresso text-cream border-espresso"
@@ -31,10 +37,12 @@ function CategoriesList() {
         onClick={() => handleSelect("all")}
       >
         All
-      </span>
+      </button>
       {supportedCategories.map((slug) => (
-        <span
+        <button
+          type="button"
           key={slug}
+          aria-pressed={activeCategory === slug}
           className={`py-2 px-4 w-full text-center whitespace-nowrap cursor-pointer transition-colors duration-300 border ${
             activeCategory === slug
               ? "bg-espresso text-cream border-espresso"
@@ -43,7 +51,7 @@ function CategoriesList() {
           onClick={() => handleSelect(slug)}
         >
           {CATEGORY_LABELS[slug] ?? slug}
-        </span>
+        </button>
       ))}
     </div>
   );
