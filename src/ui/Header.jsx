@@ -117,7 +117,7 @@ const Header = () => {
     <>
       {/* Primary header — always in normal document flow, so nav/cart/search
           stay reachable even on pages too short to trigger the scrolled state. */}
-      <header className="top-0 left-0 right-0 z-60 py-6 font-medium px-8 lg:px-20 w-full bg-transparent text-charcoal">
+      <header className="top-0 left-0 right-0 z-60 py-6 font-medium mx-auto px-[clamp(1.25rem,4vw,5rem)] w-full bg-transparent text-charcoal">
         <div className="flex w-full justify-between items-center">
           <Link to="/" className="flex items-center gap-2">
             <img src="./images/main-logo.png" alt="logo" />
@@ -224,7 +224,7 @@ const Header = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -80, opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className="fixed top-0 left-0 right-0 z-60 py-4 font-medium px-8 lg:px-20 w-full bg-espresso/80 text-cream shadow-soft border-b border-espresso backdrop-blur-lg"
+            className="fixed top-0 left-0 right-0 z-60 py-4 font-medium mx-auto px-[clamp(1.25rem,4vw,5rem)] w-full bg-espresso/80 text-cream shadow-soft border-b border-espresso backdrop-blur-lg"
           >
             <div className="flex w-full justify-between items-center">
               <Link to="/" className="flex items-center gap-2">
@@ -363,12 +363,12 @@ const Header = () => {
               </button>
             </li>
             <li className="flex items-center cursor-pointer">
-                <CartIcon
-                  className="inline-block mr-3"
-                  size={20}
-                  aria-hidden="true"
-                />
-                Cart
+              <CartIcon
+                className="inline-block mr-3"
+                size={20}
+                aria-hidden="true"
+              />
+              Cart
             </li>
           </ul>
         </nav>
