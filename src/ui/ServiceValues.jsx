@@ -36,7 +36,7 @@ const ServiceValues = () => {
           return (
             <div
               key={item.title}
-              className="relative text-center sm:text-left bg-white p-8 border border-stone rounded-xl hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300"
+              className="relative text-center sm:text-left bg-cream p-8 border border-stone hover:shadow-soft hover:-translate-y-1.5 transition-all duration-300"
             >
               <Icon
                 className="mx-auto sm:mx-0 mb-4 text-brass"
