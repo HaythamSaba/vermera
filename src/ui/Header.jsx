@@ -9,19 +9,19 @@ import useLockBodyScroll from "../hooks/useLockBodyScroll";
 import { getTotalCartQuantity } from "../features/cart/cartSlice";
 
 const navLinkClass =
-  "cursor-pointer relative after:content-[''] after:absolute after:bg-brass after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]";
+  "w-fit cursor-pointer relative after:content-[''] after:absolute after:bg-brass after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]";
 
 const MotionHeader = motion.header;
 
 // Shared cart icon + real Redux item count, reused across the primary
 // header, the floating scrolled header, and the mobile bar.
-const CartIcon = () => {
+const CartIcon = ({ className }) => {
   const totalCartQuantity = useSelector(getTotalCartQuantity);
 
   return (
     <Link
       to="/cart"
-      className="relative inline-flex"
+      className={`relative inline-flex ${className}`}
       aria-label={`Cart, ${totalCartQuantity} item${totalCartQuantity === 1 ? "" : "s"}`}
     >
       <ShoppingCart className="cursor-pointer" aria-hidden="true" />
@@ -228,7 +228,11 @@ const Header = () => {
           >
             <div className="flex w-full justify-between items-center">
               <Link to="/" className="flex items-center gap-2">
-                <img src="./images/main-logo.png" alt="logo" className="h-8 w-auto" />
+                <img
+                  src="./images/main-logo.png"
+                  alt="logo"
+                  className="h-8 w-auto"
+                />
                 <p className="text-2xl font-bold">Vermera</p>
               </Link>
 
@@ -297,7 +301,7 @@ const Header = () => {
         role="dialog"
         aria-modal="true"
         aria-label="Mobile menu"
-        className={`fixed top-0 right-0 h-full w-64 bg-cream text-charcoal shadow-soft z-70 transform transition-transform duration-500 ${
+        className={`fixed top-0 right-0 h-full w-64 bg-cream text-charcoal shadow-soft z-50 transform transition-transform duration-500 ${
           isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -335,9 +339,36 @@ const Header = () => {
 
             <li>
               <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)}>
-                <User className="inline-block mr-3" size={20} aria-hidden="true" />
+                <User
+                  className="inline-block mr-3"
+                  size={20}
+                  aria-hidden="true"
+                />
                 Profile
               </Link>
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={() => setIsSearchOpen(true)}
+                aria-label="Search your order"
+                className="flex items-center cursor-pointer"
+              >
+                <Search
+                  size={20}
+                  className="inline-block mr-3"
+                  aria-hidden="true"
+                />
+                Search
+              </button>
+            </li>
+            <li className="flex items-center cursor-pointer">
+                <CartIcon
+                  className="inline-block mr-3"
+                  size={20}
+                  aria-hidden="true"
+                />
+                Cart
             </li>
           </ul>
         </nav>
@@ -346,13 +377,16 @@ const Header = () => {
       {/* Overlay */}
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-charcoal/40 z-60"
+          className="fixed inset-0 bg-charcoal/40 z-40"
           onClick={() => setIsMobileMenuOpen(false)}
         ></div>
       )}
 
       {/* Search Modal (desktop + floating-bar mobile) */}
-      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
     </>
   );
 };
