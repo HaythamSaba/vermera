@@ -163,9 +163,7 @@ export async function action({ request }) {
     id: orderId,
     customer: {
       name: data.fullName,
-      email:
-        data.email ||
-        `${data.fullName.toLowerCase().replace(/\s+/g, "")}@example.com`,
+      email: data.email || undefined,
       phone: data.phoneNumber,
       address: data.address,
       city: data.city,

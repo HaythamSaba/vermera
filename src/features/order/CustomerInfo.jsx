@@ -1,6 +1,6 @@
 import SectionHeader from "../../ui/SectionHeader";
 import InputField from "../../ui/InputField";
-import { Phone, User } from "lucide-react";
+import { Mail, Phone, User } from "lucide-react";
 
 const CustomerInfo = ({ formErrors, username }) => {
   return (
@@ -51,6 +51,28 @@ const CustomerInfo = ({ formErrors, username }) => {
               {formErrors.phoneNumber}
             </p>
           )}
+        </div>
+
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-charcoal mb-2"
+          >
+            Email (optional)
+          </label>
+          <div className="relative">
+            <Mail
+              className="absolute left-3 top-3.5 w-5 h-5 text-taupe"
+              aria-hidden="true"
+            />
+            <input
+              id="email"
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              className="w-full pl-11 border border-stone bg-cream outline-none p-3"
+            />
+          </div>
         </div>
       </div>
     </div>
