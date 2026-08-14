@@ -1,16 +1,21 @@
-const InputField = ({
-  id,
-  type,
-  name,
-  placeholder,
-  isRequired,
-  defaultValue,
-  onChange,
-  hasLabel,
-  onKeyDown,
-  labelText,
-  className,
-}) => {
+import { forwardRef } from "react";
+
+const InputField = forwardRef(function InputField(
+  {
+    id,
+    type,
+    name,
+    placeholder,
+    isRequired,
+    defaultValue,
+    onChange,
+    hasLabel,
+    onKeyDown,
+    labelText,
+    className,
+  },
+  ref
+) {
   return (
     <div>
       {hasLabel && (
@@ -22,6 +27,7 @@ const InputField = ({
         </label>
       )}
       <input
+        ref={ref}
         id={id}
         type={type}
         name={name}
@@ -34,6 +40,6 @@ const InputField = ({
       />
     </div>
   );
-};
+});
 
 export default InputField;

@@ -13,6 +13,7 @@ const SearchModal = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
   const modalRef = useRef();
+  const inputRef = useRef();
 
   // Every close path (X button, click outside, Escape, submit) goes through
   // this so the query is always cleared alongside notifying the parent.
@@ -24,6 +25,12 @@ const SearchModal = ({ isOpen, onClose }) => {
   useClickOutside(modalRef, handleClose);
 
   useLockBodyScroll(isOpen);
+
+  // Move focus into the dialog when it opens, matching the header's mobile
+  // drawer convention.
+  useEffect(() => {
+    if (isOpen) inputRef.current?.focus();
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -48,6 +55,9 @@ const SearchModal = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 bg-charcoal/50 z-50 flex items-start justify-center pt-32">
       <div
         ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Search your order"
         className="bg-cream shadow-soft p-8 w-full max-w-2xl mx-4 relative"
         onClick={(e) => e.stopPropagation()}
       >
@@ -65,11 +75,11 @@ const SearchModal = ({ isOpen, onClose }) => {
         <div className="flex gap-3 md:flex-row flex-col">
           <div className="flex-1">
             <InputField
+              ref={inputRef}
               id={"orderId"}
               type={"text"}
               name={"orderId"}
               placeholder={"Enter your order ID..."}
-              value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
