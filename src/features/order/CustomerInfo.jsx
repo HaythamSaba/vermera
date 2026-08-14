@@ -1,8 +1,23 @@
+import { useEffect, useRef } from "react";
 import SectionHeader from "../../ui/SectionHeader";
 import InputField from "../../ui/InputField";
 import { Mail, Phone, User } from "lucide-react";
 
 const CustomerInfo = ({ formErrors, username }) => {
+  const phoneInputRef = useRef(null);
+
+  // Move focus (and the viewport) to the phone field when server-side
+  // validation rejects it — otherwise the error renders silently off-screen.
+  useEffect(() => {
+    if (formErrors?.phoneNumber) {
+      phoneInputRef.current?.focus();
+      phoneInputRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [formErrors]);
+
   return (
     <div className="bg-cream border border-stone p-6">
       <SectionHeader
@@ -35,11 +50,16 @@ const CustomerInfo = ({ formErrors, username }) => {
               aria-hidden="true"
             />
             <input
+              ref={phoneInputRef}
               id="phoneNumber"
               type="tel"
               name="phoneNumber"
               required
               placeholder="+1 (555) 123-4567"
+              aria-invalid={!!formErrors?.phoneNumber}
+              aria-describedby={
+                formErrors?.phoneNumber ? "phoneNumber-error" : undefined
+              }
               className={`w-full pl-11 border ${
                 formErrors?.phoneNumber ? "border-red-500" : "border-stone"
               } bg-cream outline-none p-3`}
@@ -47,7 +67,7 @@ const CustomerInfo = ({ formErrors, username }) => {
           </div>
 
           {formErrors?.phoneNumber && (
-            <p className="text-red-500 text-sm mt-1">
+            <p id="phoneNumber-error" role="alert" className="text-red-500 text-sm mt-1">
               {formErrors.phoneNumber}
             </p>
           )}
