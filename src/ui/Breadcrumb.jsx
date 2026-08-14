@@ -9,7 +9,7 @@ const Breadcrumb = ({ path }) => {
     return (
       <span key={i} className="text-md font-medium">
         {isLast ? (
-          label
+          <span aria-current="page">{label}</span>
         ) : (
           <Link to={link} className="hover:underline">
             {label}
@@ -20,7 +20,11 @@ const Breadcrumb = ({ path }) => {
     );
   });
 
-  return <div>{segments}</div>;
+  return (
+    <nav aria-label="Breadcrumb">
+      <div>{segments}</div>
+    </nav>
+  );
 };
 
 export default Breadcrumb;
