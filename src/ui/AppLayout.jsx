@@ -1,27 +1,27 @@
 import { Outlet, useNavigation } from "react-router";
 import Header from "./Header";
 import Footer from "./Footer";
-import LoadingSpinner from "./LoadingSpinner";
 import AnnouncementBar from "./AnnouncementBar";
 
 const AppLayout = () => {
   const navigation = useNavigation();
   const isLoading = navigation.state === "loading";
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <LoadingSpinner />
-      </div>
-    );
-  }
-
   return (
     <div>
+      {/* Slim top progress indicator — React Router already keeps the
+          previous page mounted while a loader runs, so we only need a cue
+          that a navigation is in flight, not a full-page takeover. */}
+      {isLoading && (
+        <div
+          role="progressbar"
+          aria-label="Loading"
+          className="fixed top-0 left-0 right-0 z-70 h-[3px] bg-brass animate-pulse"
+        />
+      )}
       <AnnouncementBar />
       <Header />
       <main>
-        {/* Main content will be rendered here */}
         <Outlet />
       </main>
       <Footer />
