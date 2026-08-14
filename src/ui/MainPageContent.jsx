@@ -11,9 +11,9 @@ const MainPageContent = () => {
       <Hero />
       <CategoryShowcase />
       <Products />
-      <EditorialBanner />
-      <ServiceValues />
       <InspirationSection />
+      <ServiceValues />
+      <EditorialBanner />
     </div>
   );
 };
