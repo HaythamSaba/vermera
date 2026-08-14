@@ -1,8 +1,13 @@
 // A calm, text-only brand-story moment. The CTA is intentionally omitted:
 // there is no About/brand-story route to link "Read our story" to yet, and
 // a button that goes nowhere would be a dishonest affordance. Re-add it as
+
+import { useNavigate } from "react-router";
+import MainButton from "./MainButton";
+
 // a real Link once that page exists.
 const EditorialBanner = () => {
+  const navigate = useNavigate();
   return (
     <section className="bg-cream border-y border-stone">
       <div className="container-foundation section">
@@ -14,9 +19,17 @@ const EditorialBanner = () => {
             Objects made to belong.
           </h2>
           <p className="text-taupe text-lg leading-relaxed">
-            Discover considered forms, warm materials, and details designed
-            for everyday living.
+            Discover considered forms, warm materials, and details designed for
+            everyday living.
           </p>
+          <div className="mt-8 flex justify-center">
+            <MainButton
+              content="Explore Our Products"
+              size="medium"
+              variant="primary"
+              onClick={() => navigate("/products")}
+            />
+          </div>
         </div>
       </div>
     </section>
