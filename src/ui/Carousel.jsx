@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const CAROUSEL_TIERS = {
@@ -31,8 +32,10 @@ function useCarouselTier() {
 
   return tier;
 }
+
 const Carousel = ({ children, clothes }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();
 
   const tier = useCarouselTier();
   const { active, inactive, gap } = CAROUSEL_TIERS[tier];
@@ -78,8 +81,8 @@ const Carousel = ({ children, clothes }) => {
                 {child}
                 {/* Overlay Card - Only show on active slide */}
                 {isActive && clothes && (
-                  <div className="absolute bottom-6 left-6 right-6 lg:right-auto bg-white/90 backdrop-blur-sm p-4 ">
-                    <div className="flex items-center gap-3 mb-2 text-gray-600 text-sm">
+                  <div className="absolute bottom-6 left-6 right-6 lg:right-auto bg-cream/90 backdrop-blur-sm p-4 ">
+                    <div className="flex items-center gap-3 mb-2 text-taupe text-sm">
                       <span className="font-medium text-base">
                         {"0"}
                         {clothes[actualIndex].number}
@@ -89,20 +92,20 @@ const Carousel = ({ children, clothes }) => {
                         {clothes[actualIndex].category}
                       </span>
                     </div>
-                    <h3 className="text-3xl font-semibold text-gray-800">
+                    <h3 className="font-serif text-3xl font-semibold text-espresso">
                       {clothes[actualIndex].title}
                     </h3>
-                    <button className="absolute bottom-0 right-0 lg:-right-12 bg-primary-400 hover:bg-primary-400/80 text-white p-3 transition-colors inline-flex items-center justify-center">
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path d="M5 12h14m-7-7l7 7-7 7" />
-                      </svg>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        navigate(
+                          `/products?category=${clothes[actualIndex].categorySlug}`
+                        )
+                      }
+                      aria-label={`Shop ${clothes[actualIndex].category}`}
+                      className="absolute bottom-0 right-0 lg:-right-12 bg-brass hover:bg-brass/80 text-cream p-3 transition-colors inline-flex items-center justify-center cursor-pointer"
+                    >
+                      <ChevronRight className="w-6 h-6" aria-hidden="true" />
                     </button>
                   </div>
                 )}
@@ -114,35 +117,46 @@ const Carousel = ({ children, clothes }) => {
 
       {/* Navigation Buttons */}
       <button
+        type="button"
         onClick={handlePrevious}
-        className="absolute left-1 lg:left-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 p-3 rounded-full shadow-lg transition-colors z-10"
+        aria-label="Previous look"
+        className="absolute left-1 lg:left-4 top-1/2 -translate-y-1/2 bg-cream hover:bg-stone/40 p-3 rounded-full shadow-soft transition-colors z-10 cursor-pointer"
       >
-        <ChevronLeft className="w-6 h-6 text-[#B88E2F]" />
+        <ChevronLeft className="w-6 h-6 text-brass" aria-hidden="true" />
       </button>
       <button
+        type="button"
         onClick={handleNext}
-        className="absolute right-1 lg:right-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 p-3 rounded-full shadow-lg transition-colors z-10"
+        aria-label="Next look"
+        className="absolute right-1 lg:right-4 top-1/2 -translate-y-1/2 bg-cream hover:bg-stone/40 p-3 rounded-full shadow-soft transition-colors z-10 cursor-pointer"
       >
-        <ChevronRight className="w-6 h-6 text-[#B88E2F]" />
+        <ChevronRight className="w-6 h-6 text-brass" aria-hidden="true" />
       </button>
 
       {/* Indicator Dots */}
-      <div className="mt-4 lg:mt-0 lg:absolute lg:left-[440px] lg:bottom-0 w-full lg:w-fit">
+      <div
+        role="group"
+        aria-label="Choose a look"
+        className="mt-4 lg:mt-0 lg:absolute lg:left-[440px] lg:bottom-0 w-full lg:w-fit"
+      >
         <div className="flex justify-center lg:justify-start gap-3">
           {children.map((_, index) => (
-            <div
+            <button
               key={index}
+              type="button"
               onClick={() => setCurrentIndex(index)}
+              aria-label={`Go to look ${index + 1}`}
+              aria-pressed={currentIndex === index}
               className={`cursor-pointer p-3 rounded-full ${
-                currentIndex === index ? "border border-[#B88E2F]" : ""
+                currentIndex === index ? "border border-brass" : ""
               }`}
             >
-              <div
-                className={`w-3 h-3 rounded-full ${
-                  currentIndex === index ? "bg-[#B88E2F]" : "bg-gray-300"
+              <span
+                className={`block w-3 h-3 rounded-full ${
+                  currentIndex === index ? "bg-brass" : "bg-stone"
                 }`}
-              ></div>
-            </div>
+              />
+            </button>
           ))}
         </div>
       </div>
