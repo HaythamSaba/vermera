@@ -22,14 +22,14 @@ const MainButton = ({
   // Variant styles
   const variantStyles = {
     primary:
-      "bg-primary-500 border border-primary-500 text-white hover:bg-transparent hover:border hover:border-primary-500 hover:text-primary-500",
+      "bg-brass border border-brass text-cream hover:bg-transparent hover:text-brass",
     secondary:
-      "bg-white text-primary-500 border border-primary-500 hover:bg-primary-500 hover:text-white",
+      "bg-cream text-brass border border-brass hover:bg-brass hover:text-cream",
     outline:
       "bg-transparent text-espresso border border-espresso hover:bg-espresso hover:text-cream",
-    ghost:
-      "bg-transparent text-primary-500 hover:bg-primary-500 hover:bg-opacity-10",
-    danger: "bg-white text-red-600 hover:text-white hover:bg-red-700",
+    ghost: "bg-transparent text-brass border border-transparent hover:bg-brass/10",
+    danger:
+      "bg-cream text-red-600 border border-red-600/70 hover:text-cream hover:bg-red-600",
     quiet:
       "bg-espresso border border-espresso text-cream hover:bg-transparent hover:text-espresso",
     // Same idea as "quiet", inverted for use on dark surfaces (e.g. the
@@ -46,7 +46,7 @@ const MainButton = ({
     cursor-pointer
     outline-none 
     transition-all duration-300 
-    disabled:opacity-50 disabled:cursor-not-allowed disabled:border disabled:border-stone disabled:hover:bg-primary-500 disabled:hover:text-white 
+    disabled:opacity-50 disabled:cursor-not-allowed disabled:border disabled:border-stone disabled:hover:bg-stone disabled:hover:text-taupe
     ${sizeStyles[size]} 
     ${variantStyles[variant]}
     ${fullWidth ? "w-full" : ""}
