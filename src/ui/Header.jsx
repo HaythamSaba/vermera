@@ -15,21 +15,25 @@ const MotionHeader = motion.header;
 
 // Shared cart icon + real Redux item count, reused across the primary
 // header, the floating scrolled header, and the mobile bar.
-const CartIcon = ({ className }) => {
+const CartIcon = ({ className = "", onClick, children }) => {
   const totalCartQuantity = useSelector(getTotalCartQuantity);
 
   return (
     <Link
       to="/cart"
-      className={`relative inline-flex ${className}`}
+      onClick={onClick}
+      className={`inline-flex items-center gap-3 ${className}`}
       aria-label={`Cart, ${totalCartQuantity} item${totalCartQuantity === 1 ? "" : "s"}`}
     >
-      <ShoppingCart className="cursor-pointer" aria-hidden="true" />
-      {totalCartQuantity > 0 && (
-        <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-brass text-cream text-[10px] font-semibold leading-none">
-          {totalCartQuantity}
-        </span>
-      )}
+      <span className="relative inline-flex">
+        <ShoppingCart className="cursor-pointer" aria-hidden="true" />
+        {totalCartQuantity > 0 && (
+          <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-brass text-cream text-[10px] font-semibold leading-none">
+            {totalCartQuantity}
+          </span>
+        )}
+      </span>
+      {children}
     </Link>
   );
 };
@@ -362,13 +366,10 @@ const Header = () => {
                 Search
               </button>
             </li>
-            <li className="flex items-center cursor-pointer">
-              <CartIcon
-                className="inline-block mr-3"
-                size={20}
-                aria-hidden="true"
-              />
-              Cart
+            <li>
+              <CartIcon onClick={() => setIsMobileMenuOpen(false)}>
+                Cart
+              </CartIcon>
             </li>
           </ul>
         </nav>
