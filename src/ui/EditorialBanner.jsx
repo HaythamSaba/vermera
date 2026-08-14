@@ -1,11 +1,6 @@
-// A calm, text-only brand-story moment. The CTA is intentionally omitted:
-// there is no About/brand-story route to link "Read our story" to yet, and
-// a button that goes nowhere would be a dishonest affordance. Re-add it as
-
 import { useNavigate } from "react-router";
 import MainButton from "./MainButton";
 
-// a real Link once that page exists.
 const EditorialBanner = () => {
   const navigate = useNavigate();
   return (
