@@ -34,8 +34,8 @@ function ProductsSection({
 }) {
   return (
     <div>
-      <div className="container-foundation">
-        <div className="flex flex-wrap items-center gap-6 py-6 border-b border-stone">
+      <div className="container-foundation flex items-center justify-center">
+        <div className="flex flex-wrap items-center justify-center lg:w-xl gap-6 py-6 border-b border-stone">
           <PriceFilterPanel
             minPrice={minPrice}
             maxPrice={maxPrice}
