@@ -23,7 +23,7 @@ function CategoriesList() {
     <div
       role="group"
       aria-label="Filter by category"
-      className="flex gap-3 py-6 px-8 mb-8 bg-cream border-b border-stone overflow-x-auto"
+      className="container-foundation flex gap-3 py-6 px-8 mb-8 shadow-2xl bg-cream border border-stone overflow-x-auto"
     >
       <button
         type="button"
