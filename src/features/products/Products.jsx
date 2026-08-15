@@ -93,8 +93,8 @@ const Products = ({
 
   if (error) {
     return (
-      <section className="container-foundation section flex flex-col items-center">
-        <div className="text-center py-16">
+      <section className="container-foundation flex flex-col items-center">
+        <div className="text-center mb-16">
           <p className="text-red-600 text-lg mb-4">{error}</p>
           <MainButton
             content="Retry"
@@ -108,8 +108,8 @@ const Products = ({
 
   if (products.length === 0) {
     return (
-      <section className="container-foundation section flex flex-col items-center">
-        <div className="text-center py-16">
+      <section className="container-foundation flex flex-col items-center">
+        <div className="text-center mb-16">
           <h2 className="text-[40px] font-serif font-medium text-espresso mb-4">
             Our Products
           </h2>
@@ -125,7 +125,7 @@ const Products = ({
 
   return (
     <>
-      <section className="container-foundation section flex flex-col">
+      <section className="container-foundation flex flex-col">
         <div className="text-center mb-16">
           <h2 className="text-[40px] font-serif font-medium text-espresso">
             Our Products
