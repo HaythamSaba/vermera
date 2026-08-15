@@ -35,7 +35,7 @@ function PriceFilterPanel({ minPrice, maxPrice, onApply, onClear }) {
         onClick={() => setIsOpen((open) => !open)}
         aria-expanded={isOpen}
         aria-controls="price-filter-panel"
-        className="flex items-center gap-2 text-charcoal hover:text-brass transition-colors duration-300"
+        className="flex items-center gap-2 cursor-pointer text-charcoal hover:text-brass transition-colors duration-300"
       >
         <SlidersHorizontal size={18} aria-hidden="true" />
         <span>Filter{hasActiveFilter ? " (1)" : ""}</span>
@@ -85,13 +85,15 @@ function PriceFilterPanel({ minPrice, maxPrice, onApply, onClear }) {
             />
           </div>
           <div className="flex items-center justify-between gap-2">
-            <button
+            <MainButton
               type="button"
+              variant="danger"
+              size="small"
+
               onClick={handleClear}
-              className="text-sm text-taupe hover:text-brass transition-colors duration-300"
             >
               Clear
-            </button>
+            </MainButton>
             <MainButton
               type="submit"
               size="small"
