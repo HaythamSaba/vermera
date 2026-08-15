@@ -15,19 +15,21 @@ const UpdateItemQuantity = ({ sku, quantity }) => {
   return (
     <div className="flex items-center gap-2 border border-stone bg-cream rounded-md">
       <button
+        type="button"
         onClick={handleDecrease}
         className="p-1 hover:bg-stone/30 transition"
-        title="Decrease quantity"
+        aria-label="Decrease quantity"
       >
-        <Minus className="w-4 h-4" />
+        <Minus className="w-4 h-4" aria-hidden="true" />
       </button>
       <span className="px-3 font-medium text-charcoal">{quantity}</span>
       <button
+        type="button"
         onClick={handleIncrease}
         className="p-1 hover:bg-stone/30 transition"
-        title="Increase quantity"
+        aria-label="Increase quantity"
       >
-        <Plus className="w-4 h-4" />
+        <Plus className="w-4 h-4" aria-hidden="true" />
       </button>
     </div>
   );

@@ -9,11 +9,12 @@ const DeleteItem = ({ sku }) => {
   };
   return (
     <button
+      type="button"
       onClick={handleDelete}
       className="text-red-500 hover:text-red-700 transition ml-2 p-4 bg-cream rounded-full hover:bg-red-100"
-      title="Remove item"
+      aria-label="Remove item"
     >
-      <Trash2 className="w-4 h-4" />
+      <Trash2 className="w-4 h-4" aria-hidden="true" />
     </button>
   );
 };
