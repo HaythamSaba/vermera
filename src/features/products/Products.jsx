@@ -83,7 +83,11 @@ const Products = ({
     navigate("/cart");
   };
 
-  if (loading) {
+  // Only take over the whole section for the very first load, when there's
+  // nothing on screen yet. Once products exist, a filter/sort/category
+  // change re-fetches in the background — the stale grid stays visible
+  // (dimmed) below instead of being replaced by a spinner.
+  if (loading && products.length === 0) {
     return <LoadingSpinner />;
   }
 
@@ -133,10 +137,22 @@ const Products = ({
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8 w-full">
-          {displayedProducts.map((product) => (
-            <ProductItem key={product.sku || product.id} product={product} />
-          ))}
+        <div className="relative">
+          {loading && (
+            <div className="absolute inset-0 z-10 flex justify-center pt-16 bg-ivory/60">
+              <div className="w-10 h-10 border-4 border-stone border-t-brass rounded-full animate-spin" />
+            </div>
+          )}
+          <div
+            aria-busy={loading}
+            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8 w-full transition-opacity duration-200 ${
+              loading ? "opacity-40 pointer-events-none" : "opacity-100"
+            }`}
+          >
+            {displayedProducts.map((product) => (
+              <ProductItem key={product.sku || product.id} product={product} />
+            ))}
+          </div>
         </div>
 
         <div className="flex items-center justify-center my-8">
