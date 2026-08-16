@@ -55,7 +55,9 @@ const ProductItem = ({ product }) => {
       {/* Status Badges */}
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
         {isNew && (
-          <span className={`${badgeClass} bg-cream text-charcoal border border-stone`}>
+          <span
+            className={`${badgeClass} bg-cream text-charcoal border border-stone`}
+          >
             New
           </span>
         )}
@@ -85,7 +87,7 @@ const ProductItem = ({ product }) => {
               variant="light"
               content={"More Info"}
             >
-              <Info  size={22} />
+              <Info size={22} />
             </MainButton>
             {isItemInCart ? (
               <>
@@ -117,7 +119,11 @@ const ProductItem = ({ product }) => {
           {imageError ? (
             <div className="w-full h-full flex items-center justify-center text-taupe">
               <div className="text-center">
-                <ImageOff size={40} className="mx-auto mb-2 opacity-60" aria-hidden="true" />
+                <ImageOff
+                  size={40}
+                  className="mx-auto mb-2 opacity-60"
+                  aria-hidden="true"
+                />
                 <p className="text-sm">Image unavailable</p>
               </div>
             </div>
