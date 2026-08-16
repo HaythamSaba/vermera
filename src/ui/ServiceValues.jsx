@@ -1,6 +1,5 @@
 import { Search, ShoppingBag, Sparkles, Truck } from "lucide-react";
-import useScrollReveal from "../hooks/useScrollReveal";
-import { STAGGER_MS } from "../utils/motion";
+import useStaggerReveal from "../hooks/useStaggerReveal";
 
 // Only claims backed by real, working functionality — no free shipping,
 // no 24/7 support, no returns policy, no payment-method promises, since
@@ -30,24 +29,19 @@ const SERVICE_VALUES = [
 ];
 
 const ServiceValues = () => {
-  const { ref, isVisible } = useScrollReveal();
+  const { containerRef } = useStaggerReveal(".service-card", [], {
+    durationMs: 500,
+  });
 
   return (
     <section className="container-foundation section">
-      <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
-        {SERVICE_VALUES.map((item, index) => {
+      <div ref={containerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+        {SERVICE_VALUES.map((item) => {
           const Icon = item.icon;
           return (
             <div
               key={item.title}
-              className="relative text-center sm:text-left bg-cream p-8 border border-stone hover:shadow-soft hover:-translate-y-1.5 transition-all duration-300"
-              style={{
-                opacity: isVisible ? 1 : 0,
-                // Leave transform unset once visible so the existing
-                // hover:-translate-y-1.5 utility still controls it normally.
-                transform: isVisible ? undefined : "translateY(12px)",
-                transitionDelay: `${index * STAGGER_MS}ms`,
-              }}
+              className="service-card relative text-center sm:text-left bg-cream p-8 border border-stone hover:shadow-soft hover:-translate-y-1.5 transition-all duration-300"
             >
               <Icon
                 className="mx-auto sm:mx-0 mb-4 text-brass"

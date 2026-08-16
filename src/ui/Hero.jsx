@@ -3,12 +3,19 @@ import { useNavigate } from "react-router";
 import { ImageOff } from "lucide-react";
 import MainButton from "./MainButton";
 import Reveal from "./Reveal";
+import useParallax from "../hooks/useParallax";
 import { STAGGER_MS } from "../utils/motion";
 
 const Hero = () => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  // Applied to a wrapper around the <img>, not the image itself, so this
+  // doesn't fight the image's own hover:scale-[1.05] transform (GSAP's
+  // inline transform would otherwise always win over that CSS class).
+  // scale-[1.15] gives the wrapper buffer room so the parallax translate
+  // never reveals empty space at the container's edges.
+  const parallaxRef = useParallax({ speed: 0.1, scrub: 0.8 });
 
   return (
     <section className="container-foundation">
@@ -61,15 +68,17 @@ const Hero = () => {
               </div>
             </div>
           ) : (
-            <img
-              src="/images/hero-bg.png"
-              alt="A softly styled living space with a woven chair and linen textiles, reflecting Vermera's quiet, considered aesthetic."
-              onLoad={() => setImageLoaded(true)}
-              onError={() => setImageError(true)}
-              className={`w-full h-full object-cover object-center lg:object-bottom transition-all duration-700 ease-out hover:scale-[1.05] ${
-                imageLoaded ? "opacity-100" : "opacity-0"
-              }`}
-            />
+            <div ref={parallaxRef} className="w-full h-full scale-[1.15]">
+              <img
+                src="/images/hero-bg.png"
+                alt="A softly styled living space with a woven chair and linen textiles, reflecting Vermera's quiet, considered aesthetic."
+                onLoad={() => setImageLoaded(true)}
+                onError={() => setImageError(true)}
+                className={`w-full h-full object-cover object-center lg:object-bottom transition-all duration-700 ease-out hover:scale-[1.05] ${
+                  imageLoaded ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            </div>
           )}
         </div>
       </div>

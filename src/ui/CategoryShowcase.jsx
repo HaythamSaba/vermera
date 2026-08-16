@@ -3,17 +3,19 @@ import { Link } from "react-router";
 import { getProducts, supportedCategories } from "../services/apiProducts";
 import { CATEGORY_LABELS } from "../features/products/categoryLabels";
 import Reveal from "./Reveal";
-import useScrollReveal from "../hooks/useScrollReveal";
-import { STAGGER_MS } from "../utils/motion";
+import useStaggerReveal from "../hooks/useStaggerReveal";
 
 function CategoryShowcase() {
   // One representative product per category, fetched once from the real
   // catalog (live DummyJSON data, or the same mock fallback the rest of the
   // app already relies on) — never invented placeholder data.
   const [categoryProducts, setCategoryProducts] = useState({});
-  // Attached to the grid wrapper (stable across the skeleton→loaded product
-  // swap) so every tile shares one observer and staggers off one signal.
-  const { ref: gridRef, isVisible: gridVisible } = useScrollReveal();
+  // Tiles are all present from the first render (mapped from the static
+  // supportedCategories list) — only their inner image content swaps from
+  // skeleton to real photo later — so a one-time setup (empty deps) is
+  // correct here, unlike the product grid where cards don't exist until an
+  // async fetch resolves.
+  const { containerRef: gridRef } = useStaggerReveal(".category-tile", []);
 
   useEffect(() => {
     let isMounted = true;
@@ -59,14 +61,9 @@ function CategoryShowcase() {
               key={slug}
               to={`/products?category=${slug}`}
               aria-label={`Shop ${label}`}
-              className={`group flex flex-col transition-[opacity,transform] duration-[600ms] ease-out ${
+              className={`category-tile group flex flex-col ${
                 isFeatured ? "col-span-2 row-span-2" : ""
               }`}
-              style={{
-                opacity: gridVisible ? 1 : 0,
-                transform: gridVisible ? undefined : "translateY(12px)",
-                transitionDelay: `${index * STAGGER_MS}ms`,
-              }}
             >
               <div
                 className={`overflow-hidden bg-stone/20 border border-stone mb-3 ${

@@ -51,7 +51,7 @@ const ProductItem = ({ product }) => {
     "rounded-full py-1.5 px-3 text-xs font-semibold uppercase tracking-wider";
 
   return (
-    <div className="relative group">
+    <div className="product-card relative group">
       {/* Status Badges */}
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
         {isNew && (

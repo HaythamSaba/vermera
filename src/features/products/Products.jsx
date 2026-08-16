@@ -7,6 +7,7 @@ import CartOverview from "../cart/CartOverview";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { getTotalCartQuantity } from "../cart/cartSlice";
+import useStaggerReveal from "../../hooks/useStaggerReveal";
 
 // `products`/`setProducts`/`loading`/`setLoading` are optional: pass them in
 // (as ProductsPage does, sourced from the router loader) to control this
@@ -43,6 +44,18 @@ const Products = ({
   const navigate = navigateProp ?? internalNavigate;
 
   const totalCartQuantity = useSelector(getTotalCartQuantity);
+
+  // Scoped to the homepage's self-fetching (uncontrolled) mode only for now
+  // — the Shop page's controlled/filtered grid isn't part of this pass, and
+  // re-triggering a stagger reveal on every filter/sort refetch would fight
+  // the existing dimmed-refetch treatment below. `products` in deps means
+  // this sets up once real data exists (cards don't exist in the DOM
+  // before that), not on every render.
+  const { containerRef: gridRevealRef } = useStaggerReveal(
+    ".product-card",
+    [products],
+    { enabled: !isControlled, durationMs: 700 },
+  );
 
   useEffect(() => {
     // Self-managed mode: fetch once on mount since no external loader supplied the data.
@@ -144,6 +157,7 @@ const Products = ({
             </div>
           )}
           <div
+            ref={gridRevealRef}
             aria-busy={loading}
             className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8 w-full transition-opacity duration-200 ${
               loading ? "opacity-40 pointer-events-none" : "opacity-100"
