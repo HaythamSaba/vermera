@@ -16,7 +16,7 @@ const DURATION_CLASS = {
 // useScrollReveal's own reduced-motion handling.
 const Reveal = ({
   as = "div",
-  delay = 1000,
+  delay = 0,
   duration = "editorial",
   distance = 40,
   className = "",
