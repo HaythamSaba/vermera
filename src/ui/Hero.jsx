@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { ImageOff } from "lucide-react";
 import MainButton from "./MainButton";
+import Reveal from "./Reveal";
+import { STAGGER_MS } from "../utils/motion";
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -13,21 +15,35 @@ const Hero = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center py-12 lg:py-16">
         {/* Text */}
         <div className="order-2 lg:order-1 max-w-xl">
-          <p className="font-semibold text-sm uppercase tracking-[3px] text-brass mb-4">
+          <Reveal
+            as="p"
+            delay={0}
+            className="font-semibold text-sm uppercase tracking-[3px] text-brass mb-4"
+          >
             The Vermera Edit
-          </p>
-          <h1 className="font-serif text-espresso font-semibold text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6">
+          </Reveal>
+          <Reveal
+            as="h1"
+            delay={STAGGER_MS}
+            className="font-serif text-espresso font-semibold text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6"
+          >
             Timeless Pieces, Thoughtfully Chosen
-          </h1>
-          <p className="text-taupe text-lg leading-relaxed mb-10 max-w-md">
+          </Reveal>
+          <Reveal
+            as="p"
+            delay={STAGGER_MS * 2}
+            className="text-taupe text-lg leading-relaxed mb-10 max-w-md"
+          >
             A curated edit of bags, jewelry, watches, and beauty essentials —
             each piece selected for its quality and quiet character.
-          </p>
-          <MainButton
-            content="Shop the Collection"
-            variant="quiet"
-            onClick={() => navigate("/products")}
-          />
+          </Reveal>
+          <Reveal delay={STAGGER_MS * 3}>
+            <MainButton
+              content="Shop the Collection"
+              variant="quiet"
+              onClick={() => navigate("/products")}
+            />
+          </Reveal>
         </div>
 
         {/* Image */}

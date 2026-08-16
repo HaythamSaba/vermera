@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 
 // Single editable message shown in the bar. Bump ANNOUNCEMENT_ID whenever
@@ -15,10 +16,10 @@ function readDismissed() {
   }
 }
 
-const   AnnouncementBar = () => {
-  const [isDismissed, setIsDismissed] = useState(readDismissed);
+const MotionDiv = motion.div;
 
-  if (isDismissed) return null;
+const AnnouncementBar = () => {
+  const [isDismissed, setIsDismissed] = useState(readDismissed);
 
   const handleDismiss = () => {
     try {
@@ -30,19 +31,27 @@ const   AnnouncementBar = () => {
   };
 
   return (
-    <div className="relative bg-espresso text-cream">
-      <p className="text-center text-xs sm:text-sm tracking-wide py-2 px-10">
-        {ANNOUNCEMENT_MESSAGE}
-      </p>
-      <button
-        type="button"
-        onClick={handleDismiss}
-        aria-label="Dismiss announcement"
-        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-cream/70 hover:text-cream transition-colors"
-      >
-        <X size={16} aria-hidden="true" />
-      </button>
-    </div>
+    <AnimatePresence>
+      {!isDismissed && (
+        <MotionDiv
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="relative bg-espresso text-cream"
+        >
+          <p className="text-center text-xs sm:text-sm tracking-wide py-2 px-10">
+            {ANNOUNCEMENT_MESSAGE}
+          </p>
+          <button
+            type="button"
+            onClick={handleDismiss}
+            aria-label="Dismiss announcement"
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-cream/70 hover:text-cream transition-colors"
+          >
+            <X size={16} aria-hidden="true" />
+          </button>
+        </MotionDiv>
+      )}
+    </AnimatePresence>
   );
 };
 

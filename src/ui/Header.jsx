@@ -12,6 +12,7 @@ const navLinkClass =
   "w-fit cursor-pointer relative after:content-[''] after:absolute after:bg-brass after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]";
 
 const MotionHeader = motion.header;
+const MotionDiv = motion.div;
 
 // Shared cart icon + real Redux item count, reused across the primary
 // header, the floating scrolled header, and the mobile bar.
@@ -50,6 +51,10 @@ const Header = () => {
   const mobileMenuRef = useRef();
   const mobileMenuCloseRef = useRef();
   const mobileSearchInputRef = useRef();
+  // Captures whichever hamburger button (primary or floating header) was
+  // actually clicked to open the drawer, so focus can return to it on close
+  // regardless of which one triggered the open.
+  const mobileMenuTriggerRef = useRef(null);
 
   useClickOutside(mobileMenuRef, () => setIsMobileMenuOpen(false));
 
@@ -92,6 +97,18 @@ const Header = () => {
     }
   }, [isMobileMenuOpen]);
 
+  // Return focus to whichever button opened the drawer, the instant it
+  // starts closing — not after the exit animation finishes, since the
+  // panel becomes inert immediately (see the drawer markup below).
+  useEffect(() => {
+    if (!isMobileMenuOpen && mobileMenuTriggerRef.current) {
+      if (mobileMenuTriggerRef.current.isConnected) {
+        mobileMenuTriggerRef.current.focus();
+      }
+      mobileMenuTriggerRef.current = null;
+    }
+  }, [isMobileMenuOpen]);
+
   // Autofocus the expandable mobile search field when it opens.
   useEffect(() => {
     if (isMobileSearchOpen) {
@@ -100,6 +117,7 @@ const Header = () => {
   }, [isMobileSearchOpen]);
 
   const handleOpenMobileMenu = () => {
+    mobileMenuTriggerRef.current = document.activeElement;
     setIsMobileMenuOpen(true);
     setIsMobileSearchOpen(false);
   };
@@ -298,90 +316,117 @@ const Header = () => {
         )}
       </AnimatePresence>
 
-      {/* Mobile Slide Menu */}
-      <div
-        id="mobile-nav-drawer"
-        ref={mobileMenuRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Mobile menu"
-        className={`fixed top-0 right-0 h-full w-64 bg-cream text-charcoal shadow-soft z-50 transform transition-transform duration-500 ${
-          isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        <div className="flex justify-between items-center px-6 py-5 border-b border-stone">
-          <p className="text-xl font-bold">Menu</p>
-          <button
-            ref={mobileMenuCloseRef}
-            type="button"
-            onClick={() => setIsMobileMenuOpen(false)}
-            aria-label="Close menu"
-          >
-            <X className="cursor-pointer" aria-hidden="true" />
-          </button>
-        </div>
+      {/* Mobile Slide Menu — the outer wrapper stays mounted every render so
+          its aria-hidden/inert reflect isMobileMenuOpen immediately, even
+          while the inner motion.div is still playing its exit animation
+          (AnimatePresence freezes the exiting element's own props). */}
+      <div aria-hidden={!isMobileMenuOpen} inert={!isMobileMenuOpen}>
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <MotionDiv
+              id="mobile-nav-drawer"
+              ref={mobileMenuRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Mobile menu"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed top-0 right-0 h-full w-64 bg-cream text-charcoal shadow-soft z-50"
+            >
+              <div className="flex justify-between items-center px-6 py-5 border-b border-stone">
+                <p className="text-xl font-bold">Menu</p>
+                <button
+                  ref={mobileMenuCloseRef}
+                  type="button"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  aria-label="Close menu"
+                >
+                  <X className="cursor-pointer" aria-hidden="true" />
+                </button>
+              </div>
 
-        <nav aria-label="Mobile">
-          <ul className="flex flex-col gap-6 px-6 py-8 text-lg">
-            <li className={navLinkClass}>
-              <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
-                Home
-              </Link>
-            </li>
-            <li className={navLinkClass}>
-              <Link to="/products" onClick={() => setIsMobileMenuOpen(false)}>
-                Shop
-              </Link>
-            </li>
-            <li className={navLinkClass}>
-              <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
-                Contact
-              </Link>
-            </li>
+              <nav aria-label="Mobile">
+                <ul className="flex flex-col gap-6 px-6 py-8 text-lg">
+                  <li className={navLinkClass}>
+                    <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
+                      Home
+                    </Link>
+                  </li>
+                  <li className={navLinkClass}>
+                    <Link
+                      to="/products"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Shop
+                    </Link>
+                  </li>
+                  <li className={navLinkClass}>
+                    <Link
+                      to="/contact"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Contact
+                    </Link>
+                  </li>
 
-            <hr className="border-stone" />
+                  <hr className="border-stone" />
 
-            <li>
-              <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)}>
-                <User
-                  className="inline-block mr-3"
-                  size={20}
-                  aria-hidden="true"
-                />
-                Profile
-              </Link>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={() => setIsSearchOpen(true)}
-                aria-label="Search your order"
-                className="flex items-center cursor-pointer"
-              >
-                <Search
-                  size={20}
-                  className="inline-block mr-3"
-                  aria-hidden="true"
-                />
-                Search
-              </button>
-            </li>
-            <li>
-              <CartIcon onClick={() => setIsMobileMenuOpen(false)}>
-                Cart
-              </CartIcon>
-            </li>
-          </ul>
-        </nav>
+                  <li>
+                    <Link
+                      to="/profile"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <User
+                        className="inline-block mr-3"
+                        size={20}
+                        aria-hidden="true"
+                      />
+                      Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => setIsSearchOpen(true)}
+                      aria-label="Search your order"
+                      className="flex items-center cursor-pointer"
+                    >
+                      <Search
+                        size={20}
+                        className="inline-block mr-3"
+                        aria-hidden="true"
+                      />
+                      Search
+                    </button>
+                  </li>
+                  <li>
+                    <CartIcon onClick={() => setIsMobileMenuOpen(false)}>
+                      Cart
+                    </CartIcon>
+                  </li>
+                </ul>
+              </nav>
+            </MotionDiv>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Overlay */}
-      {isMobileMenuOpen && (
-        <div
-          className="fixed inset-0 bg-charcoal/40 z-40"
-          onClick={() => setIsMobileMenuOpen(false)}
-        ></div>
-      )}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <MotionDiv
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-charcoal/40 z-40"
+            onClick={() => setIsMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+      </AnimatePresence>
 
       {/* Search Modal (desktop + floating-bar mobile) */}
       <SearchModal

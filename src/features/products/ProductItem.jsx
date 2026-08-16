@@ -122,15 +122,20 @@ const ProductItem = ({ product }) => {
               </div>
             </div>
           ) : (
-            <img
-              src={image}
-              alt={productName}
-              className={`w-full h-full object-cover transition-opacity duration-300 ${
-                imageLoaded ? "opacity-100" : "opacity-0"
-              }`}
-              onLoad={() => setImageLoaded(true)}
-              onError={() => setImageError(true)}
-            />
+            // Separate wrapper for the hover scale so it doesn't share a
+            // transition-property list with the image's own load-fade below
+            // (transition-opacity vs transition-transform stay independent).
+            <div className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-[1.02]">
+              <img
+                src={image}
+                alt={productName}
+                className={`w-full h-full object-cover transition-opacity duration-300 ${
+                  imageLoaded ? "opacity-100" : "opacity-0"
+                }`}
+                onLoad={() => setImageLoaded(true)}
+                onError={() => setImageError(true)}
+              />
+            </div>
           )}
         </div>
 

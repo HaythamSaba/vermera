@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router";
 import MainButton from "./MainButton";
 import Carousel from "./Carousel";
+import Reveal from "./Reveal";
+import { STAGGER_MS } from "../utils/motion";
 
 const clothes = [
   {
@@ -40,19 +42,29 @@ const InspirationSection = () => {
     <section className="bg-cream border-t border-stone">
       <div className="container-foundation section grid lg:grid-cols-3 gap-10 lg:gap-16 items-center">
         <div>
-          <h2 className="font-serif text-espresso font-semibold text-3xl sm:text-4xl leading-tight mb-4">
+          <Reveal
+            as="h2"
+            delay={0}
+            className="font-serif text-espresso font-semibold text-3xl sm:text-4xl leading-tight mb-4"
+          >
             Looks worth revisiting
-          </h2>
-          <p className="text-taupe text-lg leading-relaxed mb-8">
+          </Reveal>
+          <Reveal
+            as="p"
+            delay={STAGGER_MS}
+            className="text-taupe text-lg leading-relaxed mb-8"
+          >
             Four edits from our latest arrivals, styled to inspire your next
             outfit.
-          </p>
-          <MainButton
-            content="Explore More"
-            size="medium"
-            variant="quiet"
-            onClick={() => navigate("/products")}
-          />
+          </Reveal>
+          <Reveal delay={STAGGER_MS * 2}>
+            <MainButton
+              content="Explore More"
+              size="medium"
+              variant="quiet"
+              onClick={() => navigate("/products")}
+            />
+          </Reveal>
         </div>
 
         <div className="lg:col-span-2 w-full flex justify-center lg:block overflow-hidden">
