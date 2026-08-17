@@ -8,6 +8,9 @@ import CartOverview from "../cart/CartOverview";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { getTotalCartQuantity } from "../cart/cartSlice";
+import { STAGGER_MS } from "../../utils/motion";
+
+const MotionDiv = motion.div;
 
 // `products`/`setProducts`/`loading`/`setLoading` are optional: pass them in
 // (as ProductsPage does, sourced from the router loader) to control this
@@ -47,21 +50,14 @@ const Products = ({
   const totalCartQuantity = useSelector(getTotalCartQuantity);
 
   const prefersReducedMotion = useReducedMotion();
-  const revealEnabled = !isControlled;
 
   const cardParentVariants = {
-    initial:
-      revealEnabled && !prefersReducedMotion ? { opacity: 0 } : { opacity: 1 },
+    initial: prefersReducedMotion ? { opacity: 1 } : { opacity: 0 },
     visible: {
       opacity: 1,
-      transition:
-        revealEnabled && !prefersReducedMotion
-          ? {
-              when: "beforeChildren",
-              staggerChildren: 0.25,
-              delayChildren: 0.1,
-            }
-          : { duration: 0 },
+      transition: prefersReducedMotion
+        ? { duration: 0 }
+        : { when: "beforeChildren", staggerChildren: STAGGER_MS / 1000 },
     },
   };
 

@@ -27,4 +27,4 @@ export const GSAP_EASE = {
   linear: "none",
 };
 
-export const STAGGER_MS = 60;
+export const STAGGER_MS = 120;

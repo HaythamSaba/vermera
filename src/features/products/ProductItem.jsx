@@ -7,6 +7,8 @@ import { addItem, getCurrentQuantityBySku, isInCart } from "../cart/cartSlice";
 import DeleteItem from "../cart/DeleteItem";
 import UpdateItemQuantity from "../cart/UpdateItemQuantity";
 import { motion, useReducedMotion } from "framer-motion";
+import { DURATION, EASE } from "../../utils/motion";
+
 
 const imageVariants = {
   initial: { opacity: 0, scale: 0.8 },
@@ -17,7 +19,7 @@ const imageVariants = {
   },
 };
 
-const ProductItem = ({ product, index }) => {
+const ProductItem = ({ product }) => {
   const dispatch = useDispatch();
 
   const {
@@ -45,16 +47,20 @@ const ProductItem = ({ product, index }) => {
   const isOutOfStock = stock === 0;
 
   const prefersReducedMotion = useReducedMotion();
+  // Timing/distance only — no per-index delay here. Stagger order across
+  // the grid is entirely the parent's job (Products.jsx's cardParentVariants
+  // staggerChildren); adding a second, independent delay here would compound
+  // with it into a much slower reveal than either config alone implies.
   const cardVariants = {
     initial: prefersReducedMotion
       ? { opacity: 1, y: 0 }
-      : { opacity: 0, y: 40 },
+      : { opacity: 0, y: 32 },
     visible: {
       opacity: 1,
       y: 0,
       transition: prefersReducedMotion
         ? { duration: 0 }
-        : { duration: 0.6, ease: "easeOut", delay: index * 0.15 },
+        : { duration: DURATION.editorial / 1000, ease: EASE.out },
     },
   };
 
