@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import ProductItem from "./ProductItem";
 import MainButton from "../../ui/MainButton";
 import LoadingSpinner from "../../ui/LoadingSpinner";
@@ -7,12 +8,12 @@ import CartOverview from "../cart/CartOverview";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { getTotalCartQuantity } from "../cart/cartSlice";
-import useStaggerReveal from "../../hooks/useStaggerReveal";
 
 // `products`/`setProducts`/`loading`/`setLoading` are optional: pass them in
 // (as ProductsPage does, sourced from the router loader) to control this
 // component externally. Omit them to have it fetch and manage its own data
 // (e.g. when embedded standalone on the home page).
+
 const Products = ({
   category = null,
   sort = "newest",
@@ -45,17 +46,24 @@ const Products = ({
 
   const totalCartQuantity = useSelector(getTotalCartQuantity);
 
-  // Scoped to the homepage's self-fetching (uncontrolled) mode only for now
-  // — the Shop page's controlled/filtered grid isn't part of this pass, and
-  // re-triggering a stagger reveal on every filter/sort refetch would fight
-  // the existing dimmed-refetch treatment below. `products` in deps means
-  // this sets up once real data exists (cards don't exist in the DOM
-  // before that), not on every render.
-  const { containerRef: gridRevealRef } = useStaggerReveal(
-    ".product-card",
-    [products],
-    { enabled: !isControlled, durationMs: 700 },
-  );
+  const prefersReducedMotion = useReducedMotion();
+  const revealEnabled = !isControlled;
+
+  const cardParentVariants = {
+    initial:
+      revealEnabled && !prefersReducedMotion ? { opacity: 0 } : { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition:
+        revealEnabled && !prefersReducedMotion
+          ? {
+              when: "beforeChildren",
+              staggerChildren: 0.25,
+              delayChildren: 0.1,
+            }
+          : { duration: 0 },
+    },
+  };
 
   useEffect(() => {
     // Self-managed mode: fetch once on mount since no external loader supplied the data.
@@ -156,17 +164,24 @@ const Products = ({
               <div className="w-10 h-10 border-4 border-stone border-t-brass rounded-full animate-spin" />
             </div>
           )}
-          <div
-            ref={gridRevealRef}
+          <motion.div
+            variants={cardParentVariants}
+            initial="initial"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
             aria-busy={loading}
             className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8 w-full transition-opacity duration-200 ${
               loading ? "opacity-40 pointer-events-none" : "opacity-100"
             }`}
           >
-            {displayedProducts.map((product) => (
-              <ProductItem key={product.sku || product.id} product={product} />
+            {displayedProducts.map((product, index) => (
+              <ProductItem
+                key={product.sku || product.id}
+                product={product}
+                index={index}
+              />
             ))}
-          </div>
+          </motion.div>
         </div>
 
         <div className="flex items-center justify-center my-8">

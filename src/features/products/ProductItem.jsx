@@ -6,8 +6,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { addItem, getCurrentQuantityBySku, isInCart } from "../cart/cartSlice";
 import DeleteItem from "../cart/DeleteItem";
 import UpdateItemQuantity from "../cart/UpdateItemQuantity";
+import { motion, useReducedMotion } from "framer-motion";
 
-const ProductItem = ({ product }) => {
+const imageVariants = {
+  initial: { opacity: 0, scale: 0.8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+const ProductItem = ({ product, index }) => {
   const dispatch = useDispatch();
 
   const {
@@ -34,6 +44,20 @@ const ProductItem = ({ product }) => {
 
   const isOutOfStock = stock === 0;
 
+  const prefersReducedMotion = useReducedMotion();
+  const cardVariants = {
+    initial: prefersReducedMotion
+      ? { opacity: 1, y: 0 }
+      : { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: prefersReducedMotion
+        ? { duration: 0 }
+        : { duration: 0.6, ease: "easeOut", delay: index * 0.15 },
+    },
+  };
+
   const handleAddToCart = (e) => {
     e.preventDefault();
     if (isOutOfStock) return;
@@ -51,7 +75,7 @@ const ProductItem = ({ product }) => {
     "rounded-full py-1.5 px-3 text-xs font-semibold uppercase tracking-wider";
 
   return (
-    <div className="product-card relative group">
+    <motion.div className="product-card relative group" variants={cardVariants}>
       {/* Status Badges */}
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
         {isNew && (
@@ -128,12 +152,13 @@ const ProductItem = ({ product }) => {
               </div>
             </div>
           ) : (
-            // Separate wrapper for the hover scale so it doesn't share a
-            // transition-property list with the image's own load-fade below
-            // (transition-opacity vs transition-transform stay independent).
             <div className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-[1.02]">
-              <img
+              <motion.img
                 src={image}
+                variants={imageVariants}
+                initial="initial"
+                animate="visible"
+                exit="initial"
                 alt={productName}
                 className={`w-full h-full object-cover transition-opacity duration-300 ${
                   imageLoaded ? "opacity-100" : "opacity-0"
@@ -175,7 +200,7 @@ const ProductItem = ({ product }) => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
