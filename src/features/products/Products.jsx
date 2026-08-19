@@ -4,7 +4,6 @@ import ProductItem from "./ProductItem";
 import MainButton from "../../ui/MainButton";
 import LoadingSpinner from "../../ui/LoadingSpinner";
 import { getProducts } from "../../services/apiProducts";
-import CartOverview from "../cart/CartOverview";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { getTotalCartQuantity } from "../cart/cartSlice";
