@@ -9,6 +9,8 @@ import UpdateItemQuantity from "../cart/UpdateItemQuantity";
 import { motion, useReducedMotion } from "framer-motion";
 import { DURATION, EASE } from "../../utils/motion";
 
+const MotionDiv = motion.div;
+const MotionImg = motion.img;
 
 const imageVariants = {
   initial: { opacity: 0, scale: 0.8 },
@@ -81,7 +83,7 @@ const ProductItem = ({ product }) => {
     "rounded-full py-1.5 px-3 text-xs font-semibold uppercase tracking-wider";
 
   return (
-    <motion.div className="product-card relative group" variants={cardVariants}>
+    <MotionDiv className="product-card relative group" variants={cardVariants}>
       {/* Status Badges */}
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
         {isNew && (
@@ -159,7 +161,7 @@ const ProductItem = ({ product }) => {
             </div>
           ) : (
             <div className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-[1.02]">
-              <motion.img
+              <MotionImg
                 src={image}
                 variants={imageVariants}
                 initial="initial"
@@ -206,7 +208,7 @@ const ProductItem = ({ product }) => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </MotionDiv>
   );
 };
 
