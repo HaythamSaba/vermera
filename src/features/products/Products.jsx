@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import ProductItem from "./ProductItem";
 import MainButton from "../../ui/MainButton";
 import LoadingSpinner from "../../ui/LoadingSpinner";
@@ -49,6 +49,14 @@ const Products = ({
   const totalCartQuantity = useSelector(getTotalCartQuantity);
 
   const prefersReducedMotion = useReducedMotion();
+
+  // whileInView's own cascade only reaches the children that exist at the
+  // moment it fires — cards added later via Load More would never receive
+  // it and stay stuck at their `initial` variant. `initial`/`animate` DO
+  // propagate reactively to newly-mounted children through context, so we
+  // drive the reveal off useInView + a plain `animate` prop instead.
+  const gridRef = useRef(null);
+  const isGridInView = useInView(gridRef, { once: true, amount: 0.1 });
 
   const cardParentVariants = {
     initial: prefersReducedMotion ? { opacity: 1 } : { opacity: 0 },
@@ -159,24 +167,20 @@ const Products = ({
               <div className="w-10 h-10 border-4 border-stone border-t-brass rounded-full animate-spin" />
             </div>
           )}
-          <motion.div
+          <MotionDiv
+            ref={gridRef}
             variants={cardParentVariants}
             initial="initial"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
+            animate={isGridInView ? "visible" : "initial"}
             aria-busy={loading}
             className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8 w-full transition-opacity duration-200 ${
               loading ? "opacity-40 pointer-events-none" : "opacity-100"
             }`}
           >
-            {displayedProducts.map((product, index) => (
-              <ProductItem
-                key={product.sku || product.id}
-                product={product}
-                index={index}
-              />
+            {displayedProducts.map((product) => (
+              <ProductItem key={product.sku || product.id} product={product} />
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
 
         <div className="flex items-center justify-center my-8">
