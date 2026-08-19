@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import SearchModal from "../features/order/SearchModal";
 import useClickOutside from "../hooks/useClickOutside";
 import useLockBodyScroll from "../hooks/useLockBodyScroll";
+import useFocusTrap from "../hooks/useFocusTrap";
 import { getTotalCartQuantity } from "../features/cart/cartSlice";
 
 const navLinkClass =
@@ -59,6 +60,8 @@ const Header = () => {
   useClickOutside(mobileMenuRef, () => setIsMobileMenuOpen(false));
 
   useLockBodyScroll(isMobileMenuOpen);
+
+  useFocusTrap(mobileMenuRef, isMobileMenuOpen);
 
   useEffect(() => {
     const handleScroll = () => {

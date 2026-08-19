@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import useClickOutside from "../../hooks/useClickOutside";
 import useLockBodyScroll from "../../hooks/useLockBodyScroll";
+import useFocusTrap from "../../hooks/useFocusTrap";
 
 import MainButton from "../../ui/MainButton";
 import InputField from "../../ui/InputField";
@@ -25,6 +26,8 @@ const SearchModal = ({ isOpen, onClose }) => {
   useClickOutside(modalRef, handleClose);
 
   useLockBodyScroll(isOpen);
+
+  useFocusTrap(modalRef, isOpen);
 
   // Move focus into the dialog when it opens, matching the header's mobile
   // drawer convention.
