@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
 import MainButton from "../../ui/MainButton";
 
@@ -9,6 +9,20 @@ function PriceFilterPanel({ minPrice, maxPrice, onApply, onClear }) {
   const [isOpen, setIsOpen] = useState(false);
   const [minPriceInput, setMinPriceInput] = useState(minPrice ?? "");
   const [maxPriceInput, setMaxPriceInput] = useState(maxPrice ?? "");
+
+  // minPrice/maxPrice can change from outside this component's own
+  // Apply/Clear (browser back/forward, a shared ?minPrice=... link) — without
+  // this, the inputs would keep showing whatever was last typed here, and
+  // hitting Apply again would silently overwrite a filter that's actually
+  // active. Re-seed only at the moment the panel opens so we don't clobber
+  // the user's in-progress typing while it's already open.
+  useEffect(() => {
+    if (isOpen) {
+      setMinPriceInput(minPrice ?? "");
+      setMaxPriceInput(maxPrice ?? "");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   const hasActiveFilter = minPrice != null || maxPrice != null;
 
