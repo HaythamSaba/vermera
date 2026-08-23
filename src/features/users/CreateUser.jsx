@@ -16,7 +16,7 @@ const CreateUser = () => {
     navigate("/products");
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleSubmit();
     }
@@ -49,7 +49,7 @@ const CreateUser = () => {
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyDown}
             placeholder="Enter your name"
             className="w-full px-4 py-3 border border-stone bg-cream outline-none transition"
           />
