@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { getTotalCartPrice, getTotalCartQuantity } from "./cartSlice";
 import MainButton from "../../ui/MainButton";
 import useClickOutside from "../../hooks/useClickOutside";
+import useFocusTrap from "../../hooks/useFocusTrap";
 
 const MotionDiv = motion.div;
 
@@ -20,6 +21,8 @@ const CartOverview = () => {
   const wasCartOpenRef = useRef(false);
 
   useClickOutside(containerRef, () => setIsCartOpen(false));
+
+  useFocusTrap(containerRef, isCartOpen);
 
   useEffect(() => {
     if (!isCartOpen) return;
@@ -78,6 +81,7 @@ const CartOverview = () => {
               <MotionDiv
                 id="cart-overview-panel"
                 role="dialog"
+                aria-modal="true"
                 aria-label="Cart overview"
                 initial={{ opacity: 0, y: -8, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
