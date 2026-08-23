@@ -1,6 +1,7 @@
 import { isRouteErrorResponse, useNavigate, useRouteError } from "react-router";
 import { AlertCircle } from "lucide-react";
 import MainButton from "./MainButton";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 const Error = () => {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ const Error = () => {
       ? "Not Found"
       : `Error ${status}`
     : "Something Went Wrong";
+
+  useDocumentTitle(heading);
 
   const message = isResponse
     ? error.data ||

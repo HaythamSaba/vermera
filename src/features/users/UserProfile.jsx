@@ -14,6 +14,7 @@ import { Link } from "react-router";
 import CreateUser from "./CreateUser";
 import Cart from "../cart/Cart";
 import MainButton from "../../ui/MainButton";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const orderTotal = (order) =>
   order.items.reduce((sum, item) => sum + item.totalPrice, 0) +
@@ -22,6 +23,8 @@ const orderTotal = (order) =>
 
 const Profile = () => {
   const username = useSelector((state) => state.user.username);
+
+  useDocumentTitle(username ? "Profile" : "Welcome");
 
   // Local edit form only — there's no persistence layer for profile details
   // in this project (unlike cart/orders, which are real localStorage data).

@@ -15,10 +15,13 @@ import {
 } from "lucide-react";
 import MainButton from "../../ui/MainButton";
 import UpdateOrder from "./UpdateOrder";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const OrderConfirmation = () => {
   const order = useLoaderData();
   const navigate = useNavigate();
+
+  useDocumentTitle(order?.items ? `Order #${order.id}` : "Order Not Found");
 
   // Safely check if order and items exist
   if (!order || !order.items) {

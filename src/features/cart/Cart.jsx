@@ -10,10 +10,13 @@ import {
 } from "./cartSlice";
 import MainButton from "../../ui/MainButton";
 import EmptyCart from "./EmptyCart";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 // `embedded`: render just the card, without the standalone-page container, for
-// reuse inside another page's own layout (e.g. the Profile sidebar).
+// reuse inside another page's own layout (e.g. the Profile sidebar). When
+// embedded, the host page owns the document title, so skip setting our own.
 const Cart = ({ embedded = false }) => {
+  useDocumentTitle(embedded ? null : "Cart");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

@@ -4,9 +4,11 @@ import { useDispatch } from "react-redux";
 import { ImageOff } from "lucide-react";
 import { addItem } from "../cart/cartSlice";
 import MainButton from "../../ui/MainButton";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const ProductPage = () => {
   const product = useLoaderData();
+  useDocumentTitle(product.productName);
   const dispatch = useDispatch();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);

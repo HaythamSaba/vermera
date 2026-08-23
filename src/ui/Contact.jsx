@@ -2,10 +2,13 @@ import { Mail } from "lucide-react";
 import CoverBackgroundSection from "./CoverBackgroundSection";
 import InputField from "./InputField";
 import MainButton from "./MainButton";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 const CONTACT_EMAIL = "haythamsaba@gmail.com";
 
 const Contact = () => {
+  useDocumentTitle("Contact");
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);

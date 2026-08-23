@@ -3,8 +3,10 @@ import { useLoaderData, useNavigate, useSearchParams } from "react-router";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import ProductsSection from "./ProductsSection";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const ProductsPage = () => {
+  useDocumentTitle("Shop");
   const loaderProducts = useLoaderData();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
