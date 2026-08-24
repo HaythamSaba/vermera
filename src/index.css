@@ -1,18 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-50: #faf8ec;
-  --color-primary-100: #f3eece;
-  --color-primary-200: #e9db9f;
-  --color-primary-300: #dcc268;
-  --color-primary-400: #d0aa3f;
-  --color-primary-500: #b88e2f;
-  --color-primary-600: #a67528;
-  --color-primary-700: #855723;
-  --color-primary-800: #6f4724;
-  --color-primary-900: #603c23;
-  --color-primary-950: #371f11;
-
   /* Quiet-luxury visual foundation */
   --color-ivory: #f6f3ee;
   --color-cream: #fbf9f5;
@@ -58,15 +46,6 @@ h6 {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-.template {
-  padding-left: 77px;
-  padding-right: 77px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top: 30px;
-  padding-bottom: 30px;
 }
 
 /* Responsive content-width container for the redesigned homepage sections */
