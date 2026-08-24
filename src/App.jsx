@@ -5,24 +5,13 @@ import {
   productLoader,
 } from "./features/products/ProductsLoader";
 
-import Cart from "./features/cart/Cart";
-import CreateOrder, {
-  action as createOrderAction,
-} from "./features/order/CreateOrder";
-
-import OrderConfirmation, {
-  loader as orderConfirmationLoader,
-} from "./features/order/OrderConfirmation";
-import MainPageContent from "./ui/MainPageContent";
 import AppLayout from "./ui/AppLayout";
 import Error from "./ui/Error";
-import UserProfile from "./features/users/UserProfile";
-import ProductPage from "./features/products/ProductPage";
-import { action as updateOrderAction } from "./features/order/UpdateOrder";
-import Contact from "./ui/Contact";
-import ProductsPage from "./features/products/ProductsPage";
 import { Analytics } from "@vercel/analytics/react";
 
+// Route-level code splitting: each page's component (and, where it lives in
+// the same file, its loader/action) loads in its own chunk on first
+// navigation to that route, instead of everything sitting in one bundle.
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
@@ -30,45 +19,72 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <MainPageContent />,
+        lazy: () =>
+          import("./ui/MainPageContent").then((m) => ({
+            Component: m.default,
+          })),
         loader: productsLoader,
         errorElement: <Error />,
       },
       {
         path: "/products",
-        element: <ProductsPage />,
+        lazy: () =>
+          import("./features/products/ProductsPage").then((m) => ({
+            Component: m.default,
+          })),
         loader: productsLoader,
         errorElement: <Error />,
       },
       {
         path: "/products/:sku",
-        element: <ProductPage />,
+        lazy: () =>
+          import("./features/products/ProductPage").then((m) => ({
+            Component: m.default,
+          })),
         loader: productLoader,
         errorElement: <Error />,
       },
       {
         path: "/cart",
-        element: <Cart />,
+        lazy: () =>
+          import("./features/cart/Cart").then((m) => ({
+            Component: m.default,
+          })),
       },
       {
         path: "/contact",
-        element: <Contact />,
+        lazy: () =>
+          import("./ui/Contact").then((m) => ({ Component: m.default })),
       },
       {
         path: "/order/newOrder",
-        element: <CreateOrder />,
-        action: createOrderAction,
+        lazy: () =>
+          import("./features/order/CreateOrder").then((m) => ({
+            Component: m.default,
+            action: m.action,
+          })),
       },
       {
         path: "/order/:orderId",
-        element: <OrderConfirmation />,
         errorElement: <Error />,
-        loader: orderConfirmationLoader,
-        action: updateOrderAction,
+        lazy: async () => {
+          const [orderConfirmation, updateOrder] = await Promise.all([
+            import("./features/order/OrderConfirmation"),
+            import("./features/order/UpdateOrder"),
+          ]);
+          return {
+            Component: orderConfirmation.default,
+            loader: orderConfirmation.loader,
+            action: updateOrder.action,
+          };
+        },
       },
       {
         path: "/profile",
-        element: <UserProfile />,
+        lazy: () =>
+          import("./features/users/UserProfile").then((m) => ({
+            Component: m.default,
+          })),
       },
     ],
   },
