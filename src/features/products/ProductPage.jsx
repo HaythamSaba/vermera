@@ -1,9 +1,41 @@
+import { useState } from "react";
 import { useLoaderData } from "react-router";
 import { useDispatch } from "react-redux";
 import { addItem, toCartItem } from "../cart/cartSlice";
 import MainButton from "../../ui/MainButton";
 import ProductGallery from "./ProductGallery";
+import QuantitySelector from "./QuantitySelector";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
+
+// Quantity state lives here, keyed by sku at the call site below — React
+// Router keeps ProductPage mounted across a sku change (only loader data
+// changes), so keying this component forces a remount (and so a reset back
+// to 1) whenever the user lands on a different product, without needing an
+// effect to reset state imperatively.
+const AddToCartControls = ({ product, isOutOfStock, onAdd }) => {
+  const [quantity, setQuantity] = useState(1);
+  const max = product.stock;
+
+  return (
+    <div className="flex items-center gap-4">
+      {!isOutOfStock && (
+        <QuantitySelector
+          quantity={quantity}
+          onIncrease={() => setQuantity((q) => Math.min(q + 1, max))}
+          onDecrease={() => setQuantity((q) => Math.max(q - 1, 1))}
+          min={1}
+          max={max}
+        />
+      )}
+      <MainButton
+        content={isOutOfStock ? "Sold Out" : "Add to Cart"}
+        variant="quiet"
+        disabled={isOutOfStock}
+        onClick={() => onAdd(quantity)}
+      />
+    </div>
+  );
+};
 
 const ProductPage = () => {
   const product = useLoaderData();
@@ -28,9 +60,9 @@ const ProductPage = () => {
 
   const isOutOfStock = stock === 0;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (quantity) => {
     if (isOutOfStock) return;
-    dispatch(addItem(toCartItem(product)));
+    dispatch(addItem(toCartItem(product, quantity)));
   };
 
   return (
@@ -88,11 +120,11 @@ const ProductPage = () => {
             {isOutOfStock ? "Out of stock" : `${stock} available`}
           </p>
 
-          <MainButton
-            content={isOutOfStock ? "Sold Out" : "Add to Cart"}
-            variant="quiet"
-            disabled={isOutOfStock}
-            onClick={handleAddToCart}
+          <AddToCartControls
+            key={product.sku}
+            product={product}
+            isOutOfStock={isOutOfStock}
+            onAdd={handleAddToCart}
           />
         </div>
       </div>

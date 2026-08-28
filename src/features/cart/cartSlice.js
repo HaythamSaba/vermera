@@ -27,13 +27,16 @@ const initialState = {
 // dimensions, images[], etc.). Narrowing at the point of dispatch keeps the
 // persisted localStorage payload small and avoids coupling the cart to
 // fields (like the gallery's images[]) it never renders.
-export const toCartItem = ({ sku, productName, image, NewPrice, category }) => ({
+export const toCartItem = (
+  { sku, productName, image, NewPrice, category },
+  quantity = 1,
+) => ({
   sku,
   productName,
   image,
   NewPrice,
   category,
-  quantity: 1,
+  quantity,
 });
 
 const cartSlice = createSlice({
@@ -41,21 +44,27 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addItem: (state, action) => {
-      // payload = new item object
+      // payload = new item object; quantity defaults to 1 (toCartItem's
+      // default) but callers like ProductPage's quantity selector can pass
+      // any positive amount to add in one go.
       const newItem = action.payload;
+      const qtyToAdd =
+        Number.isFinite(newItem.quantity) && newItem.quantity > 0
+          ? newItem.quantity
+          : 1;
       const existingItem = state.cart.find((item) => item.sku === newItem.sku);
 
       if (existingItem) {
         // Item already exists, increase quantity
-        existingItem.quantity++;
+        existingItem.quantity += qtyToAdd;
         existingItem.totalPrice =
           parseFloat(existingItem.NewPrice) * existingItem.quantity;
       } else {
         // New item, add to cart
         state.cart.push({
           ...newItem,
-          quantity: 1,
-          totalPrice: parseFloat(newItem.NewPrice),
+          quantity: qtyToAdd,
+          totalPrice: parseFloat(newItem.NewPrice) * qtyToAdd,
         });
       }
 
