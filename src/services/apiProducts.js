@@ -120,6 +120,8 @@ function transformProduct(item) {
     DiscountPercentage: discountPercentage,
     image: item.thumbnail,
     images,
+    brand: item.brand, // real DummyJSON field; genuinely absent (undefined) on some items — guard before rendering
+    tags: Array.isArray(item.tags) ? item.tags : [],
     stock: item.stock,
     woodType: item.woodType, // no DummyJSON equivalent; ProductPage.jsx already guards with `{woodType && (...)}`
     dimensions: item.dimensions,

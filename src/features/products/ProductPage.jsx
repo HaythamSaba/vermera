@@ -17,6 +17,8 @@ const ProductPage = () => {
     OldPrice,
     images,
     category,
+    brand,
+    tags,
     woodType,
     dimensions,
     stock,
@@ -51,6 +53,24 @@ const ProductPage = () => {
           </p>
           <p className="text-taupe leading-relaxed mb-8">{description}</p>
 
+          {tags.length > 0 && (
+            <ul className="flex flex-wrap gap-2 mb-8" aria-label="Product tags">
+              {tags.map((tag) => (
+                <li
+                  key={tag}
+                  className="rounded-full border border-stone px-3 py-1 text-xs text-taupe capitalize"
+                >
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {brand && (
+            <p className="mb-2 text-charcoal">
+              <strong className="font-medium">Brand:</strong> {brand}
+            </p>
+          )}
           {woodType && (
             <p className="mb-2 text-charcoal">
               <strong className="font-medium">Wood Type:</strong> {woodType}
