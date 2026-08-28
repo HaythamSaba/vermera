@@ -3,7 +3,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import MainButton from "../../ui/MainButton";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, getCurrentQuantityBySku, isInCart } from "../cart/cartSlice";
+import {
+  addItem,
+  getCurrentQuantityBySku,
+  isInCart,
+  toCartItem,
+} from "../cart/cartSlice";
 import DeleteItem from "../cart/DeleteItem";
 import UpdateItemQuantity from "../cart/UpdateItemQuantity";
 import { motion, useReducedMotion } from "framer-motion";
@@ -69,7 +74,7 @@ const ProductItem = ({ product }) => {
   const handleAddToCart = (e) => {
     e.preventDefault();
     if (isOutOfStock) return;
-    dispatch(addItem(product));
+    dispatch(addItem(toCartItem(product)));
   };
 
   const handleOpenProductPage = (e) => {

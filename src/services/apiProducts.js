@@ -95,6 +95,16 @@ function transformProduct(item) {
     typeof item.discountPercentage === "number" ? item.discountPercentage : 0;
   const hasDiscount = discountPercentage > 0 && discountPercentage < 100;
 
+  // Compatibility field alongside `image` (singular thumbnail, unchanged and
+  // still used everywhere else): the gallery reads `images`, falling back to
+  // a single-item array around the thumbnail when DummyJSON's `images[]` is
+  // missing/empty, and guarding against a missing thumbnail too.
+  const fallback = [item.thumbnail ?? ""];
+  const images =
+    Array.isArray(item.images) && item.images.length > 0
+      ? item.images
+      : fallback;
+
   return {
     id: item.id, // fallback list key — Products.jsx: `product.sku || product.id`
     sku: String(item.sku ?? item.id), // canonical identity: cart, URLs, React keys, localStorage
@@ -109,6 +119,7 @@ function transformProduct(item) {
     isDiscount: hasDiscount,
     DiscountPercentage: discountPercentage,
     image: item.thumbnail,
+    images,
     stock: item.stock,
     woodType: item.woodType, // no DummyJSON equivalent; ProductPage.jsx already guards with `{woodType && (...)}`
     dimensions: item.dimensions,

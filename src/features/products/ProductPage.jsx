@@ -1,24 +1,21 @@
-import { useState } from "react";
 import { useLoaderData } from "react-router";
 import { useDispatch } from "react-redux";
-import { ImageOff } from "lucide-react";
-import { addItem } from "../cart/cartSlice";
+import { addItem, toCartItem } from "../cart/cartSlice";
 import MainButton from "../../ui/MainButton";
+import ProductGallery from "./ProductGallery";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const ProductPage = () => {
   const product = useLoaderData();
   useDocumentTitle(product.productName);
   const dispatch = useDispatch();
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
 
   const {
     productName,
     description,
     NewPrice,
     OldPrice,
-    image,
+    images,
     category,
     woodType,
     dimensions,
@@ -31,37 +28,13 @@ const ProductPage = () => {
 
   const handleAddToCart = () => {
     if (isOutOfStock) return;
-    dispatch(addItem(product));
+    dispatch(addItem(toCartItem(product)));
   };
 
   return (
     <div className="container-foundation section">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
-        <div className="relative aspect-square bg-stone/20 border border-stone overflow-hidden">
-          {!imageLoaded && !imageError && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-8 h-8 border-4 border-stone border-t-brass rounded-full animate-spin"></div>
-            </div>
-          )}
-          {imageError ? (
-            <div className="absolute inset-0 flex items-center justify-center text-taupe">
-              <div className="text-center px-6">
-                <ImageOff size={40} className="mx-auto mb-2 opacity-60" aria-hidden="true" />
-                <p className="text-sm">Image unavailable</p>
-              </div>
-            </div>
-          ) : (
-            <img
-              src={image}
-              alt={productName}
-              onLoad={() => setImageLoaded(true)}
-              onError={() => setImageError(true)}
-              className={`w-full h-full object-cover transition-opacity duration-300 ${
-                imageLoaded ? "opacity-100" : "opacity-0"
-              }`}
-            />
-          )}
-        </div>
+        <ProductGallery images={images} productName={productName} />
 
         <div>
           <p className="text-taupe capitalize mb-2">{formattedCategory}</p>

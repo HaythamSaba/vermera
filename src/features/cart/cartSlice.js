@@ -22,6 +22,20 @@ const initialState = {
   cart: loadFromLocalStorage(),
 };
 
+// Cart items only need enough of the product to render the cart UI and
+// price the order — not the full transformed product (description, stock,
+// dimensions, images[], etc.). Narrowing at the point of dispatch keeps the
+// persisted localStorage payload small and avoids coupling the cart to
+// fields (like the gallery's images[]) it never renders.
+export const toCartItem = ({ sku, productName, image, NewPrice, category }) => ({
+  sku,
+  productName,
+  image,
+  NewPrice,
+  category,
+  quantity: 1,
+});
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
