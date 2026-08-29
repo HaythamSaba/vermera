@@ -123,6 +123,7 @@ function transformProduct(item) {
     brand: item.brand, // real DummyJSON field; genuinely absent (undefined) on some items — guard before rendering
     tags: Array.isArray(item.tags) ? item.tags : [],
     stock: item.stock,
+    availabilityStatus: item.availabilityStatus, // real DummyJSON field ("In Stock" / "Low Stock" / "Out of Stock"); guard before rendering
     woodType: item.woodType, // no DummyJSON equivalent; ProductPage.jsx already guards with `{woodType && (...)}`
     dimensions: item.dimensions,
     shippingInformation: item.shippingInformation, // real DummyJSON field; guard before rendering

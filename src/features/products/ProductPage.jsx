@@ -58,6 +58,7 @@ const ProductPage = () => {
     woodType,
     dimensions,
     stock,
+    availabilityStatus,
     shippingInformation,
     warrantyInformation,
     returnPolicy,
@@ -66,6 +67,7 @@ const ProductPage = () => {
   let formattedCategory = category.replace(/-/g, " ");
 
   const isOutOfStock = stock === 0;
+  const isLowStock = !isOutOfStock && availabilityStatus === "Low Stock";
 
   const handleAddToCart = (quantity) => {
     if (isOutOfStock) return;
@@ -123,9 +125,16 @@ const ProductPage = () => {
               cm
             </p>
           )}
-          <p className="mb-8 text-charcoal">
-            <strong className="font-medium">Stock:</strong>{" "}
-            {isOutOfStock ? "Out of stock" : `${stock} available`}
+          <p className="mb-8 text-charcoal flex items-center gap-3">
+            <span>
+              <strong className="font-medium">Stock:</strong>{" "}
+              {isOutOfStock ? "Out of stock" : `${stock} available`}
+            </span>
+            {isLowStock && (
+              <span className="rounded-full bg-taupe text-cream py-1 px-3 text-xs font-semibold uppercase tracking-wider">
+                Low Stock
+              </span>
+            )}
           </p>
 
           <AddToCartControls

@@ -41,6 +41,7 @@ const ProductItem = ({ product }) => {
     isDiscount,
     DiscountPercentage,
     stock,
+    availabilityStatus,
     category,
     sku,
   } = product;
@@ -54,6 +55,7 @@ const ProductItem = ({ product }) => {
   const navigate = useNavigate();
 
   const isOutOfStock = stock === 0;
+  const isLowStock = !isOutOfStock && 1 === "Low Stock";
 
   const prefersReducedMotion = useReducedMotion();
   // Timing/distance only — no per-index delay here. Stagger order across
@@ -109,6 +111,11 @@ const ProductItem = ({ product }) => {
         {isOutOfStock && (
           <span className={`${badgeClass} bg-espresso text-cream`}>
             Sold Out
+          </span>
+        )}
+        {isLowStock && (
+          <span className={`${badgeClass} bg-taupe text-cream`}>
+            Low Stock
           </span>
         )}
       </div>
