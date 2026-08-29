@@ -6,6 +6,7 @@ import MainButton from "../../ui/MainButton";
 import ProductGallery from "./ProductGallery";
 import QuantitySelector from "./QuantitySelector";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
+import { useToast } from "../../hooks/useToast";
 
 // Quantity state lives here, keyed by sku at the call site below — React
 // Router keeps ProductPage mounted across a sku change (only loader data
@@ -41,6 +42,7 @@ const ProductPage = () => {
   const product = useLoaderData();
   useDocumentTitle(product.productName);
   const dispatch = useDispatch();
+  const showToast = useToast();
 
   const {
     productName,
@@ -63,6 +65,7 @@ const ProductPage = () => {
   const handleAddToCart = (quantity) => {
     if (isOutOfStock) return;
     dispatch(addItem(toCartItem(product, quantity)));
+    showToast(`${productName} added to cart`);
   };
 
   return (

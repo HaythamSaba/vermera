@@ -13,6 +13,7 @@ import DeleteItem from "../cart/DeleteItem";
 import UpdateItemQuantity from "../cart/UpdateItemQuantity";
 import { motion, useReducedMotion } from "framer-motion";
 import { DURATION, EASE } from "../../utils/motion";
+import { useToast } from "../../hooks/useToast";
 
 const MotionDiv = motion.div;
 const MotionImg = motion.img;
@@ -28,6 +29,7 @@ const imageVariants = {
 
 const ProductItem = ({ product }) => {
   const dispatch = useDispatch();
+  const showToast = useToast();
 
   const {
     productName,
@@ -75,6 +77,7 @@ const ProductItem = ({ product }) => {
     e.preventDefault();
     if (isOutOfStock) return;
     dispatch(addItem(toCartItem(product)));
+    showToast(`${productName} added to cart`);
   };
 
   const handleOpenProductPage = (e) => {
