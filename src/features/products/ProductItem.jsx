@@ -41,7 +41,6 @@ const ProductItem = ({ product }) => {
     isDiscount,
     DiscountPercentage,
     stock,
-    availabilityStatus,
     category,
     sku,
   } = product;
