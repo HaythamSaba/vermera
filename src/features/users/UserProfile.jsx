@@ -21,19 +21,28 @@ const orderTotal = (order) =>
   order.shipping +
   order.tax;
 
+const PROFILE_STORAGE_KEY = "furniture_profile";
+const emptyProfile = { name: "", email: "", phone: "", address: "" };
+
+function loadStoredProfile() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(PROFILE_STORAGE_KEY));
+    return stored && typeof stored === "object"
+      ? { ...emptyProfile, ...stored }
+      : emptyProfile;
+  } catch {
+    return emptyProfile;
+  }
+}
+
 const Profile = () => {
   const username = useSelector((state) => state.user.username);
 
   useDocumentTitle(username ? "Profile" : "Welcome");
 
-  // Local edit form only — there's no persistence layer for profile details
-  // in this project (unlike cart/orders, which are real localStorage data).
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-  });
+  // Persisted to localStorage on save, same pattern as cart/orders — reads
+  // back on mount so edits survive a reload.
+  const [user, setUser] = useState(loadStoredProfile);
 
   // Real order history, read from the same localStorage key CreateOrder.jsx
   // writes to — not mock data.
@@ -53,6 +62,11 @@ const Profile = () => {
 
   const handleSave = () => {
     setUser(editedUser);
+    try {
+      localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(editedUser));
+    } catch (error) {
+      console.error("Failed to save profile:", error);
+    }
     setIsEditing(false);
   };
 
