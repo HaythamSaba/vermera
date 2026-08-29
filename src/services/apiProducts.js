@@ -125,6 +125,9 @@ function transformProduct(item) {
     stock: item.stock,
     woodType: item.woodType, // no DummyJSON equivalent; ProductPage.jsx already guards with `{woodType && (...)}`
     dimensions: item.dimensions,
+    shippingInformation: item.shippingInformation, // real DummyJSON field; guard before rendering
+    warrantyInformation: item.warrantyInformation, // real DummyJSON field; guard before rendering
+    returnPolicy: item.returnPolicy, // real DummyJSON field; guard before rendering
   };
 }
 

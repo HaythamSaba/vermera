@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router";
 import { useDispatch } from "react-redux";
+import { RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import { addItem, toCartItem } from "../cart/cartSlice";
 import MainButton from "../../ui/MainButton";
 import ProductGallery from "./ProductGallery";
@@ -57,6 +58,9 @@ const ProductPage = () => {
     woodType,
     dimensions,
     stock,
+    shippingInformation,
+    warrantyInformation,
+    returnPolicy,
   } = product;
 
   let formattedCategory = category.replace(/-/g, " ");
@@ -130,6 +134,38 @@ const ProductPage = () => {
             isOutOfStock={isOutOfStock}
             onAdd={handleAddToCart}
           />
+
+          {(shippingInformation || warrantyInformation || returnPolicy) && (
+            <ul className="mt-8 pt-8 border-t border-stone flex flex-col gap-3">
+              {shippingInformation && (
+                <li className="flex items-center gap-3 text-charcoal">
+                  <Truck
+                    className="w-5 h-5 text-brass shrink-0"
+                    aria-hidden="true"
+                  />
+                  {shippingInformation}
+                </li>
+              )}
+              {warrantyInformation && (
+                <li className="flex items-center gap-3 text-charcoal">
+                  <ShieldCheck
+                    className="w-5 h-5 text-brass shrink-0"
+                    aria-hidden="true"
+                  />
+                  {warrantyInformation}
+                </li>
+              )}
+              {returnPolicy && (
+                <li className="flex items-center gap-3 text-charcoal">
+                  <RotateCcw
+                    className="w-5 h-5 text-brass shrink-0"
+                    aria-hidden="true"
+                  />
+                  {returnPolicy}
+                </li>
+              )}
+            </ul>
+          )}
         </div>
       </div>
 
