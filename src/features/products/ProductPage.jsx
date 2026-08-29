@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { addItem, toCartItem } from "../cart/cartSlice";
 import MainButton from "../../ui/MainButton";
 import ProductGallery from "./ProductGallery";
+import ProductItem from "./ProductItem";
 import QuantitySelector from "./QuantitySelector";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import { useToast } from "../../hooks/useToast";
@@ -39,7 +40,7 @@ const AddToCartControls = ({ product, isOutOfStock, onAdd }) => {
 };
 
 const ProductPage = () => {
-  const product = useLoaderData();
+  const { product, relatedProducts } = useLoaderData();
   useDocumentTitle(product.productName);
   const dispatch = useDispatch();
   const showToast = useToast();
@@ -131,6 +132,22 @@ const ProductPage = () => {
           />
         </div>
       </div>
+
+      {relatedProducts.length > 0 && (
+        <section className="mt-24">
+          <h2 className="font-serif text-espresso font-semibold text-2xl sm:text-3xl mb-8">
+            You May Also Like
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {relatedProducts.map((related) => (
+              <ProductItem
+                key={related.sku || related.id}
+                product={related}
+              />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 };
