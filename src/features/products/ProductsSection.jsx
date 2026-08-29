@@ -1,6 +1,7 @@
 import CategoriesList from "./CategoriesList";
 import Products from "./Products";
 import PriceFilterPanel from "./PriceFilterPanel";
+import ProductSearch from "./ProductSearch";
 import CartOverview from "../cart/CartOverview";
 
 // Matches the sort values apiProducts.js's getProducts() already supports.
@@ -31,6 +32,8 @@ function ProductsSection({
   onSortChange,
   onFilterApply,
   onFilterClear,
+  searchQuery,
+  onSearchChange,
 }) {
   return (
     <div>
@@ -74,6 +77,7 @@ function ProductsSection({
         setLoading={setLoading}
       />
       <CartOverview />
+      <ProductSearch value={searchQuery} onChange={onSearchChange} />
 
       <Products
         navigate={navigate}
@@ -90,6 +94,7 @@ function ProductsSection({
         setLoading={setLoading}
         error={error}
         setError={setError}
+        searchQuery={searchQuery}
       />
     </div>
   );

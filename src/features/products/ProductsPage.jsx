@@ -19,6 +19,21 @@ const ProductsPage = () => {
   const [loading, setLoading] = useState(false);
   const [displayCount, setDisplayCount] = useState(8);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Client-side filter on top of whatever category/sort/price fetch already
+  // produced — no extra network round trip, so results update every
+  // keystroke. `products` (raw, unfiltered) is still what re-fetches write
+  // to via setProducts; this derived list is only for display.
+  const q = searchQuery.trim().toLowerCase();
+  const visibleProducts = q
+    ? products.filter(
+        (p) =>
+          p.productName.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q),
+      )
+    : products;
 
   const updateParams = (updates) => {
     const next = new URLSearchParams(searchParams);
@@ -53,7 +68,7 @@ const ProductsPage = () => {
         maxPrice={maxPrice}
         displayCount={displayCount}
         setDisplayCount={setDisplayCount}
-        products={products}
+        products={visibleProducts}
         setProducts={setProducts}
         loading={loading}
         setLoading={setLoading}
@@ -62,6 +77,8 @@ const ProductsPage = () => {
         onSortChange={handleSortChange}
         onFilterApply={updateParams}
         onFilterClear={handleFilterClear}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
     </div>
   );
