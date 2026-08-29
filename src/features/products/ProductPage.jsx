@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router";
 import { useDispatch } from "react-redux";
 import { RotateCcw, ShieldCheck, Truck } from "lucide-react";
@@ -9,6 +9,10 @@ import ProductItem from "./ProductItem";
 import QuantitySelector from "./QuantitySelector";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import { useToast } from "../../hooks/useToast";
+import {
+  getRecentlyViewed,
+  recordProductView,
+} from "../../services/recentlyViewed";
 
 // Quantity state lives here, keyed by sku at the call site below — React
 // Router keeps ProductPage mounted across a sku change (only loader data
@@ -68,6 +72,14 @@ const ProductPage = () => {
 
   const isOutOfStock = stock === 0;
   const isLowStock = !isOutOfStock && availabilityStatus === "Low Stock";
+
+  // Read for display before recording this visit, so the current product
+  // never appears in its own "Recently Viewed" list.
+  const recentlyViewed = getRecentlyViewed(product.sku);
+
+  useEffect(() => {
+    recordProductView(product);
+  }, [product]);
 
   const handleAddToCart = (quantity) => {
     if (isOutOfStock) return;
@@ -189,6 +201,19 @@ const ProductPage = () => {
                 key={related.sku || related.id}
                 product={related}
               />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {recentlyViewed.length > 0 && (
+        <section className="mt-24">
+          <h2 className="font-serif text-espresso font-semibold text-2xl sm:text-3xl mb-8">
+            Recently Viewed
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {recentlyViewed.map((viewed) => (
+              <ProductItem key={viewed.sku} product={viewed} />
             ))}
           </div>
         </section>

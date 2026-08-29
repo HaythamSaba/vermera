@@ -41,6 +41,7 @@ const ProductItem = ({ product }) => {
     isDiscount,
     DiscountPercentage,
     stock,
+    availabilityStatus,
     category,
     sku,
   } = product;
@@ -54,7 +55,7 @@ const ProductItem = ({ product }) => {
   const navigate = useNavigate();
 
   const isOutOfStock = stock === 0;
-  const isLowStock = !isOutOfStock && 1 === "Low Stock";
+  const isLowStock = !isOutOfStock && availabilityStatus === "Low Stock";
 
   const prefersReducedMotion = useReducedMotion();
   // Timing/distance only — no per-index delay here. Stagger order across
