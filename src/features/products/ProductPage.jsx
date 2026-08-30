@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router";
-import { useDispatch } from "react-redux";
-import { RotateCcw, ShieldCheck, Truck } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { Heart, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import { addItem, toCartItem } from "../cart/cartSlice";
 import MainButton from "../../ui/MainButton";
 import ProductGallery from "./ProductGallery";
@@ -13,13 +13,25 @@ import {
   getRecentlyViewed,
   recordProductView,
 } from "../../services/recentlyViewed";
+import {
+  addItem as addWishlistItem,
+  isInWishlist,
+  removeItem as removeWishlistItem,
+  toWishlistItem,
+} from "../wishlist/wishlistSlice";
 
 // Quantity state lives here, keyed by sku at the call site below — React
 // Router keeps ProductPage mounted across a sku change (only loader data
 // changes), so keying this component forces a remount (and so a reset back
 // to 1) whenever the user lands on a different product, without needing an
 // effect to reset state imperatively.
-const AddToCartControls = ({ product, isOutOfStock, onAdd }) => {
+const AddToCartControls = ({
+  product,
+  isOutOfStock,
+  onAdd,
+  isWishlisted,
+  onToggleWishlist,
+}) => {
   const [quantity, setQuantity] = useState(1);
   const max = product.stock;
 
@@ -40,6 +52,19 @@ const AddToCartControls = ({ product, isOutOfStock, onAdd }) => {
         disabled={isOutOfStock}
         onClick={() => onAdd(quantity)}
       />
+      <button
+        type="button"
+        onClick={onToggleWishlist}
+        aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+        aria-pressed={isWishlisted}
+        className="w-14 h-14 shrink-0 flex items-center justify-center rounded-full border border-stone text-charcoal hover:text-brass hover:border-brass transition-colors cursor-pointer"
+      >
+        <Heart
+          className={isWishlisted ? "fill-brass text-brass" : ""}
+          size={20}
+          aria-hidden="true"
+        />
+      </button>
     </div>
   );
 };
@@ -72,6 +97,7 @@ const ProductPage = () => {
 
   const isOutOfStock = stock === 0;
   const isLowStock = !isOutOfStock && availabilityStatus === "Low Stock";
+  const isWishlisted = useSelector(isInWishlist(product.sku));
 
   // Read for display before recording this visit, so the current product
   // never appears in its own "Recently Viewed" list.
@@ -85,6 +111,16 @@ const ProductPage = () => {
     if (isOutOfStock) return;
     dispatch(addItem(toCartItem(product, quantity)));
     showToast(`${productName} added to cart`);
+  };
+
+  const handleToggleWishlist = () => {
+    if (isWishlisted) {
+      dispatch(removeWishlistItem(product.sku));
+      showToast(`${productName} removed from wishlist`);
+    } else {
+      dispatch(addWishlistItem(toWishlistItem(product)));
+      showToast(`${productName} added to wishlist`);
+    }
   };
 
   return (
@@ -154,6 +190,8 @@ const ProductPage = () => {
             product={product}
             isOutOfStock={isOutOfStock}
             onAdd={handleAddToCart}
+            isWishlisted={isWishlisted}
+            onToggleWishlist={handleToggleWishlist}
           />
 
           {(shippingInformation || warrantyInformation || returnPolicy) && (

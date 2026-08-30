@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, Search, ShoppingCart, User, X } from "lucide-react";
+import { Heart, Menu, Search, ShoppingCart, User, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
@@ -8,12 +8,35 @@ import useClickOutside from "../hooks/useClickOutside";
 import useLockBodyScroll from "../hooks/useLockBodyScroll";
 import useFocusTrap from "../hooks/useFocusTrap";
 import { getTotalCartQuantity } from "../features/cart/cartSlice";
+import { getWishlistCount } from "../features/wishlist/wishlistSlice";
 
 const navLinkClass =
   "w-fit cursor-pointer relative after:content-[''] after:absolute after:bg-brass after:h-[3px] after:w-0 hover:after:w-full after:duration-300 after:left-0 after:-bottom-[3px]";
 
 const MotionHeader = motion.header;
 const MotionDiv = motion.div;
+
+// Shared wishlist icon + real Redux item count, reused across the primary
+// header and the floating scrolled header.
+const WishlistIcon = ({ className = "", onClick }) => {
+  const wishlistCount = useSelector(getWishlistCount);
+
+  return (
+    <Link
+      to="/wishlist"
+      onClick={onClick}
+      className={`relative inline-flex ${className}`}
+      aria-label={`Wishlist, ${wishlistCount} item${wishlistCount === 1 ? "" : "s"}`}
+    >
+      <Heart className="cursor-pointer" aria-hidden="true" />
+      {wishlistCount > 0 && (
+        <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-brass text-cream text-[10px] font-semibold leading-none">
+          {wishlistCount}
+        </span>
+      )}
+    </Link>
+  );
+};
 
 // Shared cart icon + real Redux item count, reused across the primary
 // header, the floating scrolled header, and the mobile bar.
@@ -168,6 +191,9 @@ const Header = () => {
               <Link to="/profile" aria-label="Your account">
                 <User className="cursor-pointer" aria-hidden="true" />
               </Link>
+            </li>
+            <li>
+              <WishlistIcon />
             </li>
             <li>
               <button
@@ -387,6 +413,19 @@ const Header = () => {
                         aria-hidden="true"
                       />
                       Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/wishlist"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Heart
+                        className="inline-block mr-3"
+                        size={20}
+                        aria-hidden="true"
+                      />
+                      Wishlist
                     </Link>
                   </li>
                   <li>

@@ -52,6 +52,13 @@ const router = createBrowserRouter([
           })),
       },
       {
+        path: "/wishlist",
+        lazy: () =>
+          import("./features/wishlist/Wishlist").then((m) => ({
+            Component: m.default,
+          })),
+      },
+      {
         path: "/contact",
         lazy: () =>
           import("./ui/Contact").then((m) => ({ Component: m.default })),

@@ -1,4 +1,4 @@
-import { ImageOff, Info, ShoppingCart } from "lucide-react";
+import { Heart, ImageOff, Info, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import MainButton from "../../ui/MainButton";
@@ -14,6 +14,12 @@ import UpdateItemQuantity from "../cart/UpdateItemQuantity";
 import { motion, useReducedMotion } from "framer-motion";
 import { DURATION, EASE } from "../../utils/motion";
 import { useToast } from "../../hooks/useToast";
+import {
+  addItem as addWishlistItem,
+  isInWishlist,
+  removeItem as removeWishlistItem,
+  toWishlistItem,
+} from "../wishlist/wishlistSlice";
 
 const MotionDiv = motion.div;
 const MotionImg = motion.img;
@@ -48,6 +54,7 @@ const ProductItem = ({ product }) => {
 
   const isItemInCart = useSelector(isInCart(product.sku));
   const currentQuantity = useSelector(getCurrentQuantityBySku(product.sku));
+  const isItemInWishlist = useSelector(isInWishlist(product.sku));
 
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -89,11 +96,39 @@ const ProductItem = ({ product }) => {
     navigate(`/products/${sku}`);
   };
 
+  const handleToggleWishlist = (e) => {
+    e.preventDefault();
+    if (isItemInWishlist) {
+      dispatch(removeWishlistItem(sku));
+      showToast(`${productName} removed from wishlist`);
+    } else {
+      dispatch(addWishlistItem(toWishlistItem(product)));
+      showToast(`${productName} added to wishlist`);
+    }
+  };
+
   const badgeClass =
     "rounded-full py-1.5 px-3 text-xs font-semibold uppercase tracking-wider";
 
   return (
     <MotionDiv className="product-card relative group" variants={cardVariants}>
+      {/* Wishlist toggle */}
+      <button
+        type="button"
+        onClick={handleToggleWishlist}
+        aria-label={
+          isItemInWishlist ? "Remove from wishlist" : "Add to wishlist"
+        }
+        aria-pressed={isItemInWishlist}
+        className="absolute top-4 left-4 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-cream/90 text-charcoal hover:text-brass transition-colors cursor-pointer"
+      >
+        <Heart
+          className={isItemInWishlist ? "fill-brass text-brass" : ""}
+          size={18}
+          aria-hidden="true"
+        />
+      </button>
+
       {/* Status Badges */}
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
         {isNew && (
