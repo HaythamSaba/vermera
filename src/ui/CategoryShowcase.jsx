@@ -67,9 +67,7 @@ function CategoryShowcase() {
             >
               <div
                 className={`overflow-hidden bg-stone/20 border border-stone mb-3 ${
-                  isFeatured
-                    ? "flex-1 aspect-square sm:aspect-auto"
-                    : "aspect-square"
+                  isFeatured ? "flex-1 aspect-square sm:aspect-auto" : "aspect-square"
                 }`}
               >
                 {product ? (
