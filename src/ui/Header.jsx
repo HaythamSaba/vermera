@@ -306,6 +306,9 @@ const Header = () => {
                   </Link>
                 </li>
                 <li>
+                  <WishlistIcon />
+                </li>
+                <li>
                   <button
                     type="button"
                     onClick={() => setIsSearchOpen(true)}
