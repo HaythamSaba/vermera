@@ -183,6 +183,9 @@ const Header = () => {
             <li className={navLinkClass}>
               <Link to="/contact">Contact</Link>
             </li>
+            <li className={navLinkClass}>
+              <Link to="/about">About</Link>
+            </li>
           </ul>
 
           {/* Desktop Icons */}
@@ -297,6 +300,9 @@ const Header = () => {
                 <li className={navLinkClass}>
                   <Link to="/contact">Contact</Link>
                 </li>
+                <li className={navLinkClass}>
+                  <Link to="/about">About</Link>
+                </li>
               </ul>
 
               <ul className="hidden lg:flex gap-12 items-center justify-between">
@@ -400,6 +406,14 @@ const Header = () => {
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Contact
+                    </Link>
+                  </li>
+                  <li className={navLinkClass}>
+                    <Link
+                      to="/about"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      About
                     </Link>
                   </li>
 

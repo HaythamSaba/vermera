@@ -64,6 +64,11 @@ const router = createBrowserRouter([
           import("./ui/Contact").then((m) => ({ Component: m.default })),
       },
       {
+        path: "/about",
+        lazy: () =>
+          import("./ui/About").then((m) => ({ Component: m.default })),
+      },
+      {
         path: "/order/newOrder",
         lazy: () =>
           import("./features/order/CreateOrder").then((m) => ({
