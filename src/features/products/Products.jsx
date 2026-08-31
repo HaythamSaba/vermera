@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import ProductItem from "./ProductItem";
 import MainButton from "../../ui/MainButton";
@@ -56,7 +56,17 @@ const Products = ({
   // it and stay stuck at their `initial` variant. `initial`/`animate` DO
   // propagate reactively to newly-mounted children through context, so we
   // drive the reveal off useInView + a plain `animate` prop instead.
-  const gridRef = useRef(null);
+  //
+  // The grid doesn't exist on the very first render (the loading/error/empty
+  // branches below return before it) — framer-motion's useInView sets up its
+  // IntersectionObserver in a useEffect keyed on `[root, ref, margin, once,
+  // amount]`, and a plain useRef's identity never changes, so that effect
+  // only ever runs once, while `ref.current` is still null, and never gets a
+  // second chance once the grid actually mounts. A callback ref backed by
+  // state gives the ref object a new identity once the real node attaches,
+  // so useInView's effect re-runs against it instead of being stuck forever.
+  const [gridNode, setGridNode] = useState(null);
+  const gridRef = useMemo(() => ({ current: gridNode }), [gridNode]);
   const isGridInView = useInView(gridRef, { once: true, amount: 0.1 });
 
   const cardParentVariants = {
@@ -170,7 +180,7 @@ const Products = ({
             </div>
           )}
           <MotionDiv
-            ref={gridRef}
+            ref={setGridNode}
             variants={cardParentVariants}
             initial="initial"
             animate={isGridInView ? "visible" : "initial"}
