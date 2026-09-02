@@ -16,6 +16,8 @@ import useDocumentTitle from "../hooks/useDocumentTitle";
 import { useToast } from "../hooks/useToast";
 import { STAGGER_MS } from "../utils/motion";
 
+const MotionDiv = motion.div;
+
 const CONTACT_EMAIL = "haythamsaba@gmail.com";
 
 const CONTACT_LINKS = [
@@ -109,19 +111,18 @@ const About = () => {
               goal: becoming a Product Engineer.
             </Reveal>
           </div>
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 50, filter: "blur(20px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0)" }}
             transition={{ duration: 0.5 }}
-            className="max-w-[400px] md:w-[400px] aspect-square flex justify-center items-end bg-white pt-4 border border-stone rounded-t-full mx-auto "
+            className="max-w-[400px] md:w-[400px] aspect-square flex justify-center items-end bg-white pt-4 border border-stone rounded-t-full mx-auto"
           >
             <img
               className="w-[250px]"
               src="/images/me.png"
-              alt="Haytham Saba Image"
-              aria-hidden="true"
+              alt="Portrait of Haytham Saba"
             />
-          </motion.div>
+          </MotionDiv>
         </div>
       </div>
 
