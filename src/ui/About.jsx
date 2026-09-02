@@ -11,11 +11,18 @@ import {
 } from "lucide-react";
 import Breadcrumb from "./Breadcrumb";
 import Reveal from "./Reveal";
+import AboutSection from "./AboutSection";
+import AboutSectionHeading from "./AboutSectionHeading";
+import ContactChannelCard from "./ContactChannelCard";
 import useStaggerReveal from "../hooks/useStaggerReveal";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import { useToast } from "../hooks/useToast";
 import { STAGGER_MS } from "../utils/motion";
 
+// Matches the codebase convention elsewhere (AnnouncementBar, Header,
+// Products, ProductItem, CartOverview) — aliasing to a plain identifier
+// before using it as a JSX tag, rather than `<motion.div>` directly, is what
+// lets no-unused-vars recognize the import as used.
 const MotionDiv = motion.div;
 
 const CONTACT_EMAIL = "haythamsaba@gmail.com";
@@ -74,8 +81,8 @@ const About = () => {
   return (
     <div>
       {/* Intro / hero — deliberately plain and text-forward (a single
-          column, no image grid, no card layout) so this reads as the
-          developer's own page, not another product/category banner. */}
+          column, no card layout) so this reads as the developer's own page,
+          not another product/category banner. */}
       <div className="container-foundation section">
         <Breadcrumb path={["Home", "About"]} />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
@@ -127,14 +134,9 @@ const About = () => {
       </div>
 
       {/* Background / experience */}
-      <section className="container-foundation section">
+      <AboutSection>
         <div className="max-w-2xl">
-          <Reveal
-            as="h2"
-            className="font-serif font-medium text-3xl text-espresso mb-6"
-          >
-            Background
-          </Reveal>
+          <AboutSectionHeading>Background</AboutSectionHeading>
           <Reveal delay={STAGGER_MS} className="flex items-start gap-4">
             <Briefcase
               className="w-5 h-5 text-brass mt-1 shrink-0"
@@ -150,55 +152,45 @@ const About = () => {
             </p>
           </Reveal>
         </div>
-      </section>
+      </AboutSection>
 
       {/* This project */}
-      <section className="bg-cream border-y border-stone">
-        <div className="container-foundation section">
-          <div className="max-w-2xl">
-            <Reveal
-              as="h2"
-              className="font-serif font-medium text-3xl text-espresso mb-6"
-            >
-              About This Project
-            </Reveal>
-            <Reveal
-              as="p"
-              delay={STAGGER_MS}
-              className="text-taupe text-lg leading-relaxed mb-4"
-            >
-              Vermera is a portfolio project, not a real store — a &quot;quiet
-              luxury&quot; fashion catalog built to demonstrate frontend and
-              product-engineering skills. There&apos;s no backend: the catalog
-              is sourced live from DummyJSON, and the cart, wishlist, and order
-              records all persist to localStorage.
-            </Reveal>
-            <Reveal
-              as="p"
-              delay={STAGGER_MS * 2}
-              className="text-taupe text-lg leading-relaxed"
-            >
-              A few decisions I&apos;m glad I made along the way: filter, sort,
-              and category state all live in the URL, so results are shareable
-              and back/forward just works; every interactive element is a real,
-              keyboard-reachable control with correct ARIA rather than a styled
-              div; and scroll animation is deliberately split — GSAP and
-              ScrollTrigger for scroll-position effects, Framer Motion for
-              open/close state — instead of mixing the two on one element.
-            </Reveal>
-          </div>
+      <AboutSection tinted>
+        <div className="max-w-2xl">
+          <AboutSectionHeading>About This Project</AboutSectionHeading>
+          <Reveal
+            as="p"
+            delay={STAGGER_MS}
+            className="text-taupe text-lg leading-relaxed mb-4"
+          >
+            Vermera is a portfolio project, not a real store — a &quot;quiet
+            luxury&quot; fashion catalog built to demonstrate frontend and
+            product-engineering skills. There&apos;s no backend: the catalog is
+            sourced live from DummyJSON, and the cart, wishlist, and order
+            records all persist to localStorage.
+          </Reveal>
+          <Reveal
+            as="p"
+            delay={STAGGER_MS * 2}
+            className="text-taupe text-lg leading-relaxed"
+          >
+            A few decisions I&apos;m glad I made along the way: filter, sort,
+            and category state all live in the URL, so results are shareable and
+            back/forward just works; every interactive element is a real,
+            keyboard-reachable control with correct ARIA rather than a styled
+            div; and scroll animation is deliberately split — GSAP and
+            ScrollTrigger for scroll-position effects, Framer Motion for
+            open/close state — instead of mixing the two on one element.
+          </Reveal>
         </div>
-      </section>
+      </AboutSection>
 
       {/* Contact */}
-      <section className="container-foundation section">
+      <AboutSection>
         <div className="max-w-2xl mb-10">
-          <Reveal
-            as="h2"
-            className="font-serif font-medium text-3xl text-espresso mb-4"
-          >
+          <AboutSectionHeading className="mb-4">
             Get in Touch
-          </Reveal>
+          </AboutSectionHeading>
           <Reveal
             as="p"
             delay={STAGGER_MS}
@@ -213,30 +205,11 @@ const About = () => {
           ref={containerRef}
           className="grid grid-cols-1 sm:grid-cols-2 gap-6"
         >
-          {CONTACT_LINKS.map((channel) => {
-            const Icon = channel.icon;
-            return (
-              <a
-                key={channel.label}
-                href={channel.href}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={channel.ariaLabel}
-                className="contact-channel flex items-center gap-4 p-5 border border-stone bg-cream hover:border-brass transition-colors duration-300"
-              >
-                <Icon
-                  className="w-5 h-5 text-brass shrink-0"
-                  aria-hidden="true"
-                />
-                <div>
-                  <p className="font-medium text-charcoal">{channel.label}</p>
-                  <p className="text-taupe text-sm">{channel.value}</p>
-                </div>
-              </a>
-            );
-          })}
+          {CONTACT_LINKS.map((channel) => (
+            <ContactChannelCard key={channel.label} {...channel} />
+          ))}
 
-          <div className="contact-channel flex items-center gap-4 p-5 border border-stone bg-cream">
+          <div className="contact-channel flex items-center gap-4 p-5 border border-stone bg-cream hover:border-brass transition-colors duration-300">
             <Mail className="w-5 h-5 text-brass shrink-0" aria-hidden="true" />
             <div className="flex-1 min-w-0">
               <p className="font-medium text-charcoal">Email</p>
@@ -261,7 +234,7 @@ const About = () => {
             </button>
           </div>
         </div>
-      </section>
+      </AboutSection>
     </div>
   );
 };
