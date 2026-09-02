@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Briefcase, Check, Copy, Github, Globe, Linkedin, Mail } from "lucide-react";
+import { motion } from "framer-motion";
+import {
+  Briefcase,
+  Check,
+  Copy,
+  Github,
+  Globe,
+  Linkedin,
+  Mail,
+} from "lucide-react";
 import Breadcrumb from "./Breadcrumb";
 import Reveal from "./Reveal";
 import useStaggerReveal from "../hooks/useStaggerReveal";
@@ -67,38 +76,52 @@ const About = () => {
           developer's own page, not another product/category banner. */}
       <div className="container-foundation section">
         <Breadcrumb path={["Home", "About"]} />
-
-        <div className="max-w-2xl mt-10">
-          <Reveal
-            as="p"
-            delay={0}
-            className="font-semibold text-sm uppercase tracking-[3px] text-brass mb-4"
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          <div className="max-w-2xl mt-10">
+            <Reveal
+              as="p"
+              delay={0}
+              className="font-semibold text-sm uppercase tracking-[3px] text-brass mb-4"
+            >
+              Frontend Developer · Ljubljana, Slovenia
+            </Reveal>
+            <Reveal
+              as="h1"
+              delay={STAGGER_MS}
+              className="font-serif text-espresso font-semibold text-5xl sm:text-6xl leading-tight mb-6"
+            >
+              Haytham
+            </Reveal>
+            <Reveal
+              as="p"
+              delay={STAGGER_MS * 2}
+              className="font-serif text-2xl sm:text-3xl text-charcoal leading-snug mb-6"
+            >
+              Turning company values into websites users trust.
+            </Reveal>
+            <Reveal
+              as="p"
+              delay={STAGGER_MS * 3}
+              className="text-taupe text-lg leading-relaxed"
+            >
+              Software Engineering graduate targeting frontend and full-stack
+              roles in Ljubljana and the broader European market. Long-term
+              goal: becoming a Product Engineer.
+            </Reveal>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 50, filter: "blur(20px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0)" }}
+            transition={{ duration: 0.5 }}
+            className="max-w-[400px] md:w-[400px] aspect-square flex justify-center items-end bg-white pt-4 border border-stone rounded-t-full mx-auto "
           >
-            Frontend Developer · Ljubljana, Slovenia
-          </Reveal>
-          <Reveal
-            as="h1"
-            delay={STAGGER_MS}
-            className="font-serif text-espresso font-semibold text-5xl sm:text-6xl leading-tight mb-6"
-          >
-            Haytham
-          </Reveal>
-          <Reveal
-            as="p"
-            delay={STAGGER_MS * 2}
-            className="font-serif text-2xl sm:text-3xl text-charcoal leading-snug mb-6"
-          >
-            Turning company values into websites users trust.
-          </Reveal>
-          <Reveal
-            as="p"
-            delay={STAGGER_MS * 3}
-            className="text-taupe text-lg leading-relaxed"
-          >
-            Software Engineering graduate targeting frontend and full-stack
-            roles in Ljubljana and the broader European market. Long-term
-            goal: becoming a Product Engineer.
-          </Reveal>
+            <img
+              className="w-[250px]"
+              src="/images/me.png"
+              alt="Haytham Saba Image"
+              aria-hidden="true"
+            />
+          </motion.div>
         </div>
       </div>
 
@@ -118,11 +141,9 @@ const About = () => {
             />
             <p className="text-taupe text-lg leading-relaxed">
               Interned remotely with{" "}
-              <span className="text-charcoal font-medium">Siciliamia</span>,
-              an Italian company, working on{" "}
-              <span className="text-charcoal font-medium">
-                BlueHouse_New
-              </span>{" "}
+              <span className="text-charcoal font-medium">Siciliamia</span>, an
+              Italian company, working on{" "}
+              <span className="text-charcoal font-medium">BlueHouse_New</span>{" "}
               inside a structured pull-request and code-review workflow
               alongside senior developers.
             </p>
@@ -145,26 +166,24 @@ const About = () => {
               delay={STAGGER_MS}
               className="text-taupe text-lg leading-relaxed mb-4"
             >
-              Vermera is a portfolio project, not a real store — a
-              &quot;quiet luxury&quot; fashion catalog built to demonstrate
-              frontend and product-engineering skills. There&apos;s no
-              backend: the catalog is sourced live from DummyJSON, and the
-              cart, wishlist, and order records all persist to
-              localStorage.
+              Vermera is a portfolio project, not a real store — a &quot;quiet
+              luxury&quot; fashion catalog built to demonstrate frontend and
+              product-engineering skills. There&apos;s no backend: the catalog
+              is sourced live from DummyJSON, and the cart, wishlist, and order
+              records all persist to localStorage.
             </Reveal>
             <Reveal
               as="p"
               delay={STAGGER_MS * 2}
               className="text-taupe text-lg leading-relaxed"
             >
-              A few decisions I&apos;m glad I made along the way: filter,
-              sort, and category state all live in the URL, so results are
-              shareable and back/forward just works; every interactive
-              element is a real, keyboard-reachable control with correct
-              ARIA rather than a styled div; and scroll animation is
-              deliberately split — GSAP and ScrollTrigger for scroll-position
-              effects, Framer Motion for open/close state — instead of
-              mixing the two on one element.
+              A few decisions I&apos;m glad I made along the way: filter, sort,
+              and category state all live in the URL, so results are shareable
+              and back/forward just works; every interactive element is a real,
+              keyboard-reachable control with correct ARIA rather than a styled
+              div; and scroll animation is deliberately split — GSAP and
+              ScrollTrigger for scroll-position effects, Framer Motion for
+              open/close state — instead of mixing the two on one element.
             </Reveal>
           </div>
         </div>
@@ -209,9 +228,7 @@ const About = () => {
                   aria-hidden="true"
                 />
                 <div>
-                  <p className="font-medium text-charcoal">
-                    {channel.label}
-                  </p>
+                  <p className="font-medium text-charcoal">{channel.label}</p>
                   <p className="text-taupe text-sm">{channel.value}</p>
                 </div>
               </a>
@@ -219,10 +236,7 @@ const About = () => {
           })}
 
           <div className="contact-channel flex items-center gap-4 p-5 border border-stone bg-cream">
-            <Mail
-              className="w-5 h-5 text-brass shrink-0"
-              aria-hidden="true"
-            />
+            <Mail className="w-5 h-5 text-brass shrink-0" aria-hidden="true" />
             <div className="flex-1 min-w-0">
               <p className="font-medium text-charcoal">Email</p>
               <a
