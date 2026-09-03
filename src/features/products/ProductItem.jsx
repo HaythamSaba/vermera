@@ -156,7 +156,7 @@ const ProductItem = ({ product }) => {
       </div>
 
       {/* Hover Overlay */}
-      <div className="absolute inset-0 bg-espresso/70 backdrop-blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-400 ease-out flex flex-col items-center justify-center gap-6 z-10">
+      <div className="absolute inset-0 bg-espresso/70 backdrop-blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-400 ease-out flex flex-col items-center justify-center gap-6 z-6">
         {isOutOfStock ? (
           <span className="text-espresso text-sm font-semibold uppercase tracking-wider bg-cream px-4 py-2 rounded-full">
             Out of Stock
