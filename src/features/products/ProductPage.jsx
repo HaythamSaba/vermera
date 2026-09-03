@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { Heart, RotateCcw, ShieldCheck, Truck } from "lucide-react";
+import { RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import { addItem, toCartItem } from "../cart/cartSlice";
-import MainButton from "../../ui/MainButton";
+import AddToCartButton from "../../ui/AddToCartButton";
+import WishlistButton from "../../ui/WishlistButton";
 import ProductGallery from "./ProductGallery";
 import ProductItem from "./ProductItem";
 import QuantitySelector from "./QuantitySelector";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import { useToast } from "../../hooks/useToast";
+import useAddedConfirmation from "../../hooks/useAddedConfirmation";
 import {
   getRecentlyViewed,
   recordProductView,
@@ -34,6 +36,12 @@ const AddToCartControls = ({
 }) => {
   const [quantity, setQuantity] = useState(1);
   const max = product.stock;
+  const [justAdded, confirmAdded] = useAddedConfirmation();
+
+  const handleAdd = () => {
+    onAdd(quantity);
+    confirmAdded();
+  };
 
   return (
     <div className="flex items-center gap-4">
@@ -46,25 +54,19 @@ const AddToCartControls = ({
           max={max}
         />
       )}
-      <MainButton
-        content={isOutOfStock ? "Sold Out" : "Add to Cart"}
+      <AddToCartButton
+        justAdded={justAdded}
+        label={isOutOfStock ? "Sold Out" : "Add to Cart"}
         variant="quiet"
         disabled={isOutOfStock}
-        onClick={() => onAdd(quantity)}
+        onClick={handleAdd}
       />
-      <button
-        type="button"
-        onClick={onToggleWishlist}
-        aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
-        aria-pressed={isWishlisted}
+      <WishlistButton
+        isActive={isWishlisted}
+        onToggle={onToggleWishlist}
+        iconSize={20}
         className="w-14 h-14 shrink-0 flex items-center justify-center rounded-full border border-stone text-charcoal hover:text-brass hover:border-brass transition-colors cursor-pointer"
-      >
-        <Heart
-          className={isWishlisted ? "fill-brass text-brass" : ""}
-          size={20}
-          aria-hidden="true"
-        />
-      </button>
+      />
     </div>
   );
 };

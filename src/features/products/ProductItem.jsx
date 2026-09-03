@@ -1,7 +1,9 @@
-import { Heart, ImageOff, Info, ShoppingCart } from "lucide-react";
+import { ImageOff, Info, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import MainButton from "../../ui/MainButton";
+import AddToCartButton from "../../ui/AddToCartButton";
+import WishlistButton from "../../ui/WishlistButton";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addItem,
@@ -14,6 +16,7 @@ import UpdateItemQuantity from "../cart/UpdateItemQuantity";
 import { motion, useReducedMotion } from "framer-motion";
 import { DURATION, EASE } from "../../utils/motion";
 import { useToast } from "../../hooks/useToast";
+import useAddedConfirmation from "../../hooks/useAddedConfirmation";
 import {
   addItem as addWishlistItem,
   isInWishlist,
@@ -58,6 +61,7 @@ const ProductItem = ({ product }) => {
 
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [justAddedToCart, confirmAddedToCart] = useAddedConfirmation();
 
   const navigate = useNavigate();
 
@@ -87,6 +91,11 @@ const ProductItem = ({ product }) => {
     if (isOutOfStock) return;
     dispatch(addItem(toCartItem(product)));
     showToast(`${productName} added to cart`);
+    // Briefly confirms "Added" on this same button before the card swaps to
+    // the permanent quantity stepper below (see the isItemInCart branch),
+    // so the click gets an immediate local confirmation instead of the
+    // stepper just appearing in its place with no transition.
+    confirmAddedToCart();
   };
 
   const handleOpenProductPage = (e) => {
@@ -113,21 +122,12 @@ const ProductItem = ({ product }) => {
   return (
     <MotionDiv className="product-card relative group" variants={cardVariants}>
       {/* Wishlist toggle */}
-      <button
-        type="button"
-        onClick={handleToggleWishlist}
-        aria-label={
-          isItemInWishlist ? "Remove from wishlist" : "Add to wishlist"
-        }
-        aria-pressed={isItemInWishlist}
+      <WishlistButton
+        isActive={isItemInWishlist}
+        onToggle={handleToggleWishlist}
+        iconSize={18}
         className="absolute top-4 left-4 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-cream/90 text-charcoal hover:text-brass transition-colors cursor-pointer"
-      >
-        <Heart
-          className={isItemInWishlist ? "fill-brass text-brass" : ""}
-          size={18}
-          aria-hidden="true"
-        />
-      </button>
+      />
 
       {/* Status Badges */}
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
@@ -171,20 +171,20 @@ const ProductItem = ({ product }) => {
             >
               <Info size={22} />
             </MainButton>
-            {isItemInCart ? (
+            {isItemInCart && !justAddedToCart ? (
               <>
                 <UpdateItemQuantity sku={sku} quantity={currentQuantity} />
                 <DeleteItem sku={sku} />
               </>
             ) : (
-              <MainButton
+              <AddToCartButton
+                justAdded={justAddedToCart}
                 onClick={handleAddToCart}
                 disabled={isOutOfStock}
                 variant="light"
-                content={"Add to Cart"}
-              >
-                <ShoppingCart size={22} />
-              </MainButton>
+                icon={<ShoppingCart size={22} aria-hidden="true" />}
+                label="Add to Cart"
+              />
             )}
           </>
         )}

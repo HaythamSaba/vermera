@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import SearchModal from "../features/order/SearchModal";
+import AnimatedCount from "./AnimatedCount";
 import useClickOutside from "../hooks/useClickOutside";
 import useLockBodyScroll from "../hooks/useLockBodyScroll";
 import useFocusTrap from "../hooks/useFocusTrap";
@@ -31,7 +32,7 @@ const WishlistIcon = ({ className = "", onClick }) => {
       <Heart className="cursor-pointer" aria-hidden="true" />
       {wishlistCount > 0 && (
         <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-brass text-cream text-[10px] font-semibold leading-none">
-          {wishlistCount}
+          <AnimatedCount value={wishlistCount} />
         </span>
       )}
     </Link>
@@ -54,7 +55,7 @@ const CartIcon = ({ className = "", onClick, children }) => {
         <ShoppingCart className="cursor-pointer" aria-hidden="true" />
         {totalCartQuantity > 0 && (
           <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-brass text-cream text-[10px] font-semibold leading-none">
-            {totalCartQuantity}
+            <AnimatedCount value={totalCartQuantity} />
           </span>
         )}
       </span>
