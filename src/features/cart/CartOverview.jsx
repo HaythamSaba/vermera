@@ -1,5 +1,5 @@
 import { ShoppingCart, X } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -10,11 +10,6 @@ import useFocusTrap from "../../hooks/useFocusTrap";
 
 const MotionDiv = motion.div;
 
-// Brass, at the alpha this flash fades from — kept as an rgba literal since
-// framer-motion animates backgroundColor as a plain CSS value, not through
-// the Tailwind/theme token pipeline.
-const FLASH_COLOR = "rgba(163, 132, 91, 0.35)";
-
 const CartOverview = () => {
   const totalCartQuantity = useSelector(getTotalCartQuantity);
   const totalCartPrice = useSelector(getTotalCartPrice);
@@ -24,9 +19,6 @@ const CartOverview = () => {
   const containerRef = useRef();
   const toggleButtonRef = useRef();
   const wasCartOpenRef = useRef(false);
-  const [prevQuantity, setPrevQuantity] = useState(totalCartQuantity);
-  const [flashKey, setFlashKey] = useState(0);
-  const prefersReducedMotion = useReducedMotion();
 
   useClickOutside(containerRef, () => setIsCartOpen(false));
 
@@ -50,23 +42,6 @@ const CartOverview = () => {
     }
     wasCartOpenRef.current = isCartOpen;
   }, [isCartOpen]);
-
-  // CartOverview only ever shows aggregate totals, not a per-item line list
-  // (that's Cart.jsx/CartItem.jsx's job) — so "highlight the line that just
-  // changed" becomes "flash the totals block that just changed", the
-  // closest real equivalent in this panel. Fires on any quantity change,
-  // whether or not the panel happens to be open at the time; with the panel
-  // closed the flash element simply isn't mounted, so this is a no-op.
-  // Adjusted during render — React's documented pattern for deriving state
-  // from a prop/selector change ("Adjusting state when a prop changes") —
-  // rather than in a useEffect, which would cost an extra render/commit for
-  // something this cheap and synchronous.
-  if (prevQuantity !== totalCartQuantity) {
-    setPrevQuantity(totalCartQuantity);
-    if (!prefersReducedMotion) {
-      setFlashKey((key) => key + 1);
-    }
-  }
 
   const handleNavigate = () => {
     setIsCartOpen(false);
@@ -120,7 +95,7 @@ const CartOverview = () => {
                   </p>
                 ) : (
                   <>
-                    <div className="relative">
+                    <div>
                       <h3 className="text-lg font-serif font-medium text-espresso mb-2">
                         Cart Overview
                       </h3>
@@ -131,22 +106,6 @@ const CartOverview = () => {
                       <p className="text-charcoal">
                         Total Price: ${totalCartPrice.toFixed(2)}
                       </p>
-                      {/* Soft brass flash on the totals block whenever the
-                          quantity just changed, so an add/remove made while
-                          this panel is open is visible without re-reading
-                          the numbers. Re-triggered per change via `key`. */}
-                      {flashKey > 0 && (
-                        <MotionDiv
-                          key={flashKey}
-                          initial={{ backgroundColor: FLASH_COLOR }}
-                          animate={{
-                            backgroundColor: "rgba(163, 132, 91, 0)",
-                          }}
-                          transition={{ duration: 0.6, ease: "easeOut" }}
-                          className="absolute -inset-2 -z-10 rounded"
-                          aria-hidden="true"
-                        />
-                      )}
                     </div>
                     <div className="flex flex-col justify-center">
                       <hr className="mb-4 border-stone" />
