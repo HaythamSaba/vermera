@@ -41,7 +41,7 @@ const Hero = () => {
             delay={STAGGER_MS * 2}
             className="text-taupe text-lg leading-relaxed mb-10 max-w-md"
           >
-            A curated edit of bags, jewelry, watches, and beauty essentials —
+            A curated edit of bags, jewelry, watches, and beauty essentials,
             each piece selected for its quality and quiet character.
           </Reveal>
           <Reveal delay={STAGGER_MS * 3}>
