@@ -438,10 +438,9 @@ const Header = () => {
                       to="/wishlist"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <Heart
+                      <WishlistIcon
                         className="inline-block mr-3"
-                        size={20}
-                        aria-hidden="true"
+                        onClick={() => setIsMobileMenuOpen(false)}
                       />
                       Wishlist
                     </Link>
