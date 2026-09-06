@@ -232,7 +232,7 @@ const ProductItem = ({ product }) => {
         <div className="bg-cream p-4 pr-6 min-w-[285px] h-[200px] flex flex-col justify-between">
           <div>
             <h3
-              className="font-semibold text-2xl text-charcoal mb-2 line-clamp-1"
+              className="font-semibold text-xl text-charcoal mb-2 line-clamp-1"
               title={productName}
             >
               {productName}
