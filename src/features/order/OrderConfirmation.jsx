@@ -236,7 +236,7 @@ const OrderConfirmation = () => {
 
         <MainButton
           fullWidth
-          variant="quiet"
+          variant="outline"
           content="Continue Shopping"
           onClick={() => navigate("/products")}
         >
