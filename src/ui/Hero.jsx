@@ -47,7 +47,7 @@ const Hero = () => {
           <Reveal delay={STAGGER_MS * 3}>
             <MainButton
               content="Shop the Collection"
-              variant="quiet"
+              variant="primary"
               onClick={() => navigate("/products")}
             />
           </Reveal>
