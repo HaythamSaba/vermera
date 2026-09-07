@@ -42,7 +42,6 @@ const ProductItem = ({ product }) => {
 
   const {
     productName,
-    description,
     NewPrice,
     OldPrice,
     image,
@@ -50,8 +49,6 @@ const ProductItem = ({ product }) => {
     isDiscount,
     DiscountPercentage,
     stock,
-    availabilityStatus,
-    category,
     sku,
   } = product;
 
@@ -66,7 +63,6 @@ const ProductItem = ({ product }) => {
   const navigate = useNavigate();
 
   const isOutOfStock = stock === 0;
-  const isLowStock = !isOutOfStock && availabilityStatus === "Low Stock";
 
   const prefersReducedMotion = useReducedMotion();
   // Timing/distance only — no per-index delay here. Stagger order across
@@ -143,16 +139,6 @@ const ProductItem = ({ product }) => {
             -{Math.round(DiscountPercentage)}%
           </span>
         )}
-        {isOutOfStock && (
-          <span className={`${badgeClass} bg-espresso text-cream`}>
-            Sold Out
-          </span>
-        )}
-        {isLowStock && (
-          <span className={`${badgeClass} bg-taupe text-cream`}>
-            Low Stock
-          </span>
-        )}
       </div>
 
       {/* Hover Overlay */}
@@ -192,7 +178,7 @@ const ProductItem = ({ product }) => {
 
       <div className="border border-stone overflow-hidden">
         {/* Product Image */}
-        <div className="relative bg-stone/20">
+        <div className="relative">
           {!imageLoaded && !imageError && (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-8 h-8 border-4 border-stone border-t-brass rounded-full animate-spin"></div>
@@ -210,7 +196,7 @@ const ProductItem = ({ product }) => {
               </div>
             </div>
           ) : (
-            <div className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-[1.02]">
+            <div className=" transition-transform duration-500 ease-out group-hover:scale-[1.02]">
               <MotionImg
                 src={image}
                 variants={imageVariants}
@@ -224,12 +210,23 @@ const ProductItem = ({ product }) => {
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setImageError(true)}
               />
+              <div className="m-4 p-4 bg-brass/30 text-espresso">
+                <h3
+                  className="font-medium text-md mb-2 line-clamp-1"
+                  title={productName}
+                >
+                  {productName}
+                </h3>
+                <span className="font-normal text-md">
+                  ${NewPrice.toFixed(2)}
+                </span>
+              </div>
             </div>
           )}
         </div>
 
         {/* Product Info */}
-        <div className="bg-cream p-4 pr-6 min-w-[285px] h-[200px] flex flex-col justify-between">
+        {/* <div className="bg-cream p-4 pr-6 min-w-[285px] h-[200px] flex flex-col justify-between">
           <div>
             <h3
               className="font-semibold text-xl text-charcoal mb-2 line-clamp-1"
@@ -256,7 +253,7 @@ const ProductItem = ({ product }) => {
               </span>
             )}
           </div>
-        </div>
+        </div> */}
       </div>
     </MotionDiv>
   );
