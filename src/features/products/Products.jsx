@@ -199,7 +199,7 @@ const Products = ({
           {hasMore && (
             <MainButton
               content="Load More"
-              variant="quiet"
+              variant="primary"
               onClick={handleLoadMore}
             />
           )}
