@@ -49,6 +49,8 @@ const ProductItem = ({ product }) => {
     isDiscount,
     DiscountPercentage,
     stock,
+    availabilityStatus,
+    category,
     sku,
   } = product;
 
@@ -63,6 +65,7 @@ const ProductItem = ({ product }) => {
   const navigate = useNavigate();
 
   const isOutOfStock = stock === 0;
+  const isLowStock = !isOutOfStock && availabilityStatus === "Low Stock";
 
   const prefersReducedMotion = useReducedMotion();
   // Timing/distance only — no per-index delay here. Stagger order across
@@ -112,11 +115,16 @@ const ProductItem = ({ product }) => {
     }
   };
 
+  // Solid, non-translucent badge backgrounds only — every one of these sits
+  // directly on a photo, so contrast can't depend on what's underneath.
   const badgeClass =
-    "rounded-full py-1.5 px-3 text-xs font-semibold uppercase tracking-wider";
+    "rounded-full py-1.5 px-3 text-xs font-semibold uppercase tracking-wider shadow-soft";
 
   return (
-    <MotionDiv className="product-card relative group" variants={cardVariants}>
+    <MotionDiv
+      className="product-card relative group flex flex-col"
+      variants={cardVariants}
+    >
       {/* Wishlist toggle */}
       <WishlistButton
         isActive={isItemInWishlist}
@@ -125,103 +133,143 @@ const ProductItem = ({ product }) => {
         className="absolute top-4 left-4 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-cream/90 text-charcoal hover:text-brass transition-colors cursor-pointer"
       />
 
-      {/* Status Badges */}
-      <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
-        {isNew && (
-          <span
-            className={`${badgeClass} bg-cream text-charcoal border border-stone`}
-          >
-            New
-          </span>
-        )}
-        {isDiscount && (
-          <span className={`${badgeClass} bg-brass text-cream`}>
-            -{Math.round(DiscountPercentage)}%
-          </span>
-        )}
-      </div>
-
-      {/* Hover Overlay */}
-      <div className="absolute inset-0 bg-espresso/70 backdrop-blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-400 ease-out flex flex-col items-center justify-center gap-6 z-6">
+      {/* Status badges — stacked, solid colors, always visible (not hover-only) */}
+      <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-2">
         {isOutOfStock ? (
-          <span className="text-espresso text-sm font-semibold uppercase tracking-wider bg-cream px-4 py-2 rounded-full">
-            Out of Stock
+          <span className={`${badgeClass} bg-espresso text-cream`}>
+            Sold Out
           </span>
         ) : (
           <>
-            <MainButton
-              onClick={handleOpenProductPage}
-              disabled={isOutOfStock}
-              variant="light"
-              content={"More Info"}
-            >
-              <Info size={22} />
-            </MainButton>
-            {isItemInCart && !justAddedToCart ? (
-              <>
-                <UpdateItemQuantity sku={sku} quantity={currentQuantity} />
-                <DeleteItem sku={sku} />
-              </>
-            ) : (
-              <AddToCartButton
-                justAdded={justAddedToCart}
-                onClick={handleAddToCart}
-                disabled={isOutOfStock}
-                variant="light"
-                icon={<ShoppingCart size={22} aria-hidden="true" />}
-                label="Add to Cart"
-              />
+            {isDiscount && (
+              <span className={`${badgeClass} bg-brass text-cream`}>
+                -{Math.round(DiscountPercentage)}%
+              </span>
+            )}
+            {isLowStock && (
+              <span className={`${badgeClass} bg-taupe text-cream`}>
+                Low Stock
+              </span>
+            )}
+            {isNew && (
+              <span
+                className={`${badgeClass} bg-cream text-charcoal border border-stone`}
+              >
+                New
+              </span>
             )}
           </>
         )}
       </div>
 
-      <div className="border border-stone overflow-hidden">
-        {/* Product Image */}
-        <div className="relative">
-          {!imageLoaded && !imageError && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-8 h-8 border-4 border-stone border-t-brass rounded-full animate-spin"></div>
-            </div>
-          )}
-          {imageError ? (
-            <div className="w-full h-full flex items-center justify-center text-taupe">
-              <div className="text-center">
-                <ImageOff
-                  size={40}
-                  className="mx-auto mb-2 opacity-60"
-                  aria-hidden="true"
-                />
-                <p className="text-sm">Image unavailable</p>
-              </div>
-            </div>
-          ) : (
-            <div className=" transition-transform duration-500 ease-out group-hover:scale-[1.02]">
-              <MotionImg
-                src={image}
-                variants={imageVariants}
-                initial="initial"
-                animate="visible"
-                exit="initial"
-                alt={productName}
-                className={`w-full h-full object-cover transition-opacity duration-300 ${
-                  imageLoaded ? "opacity-100" : "opacity-0"
-                }`}
-                onLoad={() => setImageLoaded(true)}
-                onError={() => setImageError(true)}
+      {/* Image + hover overlay */}
+      <div className="relative overflow-hidden bg-stone/20 aspect-4/5">
+        {!imageLoaded && !imageError && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-8 h-8 border-4 border-stone border-t-brass rounded-full animate-spin" />
+          </div>
+        )}
+
+        {imageError ? (
+          <div className="w-full h-full flex items-center justify-center text-taupe">
+            <div className="text-center">
+              <ImageOff
+                size={40}
+                className="mx-auto mb-2 opacity-60"
+                aria-hidden="true"
               />
-              <div className="m-4 p-4 bg-brass/30 text-espresso">
-                <h3
-                  className="font-medium text-md mb-2 line-clamp-1"
-                  title={productName}
-                >
-                  {productName}
-                </h3>
-                <span className="font-normal text-md">
-                  ${NewPrice.toFixed(2)}
-                </span>
-              </div>
+              <p className="text-sm">Image unavailable</p>
             </div>
+          </div>
+        ) : (
+          <MotionImg
+            src={image}
+            variants={imageVariants}
+            initial="initial"
+            animate="visible"
+            exit="initial"
+            alt={productName}
+            className={`w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-[1.04] ${
+              imageLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageError(true)}
+          />
+        )}
+
+        {/* Category chip — solid espresso, echoes the lookbook caption
+            language without sitting translucent over a photo of unknown
+            background color. */}
+        {category && (
+          <span className="absolute bottom-3 left-3 z-10 bg-espresso/90 text-cream text-[11px] font-medium uppercase tracking-wider px-2.5 py-1 rounded-full">
+            {category}
+          </span>
+        )}
+
+        {/* Hover overlay — actions only, no product info duplicated here */}
+        <div className="absolute inset-0 bg-espresso/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out flex flex-col items-center justify-center gap-6">
+          {isOutOfStock ? (
+            <span className="text-espresso text-sm font-semibold uppercase tracking-wider bg-cream px-4 py-2 rounded-full">
+              Out of Stock
+            </span>
+          ) : (
+            <>
+              <MainButton
+                onClick={handleOpenProductPage}
+                disabled={isOutOfStock}
+                variant="light"
+                content="More Info"
+              >
+                <Info size={22} />
+              </MainButton>
+              {isItemInCart && !justAddedToCart ? (
+                <div className="flex items-center gap-3">
+                  <UpdateItemQuantity sku={sku} quantity={currentQuantity} />
+                  <DeleteItem sku={sku} />
+                </div>
+              ) : (
+                <AddToCartButton
+                  justAdded={justAddedToCart}
+                  onClick={handleAddToCart}
+                  disabled={isOutOfStock}
+                  variant="light"
+                  icon={<ShoppingCart size={22} aria-hidden="true" />}
+                  label="Add to Cart"
+                />
+              )}
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Info panel — fixed min-height so grid rows stay aligned regardless
+          of title length or whether OldPrice is present. */}
+      <div
+        role={isOutOfStock ? undefined : "link"}
+        tabIndex={isOutOfStock ? undefined : 0}
+        onClick={handleOpenProductPage}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") handleOpenProductPage(e);
+        }}
+        className={`bg-white px-4 py-3.5 min-h-[92px] flex flex-col justify-between ${
+          isOutOfStock ? "opacity-60" : "cursor-pointer"
+        }`}
+      >
+        <h3
+          className="font-serif font-medium text-lg leading-snug text-charcoal line-clamp-1"
+          title={productName}
+        >
+          {productName}
+        </h3>
+
+        <div className="flex items-baseline gap-2 mt-2">
+          <span className="font-semibold text-lg text-charcoal">
+            ${NewPrice.toFixed(2)}
+          </span>
+          {OldPrice && (
+            <span className="text-sm text-taupe line-through">
+              ${OldPrice.toFixed(2)}
+            </span>
           )}
         </div>
       </div>
