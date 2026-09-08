@@ -224,36 +224,6 @@ const ProductItem = ({ product }) => {
             </div>
           )}
         </div>
-
-        {/* Product Info */}
-        {/* <div className="bg-cream p-4 pr-6 min-w-[285px] h-[200px] flex flex-col justify-between">
-          <div>
-            <h3
-              className="font-semibold text-xl text-charcoal mb-2 line-clamp-1"
-              title={productName}
-            >
-              {productName}
-            </h3>
-            <p className="text-sm text-taupe mb-1 capitalize">{category}</p>
-            <p
-              className="text-base text-taupe line-clamp-2"
-              title={description}
-            >
-              {description}
-            </p>
-          </div>
-
-          <div className="flex justify-between items-center mt-auto">
-            <span className="font-semibold text-xl text-charcoal">
-              ${NewPrice.toFixed(2)}
-            </span>
-            {OldPrice && (
-              <span className="text-base font-normal text-taupe line-through">
-                ${OldPrice.toFixed(2)}
-              </span>
-            )}
-          </div>
-        </div> */}
       </div>
     </MotionDiv>
   );
