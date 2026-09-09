@@ -129,7 +129,7 @@ const Products = ({
 
   if (error) {
     return (
-      <section className="container-foundation flex flex-col items-center">
+      <section className="container-foundation flex flex-col items-center border-b border-stone">
         <div className="text-center mb-16">
           <p className="text-red-600 text-lg mb-4">{error}</p>
           <MainButton
@@ -144,7 +144,7 @@ const Products = ({
 
   if (products.length === 0) {
     return (
-      <section className="container-foundation flex flex-col items-center">
+      <section className="container-foundation flex flex-col items-center border-b border-stone">
         <div className="text-center mb-16">
           <h2 className="text-[40px] font-serif font-medium text-espresso mb-4">
             Our Products
@@ -160,8 +160,8 @@ const Products = ({
   }
 
   return (
-    <>
-      <section className="container-foundation flex flex-col">
+    <div className="bg-ivory border-b border-stone">
+      <section className="container-foundation flex flex-col ">
         <div className="text-center mb-16">
           <h2 className="text-[40px] font-serif font-medium text-espresso">
             Our Products
@@ -219,7 +219,7 @@ const Products = ({
           </p>
         )}
       </section>
-    </>
+    </div>
   );
 };
 

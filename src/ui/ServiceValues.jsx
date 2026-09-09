@@ -34,31 +34,36 @@ const ServiceValues = () => {
   });
 
   return (
-    <section className="container-foundation section">
-      <div ref={containerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
-        {SERVICE_VALUES.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div
-              key={item.title}
-              className="service-card relative text-center sm:text-left bg-cream p-8 border border-stone hover:shadow-soft hover:-translate-y-1.5 transition-all duration-300"
-            >
-              <Icon
-                className="mx-auto sm:mx-0 mb-4 text-brass"
-                size={28}
-                strokeWidth={1.5}
-                aria-hidden="true"
-              />
-              <h3 className="font-medium text-lg text-charcoal mb-2">
-                {item.title}
-              </h3>
-              <p className="text-taupe text-sm leading-relaxed">
-                {item.description}
-              </p>
-            </div>
-          );
-        })}
-      </div>
+    <section className="bg-white border-b border-stone">
+      <section className="container-foundation section">
+        <div
+          ref={containerRef}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10"
+        >
+          {SERVICE_VALUES.map((item) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={item.title}
+                className="service-card relative text-center sm:text-left bg-cream p-8 border border-stone hover:shadow-soft hover:-translate-y-1.5 transition-all duration-300"
+              >
+                <Icon
+                  className="mx-auto sm:mx-0 mb-4 text-brass"
+                  size={28}
+                  strokeWidth={1.5}
+                  aria-hidden="true"
+                />
+                <h3 className="font-medium text-lg text-charcoal mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-taupe text-sm leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
     </section>
   );
 };

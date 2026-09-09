@@ -39,7 +39,7 @@ const InspirationSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="bg-cream border-t border-stone">
+    <section className="bg-cream border-b border-stone">
       <div className="container-foundation section grid lg:grid-cols-3 gap-10 lg:gap-16 items-center">
         <div>
           <Reveal
