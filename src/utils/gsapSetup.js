@@ -1,10 +1,11 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 
 // Registered once at module scope — ES modules only evaluate a given file
 // once, so every hook importing from here shares the same registration
 // rather than re-registering the plugin on every mount.
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 // Async content (images without a reserved aspect-ratio box, web fonts,
 // etc.) can shift layout after a trigger's start/end positions were first
@@ -16,4 +17,4 @@ if (typeof window !== "undefined") {
   });
 }
 
-export { gsap, ScrollTrigger };
+export { gsap, ScrollTrigger, SplitText };

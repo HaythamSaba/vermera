@@ -15,6 +15,7 @@ import AboutSection from "./AboutSection";
 import AboutSectionHeading from "./AboutSectionHeading";
 import ContactChannelCard from "./ContactChannelCard";
 import useStaggerReveal from "../hooks/useStaggerReveal";
+import useTextReveal from "../hooks/useTextReveal";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import { useToast } from "../hooks/useToast";
 import { STAGGER_MS } from "../utils/motion";
@@ -65,6 +66,9 @@ const About = () => {
     durationMs: 500,
   });
 
+  // TESTING: per-letter blur-in reveal on the name heading.
+  const { ref: nameRef } = useTextReveal({ staggerMs: 22 });
+
   const handleCopyEmail = async () => {
     try {
       await navigator.clipboard.writeText(CONTACT_EMAIL);
@@ -94,13 +98,12 @@ const About = () => {
             >
               Frontend Developer · Ljubljana, Slovenia
             </Reveal>
-            <Reveal
-              as="h1"
-              delay={STAGGER_MS}
-              className="font-serif text-espresso font-semibold text-5xl sm:text-6xl leading-tight mb-6"
+            <h1
+              ref={nameRef}
+              className="font-serif text-espresso font-semibold text-5xl sm:text-6xl leading-tight mb-6 opacity-0"
             >
               Haytham
-            </Reveal>
+            </h1>
             <Reveal
               as="p"
               delay={STAGGER_MS * 2}
