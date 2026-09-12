@@ -6,6 +6,7 @@ import EmptyWishlist from "./EmptyWishlist";
 import { clearWishlist, getWishlist } from "./wishlistSlice";
 import MainButton from "../../ui/MainButton";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
+import useMetaDescription from "../../hooks/useMetaDescription";
 
 const Wishlist = () => {
   useDocumentTitle("Wishlist");
@@ -13,6 +14,11 @@ const Wishlist = () => {
   const navigate = useNavigate();
 
   const wishlist = useSelector(getWishlist);
+  useMetaDescription(
+    wishlist.length > 0
+      ? `Your saved Vermera pieces — ${wishlist.length} item${wishlist.length === 1 ? "" : "s"} favorited, ready to revisit or add to cart.`
+      : "Your Vermera wishlist is empty — browse the shop and save pieces you want to revisit.",
+  );
 
   const handleClearWishlist = () => {
     if (window.confirm("Are you sure you want to clear your wishlist?")) {

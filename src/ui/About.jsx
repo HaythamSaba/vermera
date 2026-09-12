@@ -17,6 +17,7 @@ import ContactChannelCard from "./ContactChannelCard";
 import useStaggerReveal from "../hooks/useStaggerReveal";
 import useTextReveal from "../hooks/useTextReveal";
 import useDocumentTitle from "../hooks/useDocumentTitle";
+import useMetaDescription from "../hooks/useMetaDescription";
 import { useToast } from "../hooks/useToast";
 import { STAGGER_MS } from "../utils/motion";
 
@@ -57,6 +58,9 @@ const CONTACT_LINKS = [
 // is about Haytham, not the fictional Vermera brand.
 const About = () => {
   useDocumentTitle("About");
+  useMetaDescription(
+    "Haytham Saba — Frontend Developer based in Ljubljana, Slovenia. Background, the decisions behind this project, and how to get in touch.",
+  );
   const showToast = useToast();
   const [copied, setCopied] = useState(false);
 

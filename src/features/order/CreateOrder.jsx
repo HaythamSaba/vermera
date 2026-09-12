@@ -23,6 +23,7 @@ import ShippingOptions from "./ShippingOptions";
 import OrderSummary from "./OrderSummary";
 import useOrderTotals from "../../hooks/useOrderTotals";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
+import useMetaDescription from "../../hooks/useMetaDescription";
 
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
@@ -31,6 +32,9 @@ const isValidPhone = (str) =>
 
 const CreateOrder = () => {
   useDocumentTitle("Checkout");
+  useMetaDescription(
+    "Enter your contact details, shipping address, and shipping option to place your Vermera order.",
+  );
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const formErrors = useActionData();

@@ -3,11 +3,15 @@ import CoverBackgroundSection from "./CoverBackgroundSection";
 import InputField from "./InputField";
 import MainButton from "./MainButton";
 import useDocumentTitle from "../hooks/useDocumentTitle";
+import useMetaDescription from "../hooks/useMetaDescription";
 
 const CONTACT_EMAIL = "haythamsaba@gmail.com";
 
 const Contact = () => {
   useDocumentTitle("Contact");
+  useMetaDescription(
+    "Questions about an order, a product, or anything else — get in touch with Vermera by email or the contact form.",
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();

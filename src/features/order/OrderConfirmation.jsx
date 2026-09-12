@@ -16,12 +16,18 @@ import {
 import MainButton from "../../ui/MainButton";
 import UpdateOrder from "./UpdateOrder";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
+import useMetaDescription from "../../hooks/useMetaDescription";
 
 const OrderConfirmation = () => {
   const order = useLoaderData();
   const navigate = useNavigate();
 
   useDocumentTitle(order?.items ? `Order #${order.id}` : "Order Not Found");
+  useMetaDescription(
+    order?.items
+      ? `Order #${order.id} confirmed — ${order.items.length} item${order.items.length === 1 ? "" : "s"}.`
+      : "We couldn't find this order — check the link and try again.",
+  );
 
   // Safely check if order and items exist
   if (!order || !order.items) {

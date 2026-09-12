@@ -9,6 +9,7 @@ import ProductGallery from "./ProductGallery";
 import ProductItem from "./ProductItem";
 import QuantitySelector from "./QuantitySelector";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
+import useMetaDescription from "../../hooks/useMetaDescription";
 import { useToast } from "../../hooks/useToast";
 import useAddedConfirmation from "../../hooks/useAddedConfirmation";
 import {
@@ -98,6 +99,19 @@ const ProductPage = () => {
   let formattedCategory = category.replace(/-/g, " ");
 
   const isOutOfStock = stock === 0;
+  const categoryTitleCase = formattedCategory.replace(/\b\w/g, (c) =>
+    c.toUpperCase(),
+  );
+  const priceFact = OldPrice
+    ? `Price: $${NewPrice.toFixed(2)} (was $${OldPrice.toFixed(2)})`
+    : `Price: $${NewPrice.toFixed(2)}`;
+  // First sentence of the real product description, plus the same
+  // category/price/stock facts already shown on the page — structured facts
+  // read better here than a vague one-liner, per meta description best
+  // practice.
+  useMetaDescription(
+    `${description ? description.split(".")[0].trim() + ". " : ""}Category: ${categoryTitleCase}, ${priceFact}, ${isOutOfStock ? "Out of Stock" : "In Stock"}.`,
+  );
   const isLowStock = !isOutOfStock && availabilityStatus === "Low Stock";
   const isWishlisted = useSelector(isInWishlist(product.sku));
 

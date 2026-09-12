@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import ProductsSection from "./ProductsSection";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
+import useMetaDescription from "../../hooks/useMetaDescription";
 
 const ProductsPage = () => {
   useDocumentTitle("Shop");
@@ -11,6 +12,11 @@ const ProductsPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const category = searchParams.get("category");
+  useMetaDescription(
+    category
+      ? `Shop ${category.replace(/-/g, " ")} at Vermera — filter by price and sort by newest, price, or rating.`
+      : "Shop the full Vermera catalog — bags, dresses, jewelry, shoes, watches, and beauty essentials. Filter by category and price, or sort and search.",
+  );
   const sort = searchParams.get("sort") || "newest";
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");

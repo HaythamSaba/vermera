@@ -11,6 +11,7 @@ import {
 import MainButton from "../../ui/MainButton";
 import EmptyCart from "./EmptyCart";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
+import useMetaDescription from "../../hooks/useMetaDescription";
 
 // `embedded`: render just the card, without the standalone-page container, for
 // reuse inside another page's own layout (e.g. the Profile sidebar). When
@@ -24,6 +25,13 @@ const Cart = ({ embedded = false }) => {
   const cart = useSelector(getCart);
   const cartItemCount = useSelector(getTotalCartQuantity);
   const cartTotal = useSelector(getTotalCartPrice);
+  useMetaDescription(
+    embedded
+      ? null
+      : cart.length > 0
+        ? `Your Vermera cart — Items: ${cartItemCount}, Subtotal: $${cartTotal.toFixed(2)}. Review and proceed to checkout.`
+        : "Your Vermera cart is empty — browse the shop to add bags, dresses, jewelry, shoes, watches, and beauty essentials.",
+  );
 
   const handleClearCart = () => {
     if (window.confirm("Are you sure you want to clear your cart?")) {

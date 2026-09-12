@@ -2,6 +2,7 @@ import { isRouteErrorResponse, useNavigate, useRouteError } from "react-router";
 import { AlertCircle } from "lucide-react";
 import MainButton from "./MainButton";
 import useDocumentTitle from "../hooks/useDocumentTitle";
+import useMetaDescription from "../hooks/useMetaDescription";
 
 const Error = () => {
   const navigate = useNavigate();
@@ -23,6 +24,8 @@ const Error = () => {
       error.statusText ||
       "The page you're looking for doesn't exist."
     : error?.message || "An unexpected error occurred.";
+
+  useMetaDescription(message);
 
   return (
     <div className="min-h-[70vh] bg-ivory flex items-center justify-center px-4">

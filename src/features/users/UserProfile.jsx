@@ -15,6 +15,7 @@ import CreateUser from "./CreateUser";
 import Cart from "../cart/Cart";
 import MainButton from "../../ui/MainButton";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
+import useMetaDescription from "../../hooks/useMetaDescription";
 
 const orderTotal = (order) =>
   order.items.reduce((sum, item) => sum + item.totalPrice, 0) +
@@ -56,6 +57,12 @@ const Profile = () => {
       return [];
     }
   });
+
+  useMetaDescription(
+    username
+      ? `Your Vermera profile — saved shipping details and ${orders.length} order${orders.length === 1 ? "" : "s"}.`
+      : "Enter your name to start shopping with Vermera and keep track of your orders.",
+  );
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState(user);
