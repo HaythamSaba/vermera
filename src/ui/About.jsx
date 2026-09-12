@@ -129,7 +129,7 @@ const About = () => {
           >
             <img
               className="w-[250px]"
-              src="/images/me.png"
+              src="/images/me.webp"
               alt="Portrait of Haytham Saba"
             />
           </MotionDiv>

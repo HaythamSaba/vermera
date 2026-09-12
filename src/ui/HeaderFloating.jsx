@@ -28,7 +28,7 @@ const HeaderFloating = ({
         <div className="flex w-full justify-between items-center">
           <Link to="/" className="flex items-center gap-2">
             <img
-              src="/images/main-logo.png"
+              src="/images/main-logo.webp"
               alt="logo"
               className="h-8 w-auto"
             />

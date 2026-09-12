@@ -70,7 +70,7 @@ const Hero = () => {
           ) : (
             <div ref={parallaxRef} className="w-full h-full scale-[1.15]">
               <img
-                src="/images/hero-bg.png"
+                src="/images/hero-bg.webp"
                 alt="A softly styled living space with a woven chair and linen textiles, reflecting Vermera's quiet, considered aesthetic."
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setImageError(true)}
