@@ -5,6 +5,7 @@ import MainButton from "./MainButton";
 import Reveal from "./Reveal";
 import useParallax from "../hooks/useParallax";
 import { STAGGER_MS } from "../utils/motion";
+import useTextReveal from "../hooks/useTextReveal";
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -16,6 +17,8 @@ const Hero = () => {
   // scale-[1.15] gives the wrapper buffer room so the parallax translate
   // never reveals empty space at the container's edges.
   const parallaxRef = useParallax({ speed: 0.1, scrub: 0.8 });
+
+  const { ref: nameRef } = useTextReveal({ staggerMs: 40 });
 
   return (
     <section className="container-foundation">
@@ -29,22 +32,21 @@ const Hero = () => {
           >
             The Vermera Edit
           </Reveal>
-          <Reveal
-            as="h1"
-            delay={STAGGER_MS}
+          <h1
+            ref={nameRef}
             className="font-serif text-espresso font-semibold text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6"
           >
-            Timeless Pieces, Thoughtfully Chosen
-          </Reveal>
+            Timeless Pieces,<br /> Thoughtfully<br /> Chosen
+          </h1>
           <Reveal
             as="p"
-            delay={STAGGER_MS * 2}
+            delay={STAGGER_MS * 6}
             className="text-taupe text-lg leading-relaxed mb-10 max-w-md"
           >
             A curated edit of bags, jewelry, watches, and beauty essentials,
             each piece selected for its quality and quiet character.
           </Reveal>
-          <Reveal delay={STAGGER_MS * 3}>
+          <Reveal delay={STAGGER_MS * 8}>
             <MainButton
               content="Shop the Collection"
               variant="primary"
@@ -63,7 +65,11 @@ const Hero = () => {
           {imageError ? (
             <div className="absolute inset-0 flex items-center justify-center bg-stone/20 text-taupe">
               <div className="text-center px-6">
-                <ImageOff size={40} className="mx-auto mb-2 opacity-60" aria-hidden="true" />
+                <ImageOff
+                  size={40}
+                  className="mx-auto mb-2 opacity-60"
+                  aria-hidden="true"
+                />
                 <p className="text-sm">Image unavailable</p>
               </div>
             </div>
