@@ -77,7 +77,10 @@ const Hero = () => {
             <div ref={parallaxRef} className="w-full h-full scale-[1.15]">
               <img
                 src="/images/hero-bg.webp"
+                srcSet="/images/hero-bg-640.webp 640w, /images/hero-bg-1024.webp 1024w, /images/hero-bg.webp 1408w"
+                sizes="(min-width: 1024px) 528px, 100vw"
                 alt="A softly styled living space with a woven chair and linen textiles, reflecting Vermera's quiet, considered aesthetic."
+                fetchPriority="high"
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setImageError(true)}
                 className={`w-full h-full object-cover object-center lg:object-bottom transition-all duration-700 ease-out hover:scale-[1.05] ${

@@ -8,7 +8,33 @@
   <title>Vermera</title>
   <meta name="description" content="Vermera — a curated edit of bags, dresses, jewelry, shoes, watches, and beauty essentials, each piece selected for its quality and quiet character.">
 
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!--
+    Loaded non-render-blocking: fetch it at high priority via preload, then
+    swap it in as the real stylesheet once it arrives (the "print" media
+    trick — it doesn't block rendering because the browser doesn't need
+    print styles for an on-screen render) instead of the plain <link
+    rel="stylesheet"> this used to be, which held first paint hostage to
+    fonts.googleapis.com. The <noscript> keeps it working with JS disabled.
+    &display=swap in the URL already means text renders in the fallback
+    font immediately either way, so this only removes the block — it
+    doesn't change which font swap happens or when.
+  -->
+  <link
+    rel="preload"
+    as="style"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Poppins:wght@300;400;500;600;700&display=swap"
+  >
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Poppins:wght@300;400;500;600;700&display=swap"
+    media="print"
+    onload="this.media='all'"
+  >
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Poppins:wght@300;400;500;600;700&display=swap">
+  </noscript>
 </head>
 
 <body>
