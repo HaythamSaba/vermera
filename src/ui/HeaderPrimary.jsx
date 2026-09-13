@@ -1,8 +1,8 @@
 import { Menu, Search } from "lucide-react";
-import { Link } from "react-router";
 import HeaderDesktopNav from "./HeaderDesktopNav";
 import HeaderDesktopIcons from "./HeaderDesktopIcons";
 import CartIcon from "./CartIcon";
+import Logo from "./Logo";
 
 // Always in normal document flow, so nav/cart/search stay reachable even on
 // pages too short to trigger the floating header's scrolled state.
@@ -19,10 +19,7 @@ const HeaderPrimary = ({
 }) => (
   <header className="top-0 left-0 right-0 z-60 py-6 font-medium mx-auto px-[clamp(1.25rem,4vw,5rem)] w-full bg-transparent text-charcoal">
     <div className="flex w-full justify-between items-center">
-      <Link to="/" className="flex items-center gap-2">
-        <img src="/images/main-logo.webp" alt="logo" width={50} height={32} />
-        <p className="text-4xl font-bold">Vermera</p>
-      </Link>
+      <Logo size="default" animate />
 
       {/* Desktop nav */}
       <HeaderDesktopNav />

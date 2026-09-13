@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { supportedCategories } from "../services/apiProducts";
 import { CATEGORY_LABELS } from "../features/products/categoryLabels";
+import Logo from "./Logo";
 
 const linkClass = "hover:text-brass transition-colors duration-300";
 
@@ -12,7 +13,7 @@ const Footer = () => {
       <div className="container-foundation grid gap-10 sm:grid-cols-2 lg:grid-cols-3 py-12 lg:py-20">
         {/* Brand */}
         <div>
-          <p className="text-2xl font-serif font-medium mb-4">Vermera.</p>
+          <Logo size="compact" className="mb-4" />
           <p className="text-taupe max-w-xs">
             Considered pieces for everyday living.
           </p>

@@ -1,9 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Search } from "lucide-react";
-import { Link } from "react-router";
 import HeaderDesktopNav from "./HeaderDesktopNav";
 import HeaderDesktopIcons from "./HeaderDesktopIcons";
 import CartIcon from "./CartIcon";
+import Logo from "./Logo";
 
 const MotionHeader = motion.header;
 
@@ -26,16 +26,7 @@ const HeaderFloating = ({
         className="fixed top-0 left-0 right-0 z-60 py-4 font-medium mx-auto px-[clamp(1.25rem,4vw,5rem)] w-full bg-espresso/80 text-cream shadow-soft border-b border-espresso backdrop-blur-lg"
       >
         <div className="flex w-full justify-between items-center">
-          <Link to="/" className="flex items-center gap-2">
-            <img
-              src="/images/main-logo.webp"
-              alt="logo"
-              width={50}
-              height={32}
-              className="h-8 w-auto"
-            />
-            <p className="text-2xl font-bold">Vermera</p>
-          </Link>
+          <Logo size="compact" />
 
           <HeaderDesktopNav />
           <HeaderDesktopIcons onSearchClick={onSearchClick} />
