@@ -10,6 +10,26 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!--
+    This is a client-rendered SPA — the homepage's hero <img> (the LCP
+    element) doesn't exist in this HTML at all; it's written in by React
+    after the JS bundle loads and runs. Without this, the browser's preload
+    scanner has nothing to find until then (Lighthouse: LCP request
+    discovery, "Request is discoverable in initial document" = false).
+    Preloading it here, with the same srcset/sizes Hero.jsx uses, lets the
+    browser start fetching it immediately instead of waiting on JS.
+    Home-only, but this file is shared by every route — the small wasted
+    fetch on other pages is far cheaper than the LCP hit of not doing this.
+  -->
+  <link
+    rel="preload"
+    as="image"
+    fetchpriority="high"
+    href="/images/hero-bg-1024.webp"
+    imagesrcset="/images/hero-bg-640.webp 640w, /images/hero-bg-1024.webp 1024w, /images/hero-bg.webp 1408w"
+    imagesizes="(min-width: 1024px) 528px, 100vw"
+  >
   <!--
     Loaded non-render-blocking: fetch it at high priority via preload, then
     swap it in as the real stylesheet once it arrives (the "print" media

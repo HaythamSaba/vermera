@@ -73,7 +73,14 @@ const InspirationSection = () => {
               <img
                 key={idx}
                 src={clothing.image}
+                srcSet={`${clothing.image.replace(".webp", "-480.webp")} 480w, ${clothing.image} 900w`}
+                // Matches Carousel.jsx's CAROUSEL_TIERS breakpoints — the
+                // active slide's width at each tier (inactive slides are
+                // smaller, but sizing for the largest keeps every instance
+                // sharp).
+                sizes="(min-width: 1024px) 404px, (min-width: 640px) 330px, 240px"
                 alt={clothing.title}
+                loading="lazy"
                 className="w-full h-full object-cover"
               />
             ))}

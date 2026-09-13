@@ -6,9 +6,29 @@
   --color-cream: #fbf9f5;
   --color-charcoal: #1c1c1c;
   --color-espresso: #2b211c;
-  --color-taupe: #8b8178;
+  /* Darkened from the original #8b8178 — failed WCAG AA (4.5:1) as text on
+     the ivory/cream backgrounds it's used against sitewide (Lighthouse
+     color-contrast, measured 3.15–3.62:1). This is the minimal darkening
+     (same hue, reduced lightness) that clears 4.5:1 with a small margin
+     against both --color-ivory and --color-cream — see
+     scripts/contrast-fix.cjs. Safe to change as one shared token: every
+     other role taupe plays (borders, muted backgrounds, bg-taupe under
+     light text) only gets *more* contrast from a darker value, never less. */
+  --color-taupe: #756c64;
   --color-stone: #d9d1c7;
   --color-brass: #a3845b;
+  /* Text-only counterpart to --color-brass, for when brass is the literal
+     foreground color of small/normal-weight text on a light surface (an
+     eyebrow label, a button's outlined/ghost variant, an inline price
+     delta) — #a3845b measures 3.15–3.44:1 there, short of the 4.5:1 AA
+     minimum. Kept separate rather than darkening --color-brass itself:
+     unlike taupe, brass is also used as a *background* under dark
+     (charcoal) text (MainButton's primary variant) and under light (cream)
+     text (badges, the nav progress bar) — darkening it uniformly fixes the
+     text-color failures but pulls it close enough to charcoal's near-black
+     luminance to break that pairing instead. Same minimal-darkening
+     approach, see scripts/contrast-fix.cjs. */
+  --color-brass-ink: #836a49;
 
   --font-serif: "Fraunces", ui-serif, Georgia, serif;
   --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;

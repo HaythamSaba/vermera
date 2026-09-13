@@ -22,12 +22,13 @@ const MainButton = ({
   // Variant styles
   const variantStyles = {
     primary:
-      "bg-brass border border-brass text-charcoal hover:bg-transparent hover:text-brass",
+      "bg-brass border border-brass text-charcoal hover:bg-transparent hover:text-brass-ink",
     secondary:
-      "bg-cream text-brass border border-brass hover:bg-brass hover:text-cream",
+      "bg-cream text-brass-ink border border-brass hover:bg-brass hover:text-cream",
     outline:
       "bg-transparent text-espresso border border-espresso hover:bg-espresso hover:text-cream",
-    ghost: "bg-transparent text-brass border border-transparent hover:bg-brass/10",
+    ghost:
+      "bg-transparent text-brass-ink border border-transparent hover:bg-brass/10",
     danger:
       "bg-cream text-red-600 border border-red-600/70 hover:text-cream hover:bg-red-600",
     quiet:

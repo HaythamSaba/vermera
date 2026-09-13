@@ -48,7 +48,7 @@ const OrderSummary = ({
           {isExpressShipping && (
             <div className="flex justify-between text-sm">
               <span className="text-taupe">Express Shipping</span>
-              <span className="font-medium text-brass">
+              <span className="font-medium text-brass-ink">
                 + ${expressCost.toFixed(2)}
               </span>
             </div>

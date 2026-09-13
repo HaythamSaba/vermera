@@ -30,6 +30,8 @@ const HeaderFloating = ({
             <img
               src="/images/main-logo.webp"
               alt="logo"
+              width={50}
+              height={32}
               className="h-8 w-auto"
             />
             <p className="text-2xl font-bold">Vermera</p>

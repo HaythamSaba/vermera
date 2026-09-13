@@ -14,7 +14,7 @@ const EditorialBanner = () => {
           <Reveal
             as="p"
             delay={0}
-            className="font-semibold text-sm uppercase tracking-[3px] text-brass mb-4"
+            className="font-semibold text-sm uppercase tracking-[3px] text-brass-ink mb-4"
           >
             The Vermera Approach
           </Reveal>

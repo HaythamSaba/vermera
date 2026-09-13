@@ -25,29 +25,39 @@ function round2(value) {
   return Number(value.toFixed(2));
 }
 
+let catalogPromise = null;
+
 // Fetches the full DummyJSON catalog and narrows it to the categories this
 // storefront supports, falling back to the mock snapshot on any network
 // error, non-2xx response, or malformed payload.
-async function fetchScopedCatalog() {
-  try {
-    const res = await fetch(`${BASE_URL}/products?limit=0`);
-    if (!res.ok) {
-      throw new Error(`API Error: ${res.status}`);
-    }
-    const data = await res.json();
-    if (!Array.isArray(data?.products)) {
-      throw new Error(
-        "Malformed response: expected data.products to be an array",
+function fetchScopedCatalog() {
+  if (catalogPromise) return catalogPromise;
+
+  catalogPromise = (async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/products?limit=0`);
+      if (!res.ok) {
+        throw new Error(`API Error: ${res.status}`);
+      }
+      const data = await res.json();
+      if (!Array.isArray(data?.products)) {
+        throw new Error(
+          "Malformed response: expected data.products to be an array",
+        );
+      }
+      const items = data.products.filter((p) =>
+        supportedCategories.includes(p.category),
       );
+      return { items, fromMock: false };
+    } catch (error) {
+      console.warn(
+        `[productsAPI] Falling back to mock data — ${error.message}`,
+      );
+      return { items: mockProducts, fromMock: true };
     }
-    const items = data.products.filter((p) =>
-      supportedCategories.includes(p.category),
-    );
-    return { items, fromMock: false };
-  } catch (error) {
-    console.warn(`[productsAPI] Falling back to mock data — ${error.message}`);
-    return { items: mockProducts, fromMock: true };
-  }
+  })();
+
+  return catalogPromise;
 }
 
 // Applies category/price/sort/limit options to a scoped item array. Runs for
