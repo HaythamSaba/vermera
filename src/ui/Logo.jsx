@@ -55,12 +55,12 @@ const Logo = ({
   onClick,
 }) => {
   const lockup = (
-    <span className="inline-flex items-center gap-2">
+    <span className="inline-flex items-center">
       <BrandMark className={`${MARK_SIZE_CLASSES[size]} w-auto shrink-0`} />
       <span
-        className={`hidden md:inline font-serif font-medium tracking-[0.04em] ${SIZE_CLASSES[size]}`}
+        className={`hidden md:inline font-serif font-medium tracking-[0.04em] -ml-3 text-espresso ${SIZE_CLASSES[size]}`}
       >
-        Vermera
+        ermera
       </span>
     </span>
   );
