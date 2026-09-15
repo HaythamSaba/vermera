@@ -25,7 +25,6 @@ const CreateUser = () => {
   return (
     <div className="min-h-[87.8vh] bg-ivory flex items-center justify-center px-4">
       <div className="bg-cream border border-stone p-8 w-full max-w-md">
-        {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-stone/20 rounded-full mb-4">
             <User className="w-8 h-8 text-brass" aria-hidden="true" />
@@ -36,7 +35,6 @@ const CreateUser = () => {
           <p className="text-taupe">Enter your name to get started</p>
         </div>
 
-        {/* Input Section */}
         <div className="mb-6">
           <label
             htmlFor="username"
@@ -63,7 +61,6 @@ const CreateUser = () => {
           disabled={!username.trim()}
         />
 
-        {/* Footer Text */}
         <p className="text-center text-sm text-taupe mt-6">
           Considered pieces for everyday living.
         </p>

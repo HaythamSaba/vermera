@@ -125,7 +125,6 @@ const ProductItem = ({ product }) => {
       className="product-card relative group flex flex-col"
       variants={cardVariants}
     >
-      {/* Wishlist toggle */}
       <WishlistButton
         isActive={isItemInWishlist}
         onToggle={handleToggleWishlist}
@@ -162,7 +161,6 @@ const ProductItem = ({ product }) => {
         )}
       </div>
 
-      {/* Image + hover overlay */}
       <div className="relative overflow-hidden bg-stone/20 aspect-4/5">
         {!imageLoaded && !imageError && (
           <div className="absolute inset-0 flex items-center justify-center">

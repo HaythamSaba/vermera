@@ -11,7 +11,6 @@ const Footer = () => {
       <hr className="border-t border-stone" />
 
       <div className="container-foundation grid gap-10 sm:grid-cols-2 lg:grid-cols-3 py-12 lg:py-20">
-        {/* Brand */}
         <div>
           <Logo size="compact" className="mb-4" />
           <p className="text-taupe max-w-xs">
@@ -19,7 +18,6 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Shop */}
         <div aria-label="Shop">
           <p className="text-taupe font-medium mb-4">Shop</p>
           <ul className="grid grid-cols-2 gap-3 ">
@@ -38,7 +36,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Customer care */}
         <div aria-label="Customer care">
           <p className="text-taupe font-medium mb-4">Customer Care</p>
           <ul className="flex flex-col gap-3">

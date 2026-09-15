@@ -12,37 +12,22 @@ export async function getAddress({ latitude, longitude }) {
     if (!res.ok) throw Error("Failed getting address");
 
     const data = await res.json();
-
-    // Extract address components
     const address = data.address || {};
 
     return {
-      // Street information
       streetNumber: address.house_number || "",
       streetName: address.road || address.street || "",
-
-      // City information
       city:
         address.city ||
         address.town ||
         address.village ||
         address.municipality ||
         "",
-
-      // Postal code
       postalCode: address.postcode || "",
-
-      // State/Province
       state: address.state || address.province || "",
-
-      // Country
       country: address.country || "",
       countryCode: address.country_code?.toUpperCase() || "",
-
-      // Full formatted address
       displayAddress: data.display_name || "",
-
-      // Additional useful fields
       suburb: address.suburb || address.neighbourhood || "",
       county: address.county || "",
     };

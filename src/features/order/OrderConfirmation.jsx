@@ -52,7 +52,6 @@ const OrderConfirmation = () => {
   const tax = order.tax || subtotal * 0.08;
   const total = subtotal + shipping + tax;
 
-  // Format date
   const orderDate = new Date(order.createdAt).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -74,7 +73,6 @@ const OrderConfirmation = () => {
   return (
     <div className="container-foundation section">
       <div className="max-w-4xl mx-auto">
-        {/* Success Header */}
         <div className="text-center mb-10">
           <div className="flex justify-center mb-4">
             <CheckCircle className="w-20 h-20 text-brass" aria-hidden="true" />
@@ -87,7 +85,6 @@ const OrderConfirmation = () => {
           </p>
         </div>
 
-        {/* Order Status */}
         <div className="bg-cream border border-stone p-6 mb-6">
           <h3 className="text-lg font-serif font-medium text-espresso mb-4 flex items-center">
             <ChartNoAxesColumn className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
@@ -119,9 +116,7 @@ const OrderConfirmation = () => {
           </div>
         </div>
 
-        {/* Customer & Shipping Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          {/* Customer Info */}
           <div className="bg-cream border border-stone p-6">
             <h3 className="text-lg font-serif font-medium text-espresso mb-4 flex items-center">
               <User className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
@@ -142,7 +137,6 @@ const OrderConfirmation = () => {
             </div>
           </div>
 
-          {/* Shipping Address */}
           <div className="bg-cream border border-stone p-6">
             <h3 className="text-lg font-serif font-medium text-espresso mb-4 flex items-center">
               <MapPin className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
@@ -158,7 +152,6 @@ const OrderConfirmation = () => {
           </div>
         </div>
 
-        {/* Order Items */}
         <div className="bg-cream border border-stone p-6 mb-6">
           <h3 className="text-lg font-serif font-medium text-espresso mb-4 flex items-center">
             <Package className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
@@ -197,7 +190,6 @@ const OrderConfirmation = () => {
           </div>
         </div>
 
-        {/* Payment Summary */}
         <div className="bg-cream border border-stone p-6 mb-6">
           <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
             <h3 className="text-lg font-serif font-medium text-espresso flex items-center">
@@ -253,11 +245,9 @@ const OrderConfirmation = () => {
   );
 };
 
-// Loader to get order data
 export async function loader({ params }) {
   const { orderId } = params;
 
-  // Get orders from localStorage
   const ordersJSON = localStorage.getItem("furniture_orders");
 
   if (!ordersJSON) {

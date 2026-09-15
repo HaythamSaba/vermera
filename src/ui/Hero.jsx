@@ -23,7 +23,6 @@ const Hero = () => {
   return (
     <section className="container-foundation">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center py-12 lg:py-16">
-        {/* Text */}
         <div className="order-2 lg:order-1 max-w-xl">
           <Reveal
             as="p"
@@ -55,7 +54,6 @@ const Hero = () => {
           </Reveal>
         </div>
 
-        {/* Image */}
         <div className="order-1 lg:order-2 relative w-full lg:aspect-square overflow-hidden bg-stone/30">
           {!imageLoaded && !imageError && (
             <div className="absolute inset-0 flex items-center justify-center">

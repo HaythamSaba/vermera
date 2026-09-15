@@ -114,7 +114,6 @@ const HeaderMobileDrawer = ({
       </AnimatePresence>
     </div>
 
-    {/* Overlay */}
     <AnimatePresence>
       {isOpen && (
         <MotionDiv

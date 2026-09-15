@@ -86,7 +86,6 @@ const Profile = () => {
 
   return (
     <div className="container-foundation section">
-      {/* Header */}
       <div className="bg-cream border border-stone p-6 mb-6">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center space-x-4">
@@ -113,9 +112,7 @@ const Profile = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - User Info */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Personal Information */}
           <div className="bg-cream border border-stone p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-serif font-medium text-espresso">
@@ -208,7 +205,6 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Order History */}
           <div className="bg-cream border border-stone p-6">
             <h2 className="text-xl font-serif font-medium text-espresso mb-4 flex items-center">
               <Package className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
@@ -250,7 +246,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Right Column - Cart Summary */}
         <div className="space-y-6">
           <Cart embedded />
         </div>

@@ -7,14 +7,12 @@ const CartItem = ({ item }) => {
 
   return (
     <div className="flex gap-4 p-3 border border-stone hover:shadow-soft transition-shadow duration-300">
-      {/* Product Image */}
       <img
         src={image}
         alt={productName}
         className="w-20 h-20 object-cover border border-stone"
       />
 
-      {/* Product Details */}
       <div className="flex-1">
         <div className="flex justify-between items-start mb-1">
           <h3 className="font-medium text-charcoal line-clamp-1">
@@ -25,7 +23,6 @@ const CartItem = ({ item }) => {
 
         <p className="text-sm text-taupe capitalize mb-2">{category}</p>
 
-        {/* Price and Quantity Controls */}
         <div className="flex justify-between items-center">
           <UpdateItemQuantity sku={sku} quantity={quantity} />
 

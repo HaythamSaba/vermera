@@ -21,13 +21,10 @@ const HeaderPrimary = ({
     <div className="flex w-full justify-between items-center">
       <Logo size="primary" animate />
 
-      {/* Desktop nav */}
       <HeaderDesktopNav />
 
-      {/* Desktop Icons */}
       <HeaderDesktopIcons onSearchClick={onSearchClick} />
 
-      {/* Mobile bar: search, cart, menu */}
       <div className="flex items-center gap-5 lg:hidden">
         <button
           type="button"
@@ -51,7 +48,6 @@ const HeaderPrimary = ({
       </div>
     </div>
 
-    {/* Expandable mobile search */}
     {isMobileSearchOpen && (
       <div id="mobile-search-row" className="lg:hidden mt-4">
         <form

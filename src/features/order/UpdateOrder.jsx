@@ -14,7 +14,6 @@ const UpdateOrder = ({ order }) => {
       <p className="text-sm font-medium text-charcoal">Shipping Speed:</p>
 
       <div className="flex gap-3 flex-wrap">
-        {/* Standard Shipping Option */}
         <fetcher.Form method="PATCH">
           <input type="hidden" name="orderId" value={order.id} />
           <input type="hidden" name="shippingType" value="standard" />
@@ -44,7 +43,6 @@ const UpdateOrder = ({ order }) => {
           </button>
         </fetcher.Form>
 
-        {/* Express Shipping Option */}
         <fetcher.Form method="PATCH">
           <input type="hidden" name="orderId" value={order.id} />
           <input type="hidden" name="shippingType" value="express" />

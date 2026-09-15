@@ -81,7 +81,6 @@ const CreateOrder = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* LEFT */}
           <div className="lg:col-span-2">
             <Form method="POST" className="space-y-6">
               <CustomerInfo formErrors={formErrors} username={username} />
@@ -100,7 +99,6 @@ const CreateOrder = () => {
                 setIsExpressShipping={setIsExpressShipping}
               />
 
-              {/* Hidden inputs */}
               <input type="hidden" name="cart" value={JSON.stringify(cart)} />
               <input type="hidden" name="totalPrice" value={totalPrice} />
               <input type="hidden" name="totalQuantity" value={totalQuantity} />
@@ -128,7 +126,6 @@ const CreateOrder = () => {
             </Form>
           </div>
 
-          {/* RIGHT */}
           <OrderSummary
             cart={cart}
             totalPrice={totalPrice}

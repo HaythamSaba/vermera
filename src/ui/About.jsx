@@ -140,7 +140,6 @@ const About = () => {
         </div>
       </div>
 
-      {/* Background / experience */}
       <AboutSection>
         <div className="max-w-2xl">
           <AboutSectionHeading>Background</AboutSectionHeading>
@@ -161,7 +160,6 @@ const About = () => {
         </div>
       </AboutSection>
 
-      {/* This project */}
       <AboutSection tinted>
         <div className="max-w-2xl">
           <AboutSectionHeading>About This Project</AboutSectionHeading>
@@ -192,7 +190,6 @@ const About = () => {
         </div>
       </AboutSection>
 
-      {/* Contact */}
       <AboutSection>
         <div className="max-w-2xl mb-10">
           <AboutSectionHeading className="mb-4">

@@ -47,7 +47,6 @@ const Cart = ({ embedded = false }) => {
     navigate("/order/newOrder");
   };
 
-  // Empty cart state
   if (cart.length === 0) return <EmptyCart embedded={embedded} />;
 
   const card = (

@@ -59,7 +59,7 @@ const Carousel = ({ children, clothes }) => {
 
   return (
     <div className="relative">
-      <div className="">
+      <div>
         <div
           className="flex transition-transform duration-500 items-start"
           style={{
@@ -79,7 +79,6 @@ const Carousel = ({ children, clothes }) => {
                 style={{ width: size.w, height: size.h }}
               >
                 {child}
-                {/* Overlay Card - Only show on active slide */}
                 {isActive && clothes && (
                   <div className="absolute bottom-6 left-6 right-6 lg:right-auto bg-cream/90 backdrop-blur-sm p-4 ">
                     <div className="flex items-center gap-3 mb-2 text-taupe text-sm">
@@ -115,7 +114,6 @@ const Carousel = ({ children, clothes }) => {
         </div>
       </div>
 
-      {/* Navigation Buttons */}
       <button
         type="button"
         onClick={handlePrevious}
@@ -133,7 +131,6 @@ const Carousel = ({ children, clothes }) => {
         <ChevronRight className="w-6 h-6 text-brass" aria-hidden="true" />
       </button>
 
-      {/* Indicator Dots */}
       <div
         role="group"
         aria-label="Choose a look"
