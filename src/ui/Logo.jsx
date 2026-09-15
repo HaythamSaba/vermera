@@ -58,7 +58,7 @@ const Logo = ({
     <span className="inline-flex items-center">
       <BrandMark className={`${MARK_SIZE_CLASSES[size]} w-auto shrink-0`} />
       <span
-        className={`hidden md:inline font-serif font-medium tracking-[0.04em] ${SIZE_CLASSES[size]}`}
+        className={`hidden md:inline font-serif font-medium tracking-[0.04em] -ml-3 ${SIZE_CLASSES[size]}`}
       >
         ermera
       </span>
