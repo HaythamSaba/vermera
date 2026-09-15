@@ -27,14 +27,14 @@ const MARK_SIZE_CLASSES = {
 
 // Vermera's brand mark — an abstract calligraphic "V" (BrandMark.jsx) sits
 // beside the wordmark (Fraunces, medium weight, slightly tracked-out)
-// rather than replacing it, per the approved mark lockup. Color is
-// intentionally not set on either piece here — both inherit `currentColor`
-// from whichever text-* class the header/footer already applies
-// (text-charcoal on the light primary header and footer, text-cream on the
-// dark floating header), so this one component renders correctly in every
-// context it's used in. The brass underline-on-hover (the exact treatment
-// HeaderDesktopNav's links already use) is brass's one "accent" role here,
-// per the design brief.
+// rather than replacing it, per the approved mark lockup. The wordmark's
+// color is intentionally not set here — it inherits `currentColor` from
+// whichever text-* class the header/footer already applies (text-charcoal
+// on the light primary header and footer, text-cream on the dark floating
+// header), so this one component renders correctly in every context it's
+// used in. BrandMark keeps its own fixed brass tone regardless of context —
+// that's its one "accent" role here, per the design brief — so only the
+// wordmark needs to track the surrounding surface.
 //
 // `size`: "default" is the full-width primary header's 36px; "compact" is
 // the condensed floating header's and the footer's 24px — both stayed
@@ -58,7 +58,7 @@ const Logo = ({
     <span className="inline-flex items-center">
       <BrandMark className={`${MARK_SIZE_CLASSES[size]} w-auto shrink-0`} />
       <span
-        className={`hidden md:inline font-serif font-medium tracking-[0.04em] -ml-3 text-espresso ${SIZE_CLASSES[size]}`}
+        className={`hidden md:inline font-serif font-medium tracking-[0.04em] -ml-3 ${SIZE_CLASSES[size]}`}
       >
         ermera
       </span>

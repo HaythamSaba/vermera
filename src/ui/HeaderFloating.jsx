@@ -23,10 +23,10 @@ const HeaderFloating = ({
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: -80, opacity: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="fixed top-0 left-0 right-0 z-60 py-4 font-medium mx-auto px-[clamp(1.25rem,4vw,5rem)] w-full bg-espresso/80 text-cream shadow-soft border-b border-espresso backdrop-blur-lg"
+        className="fixed top-0 left-0 right-0 z-60 py-6 font-medium mx-auto px-[clamp(1.25rem,4vw,5rem)] w-full text-charcoall bg-espresso/80 text-cream shadow-soft backdrop-blur-lg"
       >
         <div className="flex w-full justify-between items-center">
-          <Logo size="compact" />
+          <Logo size="primary" animate />
 
           <HeaderDesktopNav />
           <HeaderDesktopIcons onSearchClick={onSearchClick} />
