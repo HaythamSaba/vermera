@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { navLinkClass } from "./HeaderDesktopNav";
 import { EASE } from "../utils/motion";
+import BrandMark from "./BrandMark";
 
 // Matches the codebase convention elsewhere (Header, CartOverview) —
 // aliasing to a plain identifier before using it as a JSX tag is what lets
@@ -9,20 +10,31 @@ import { EASE } from "../utils/motion";
 const MotionSpan = motion.span;
 
 const SIZE_CLASSES = {
-  default: "text-4xl",
+  primary: "text-4xl",
+  default: "text-3xl",
   compact: "text-2xl",
 };
 
-// Vermera's brand mark — a restrained typographic wordmark (Fraunces,
-// medium weight, slightly tracked-out) rather than an icon+text lockup:
-// this is a quiet-luxury fashion brand, and an invented pictorial symbol
-// would work against that positioning. Color is intentionally not set here
-// — it inherits `currentColor` from whichever text-* class the header/
-// footer already applies (text-charcoal on the light primary header and
-// footer, text-cream on the dark floating header), so this one component
-// renders correctly in every context it's used in. The brass underline-on-
-// hover (the exact treatment HeaderDesktopNav's links already use) is
-// brass's one "accent" role here, per the design brief.
+// Paired with SIZE_CLASSES' wordmark sizes (36px / 24px) — picked by eye
+// against the live header/footer, not the font-size 1:1, since the mark's
+// bold ribbon strokes read heavier than the wordmark's x-height at an
+// equal pixel size.
+const MARK_SIZE_CLASSES = {
+  primary: "h-9",
+  default: "h-7",
+  compact: "h-5",
+};
+
+// Vermera's brand mark — an abstract calligraphic "V" (BrandMark.jsx) sits
+// beside the wordmark (Fraunces, medium weight, slightly tracked-out)
+// rather than replacing it, per the approved mark lockup. Color is
+// intentionally not set on either piece here — both inherit `currentColor`
+// from whichever text-* class the header/footer already applies
+// (text-charcoal on the light primary header and footer, text-cream on the
+// dark floating header), so this one component renders correctly in every
+// context it's used in. The brass underline-on-hover (the exact treatment
+// HeaderDesktopNav's links already use) is brass's one "accent" role here,
+// per the design brief.
 //
 // `size`: "default" is the full-width primary header's 36px; "compact" is
 // the condensed floating header's and the footer's 24px — both stayed
@@ -36,18 +48,27 @@ const SIZE_CLASSES = {
 // primary header only, which truly mounts once per page load; the floating
 // header mounts/unmounts on every scroll-threshold crossing, where
 // replaying this each time would read as fidgety rather than quiet.
-const Logo = ({ size = "default", animate = false, className = "" }) => {
-  const text = (
-    <span
-      className={`font-serif font-medium tracking-[0.04em] ${SIZE_CLASSES[size]}`}
-    >
-      Vermera
+const Logo = ({
+  size = "primary",
+  animate = false,
+  className = "",
+  onClick,
+}) => {
+  const lockup = (
+    <span className="inline-flex items-center gap-2">
+      <BrandMark className={`${MARK_SIZE_CLASSES[size]} w-auto shrink-0`} />
+      <span
+        className={`hidden md:inline font-serif font-medium tracking-[0.04em] ${SIZE_CLASSES[size]}`}
+      >
+        Vermera
+      </span>
     </span>
   );
 
   return (
     <Link
       to="/"
+      onClick={onClick}
       className={`${navLinkClass} inline-flex items-center ${className}`}
     >
       {animate ? (
@@ -56,10 +77,10 @@ const Logo = ({ size = "default", animate = false, className = "" }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, ease: EASE.out }}
         >
-          {text}
+          {lockup}
         </MotionSpan>
       ) : (
-        text
+        lockup
       )}
     </Link>
   );

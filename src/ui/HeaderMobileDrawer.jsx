@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { navLinkClass } from "./HeaderDesktopNav";
 import WishlistIcon from "./WishlistIcon";
 import CartIcon from "./CartIcon";
+import Logo from "./Logo";
 
 const MotionDiv = motion.div;
 
@@ -36,7 +37,7 @@ const HeaderMobileDrawer = ({
             className="fixed top-0 right-0 h-full w-64 bg-cream text-charcoal shadow-soft z-50"
           >
             <div className="flex justify-between items-center px-6 py-5 border-b border-stone">
-              <p className="text-xl font-bold">Menu</p>
+              <Logo size="default" onClick={onClose} />
               <button
                 ref={closeButtonRef}
                 type="button"
