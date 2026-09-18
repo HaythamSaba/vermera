@@ -161,7 +161,7 @@ const ProductItem = ({ product }) => {
         )}
       </div>
 
-      <div className="relative overflow-hidden bg-stone/20 aspect-4/5">
+      <div className="relative overflow-hidden bg-stone/20 aspect-4/5 border-8 border-white group-hover:border-espresso">
         {!imageLoaded && !imageError && (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-8 h-8 border-4 border-stone border-t-brass rounded-full animate-spin" />
@@ -249,23 +249,23 @@ const ProductItem = ({ product }) => {
         onKeyDown={(e) => {
           if (e.key === "Enter") handleOpenProductPage(e);
         }}
-        className={`bg-white px-4 py-3.5 min-h-[92px] flex flex-col justify-between ${
+        className={`bg-white px-4 py-3.5 min-h-[92px] flex flex-col justify-between group-hover:bg-espresso ${
           isOutOfStock ? "opacity-60" : "cursor-pointer"
         }`}
       >
         <h3
-          className="font-serif font-medium text-lg leading-snug text-charcoal line-clamp-1"
+          className="font-serif font-medium text-lg leading-snug text-charcoal line-clamp-1 group-hover:text-cream"
           title={productName}
         >
           {productName}
         </h3>
 
         <div className="flex items-baseline gap-2 mt-2">
-          <span className="font-semibold text-lg text-charcoal">
+          <span className="font-semibold text-lg text-charcoal group-hover:text-cream">
             ${NewPrice.toFixed(2)}
           </span>
           {OldPrice && (
-            <span className="text-sm text-taupe line-through">
+            <span className="text-sm text-taupe line-through group-hover:text-cream">
               ${OldPrice.toFixed(2)}
             </span>
           )}
