@@ -29,7 +29,7 @@ const Contact = () => {
 
   return (
     <div>
-      <CoverBackgroundSection title="Contact" path={["Home", "Contact"]} />
+      <CoverBackgroundSection title="Contact" path={["Home", "Contact"]} size="primary" />
 
       <div className="container-foundation section grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div>

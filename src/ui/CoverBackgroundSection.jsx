@@ -1,17 +1,13 @@
+import { MARK_SIZE_CLASSES } from "../utils/motion";
+import BrandMark from "./BrandMark";
 import Breadcrumb from "./Breadcrumb";
 
-const CoverBackgroundSection = ({ title, path }) => {
+const CoverBackgroundSection = ({ title, path, size }) => {
   return (
     <div className="relative">
       <div className="h-[316px] w-full relative bg-[url('/images/products-background.webp')] bg-cover bg-center bg-no-repeat  before:content-['']  before:absolute before:inset-0 before:backdrop-blur-md">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center flex flex-col items-center gap-2">
-          <img
-            src="/images/main-logo.webp"
-            alt=""
-            aria-hidden="true"
-            width={50}
-            height={32}
-          />
+          <BrandMark className={`${MARK_SIZE_CLASSES[size]} w-auto shrink-0`} />
           <h1 className="font-serif text-espresso text-5xl font-medium my-2">
             {title}
           </h1>
