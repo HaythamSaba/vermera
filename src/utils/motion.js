@@ -28,3 +28,15 @@ export const GSAP_EASE = {
 };
 
 export const STAGGER_MS = 120;
+
+export const SIZE_CLASSES = {
+  primary: "text-4xl",
+  default: "text-3xl",
+  compact: "text-2xl",
+};
+
+export const MARK_SIZE_CLASSES = {
+  primary: "h-9",
+  default: "h-7",
+  compact: "h-5",
+};
