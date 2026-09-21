@@ -12,7 +12,7 @@ const Footer = () => {
 
       <div className="container-foundation grid gap-10 sm:grid-cols-2 lg:grid-cols-3 py-12 lg:py-20">
         <div>
-          <Logo size="compact" className="mb-4" />
+          <Logo size="default" className="mb-4" />
           <p className="text-taupe max-w-xs">
             Considered pieces for everyday living.
           </p>
