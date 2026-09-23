@@ -14,7 +14,7 @@ const FooterParallaxText = () => {
     <p
       ref={parallaxRef}
       aria-hidden="true"
-      className="absolute -top-[5%] left-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-[200px] text-taupe/40 text-center font-light tracking-widest select-none pointer-events-none -z-10"
+      className="absolute top-[2%] left-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-[200px] text-taupe/40 text-center tracking-widest select-none pointer-events-none -z-10"
     >
       VERMERA
     </p>
