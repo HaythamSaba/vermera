@@ -8,7 +8,7 @@ const EDITORIAL_STAGGER = STAGGER_MS + 20; // 60-80ms band per the plan
 const EditorialBanner = () => {
   const navigate = useNavigate();
   return (
-    <section className="bg-cream border-b border-stone">
+    <section className="bg-cream border-b border-stone relative  z-10">
       <div className="container-foundation section">
         <div className="max-w-2xl mx-auto text-center">
           <Reveal
