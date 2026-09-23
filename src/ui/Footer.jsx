@@ -1,15 +1,22 @@
+import { lazy, Suspense } from "react";
 import { Link } from "react-router";
 import { supportedCategories } from "../services/apiProducts";
 import { CATEGORY_LABELS } from "../features/products/categoryLabels";
 import Logo from "./Logo";
 
+const FooterParallaxText = lazy(() => import("./FooterParallaxText"));
+
 const linkClass = "hover:text-brass transition-colors duration-300";
 
 const Footer = () => {
   return (
-    <footer className="bg-cream text-charcoal">
-      <hr className="border-t border-stone" />
+    <footer className="bg-cream text-charcoal pt-50 relative isolate">
+      <Suspense fallback={null}>
+        <FooterParallaxText />
+      </Suspense>
 
+      <hr className="border-t border-stone" />
+      
       <div className="container-foundation grid gap-10 sm:grid-cols-2 lg:grid-cols-3 py-12 lg:py-20">
         <div>
           <Logo size="default" className="mb-4" />
@@ -62,7 +69,6 @@ const Footer = () => {
           </ul>
         </div>
       </div>
-
       <div className="border-t border-stone">
         <div className="container-foundation py-6 text-sm text-taupe text-center">
           © {new Date().getFullYear()} Vermera. All rights reserved.
