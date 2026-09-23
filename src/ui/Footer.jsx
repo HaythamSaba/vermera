@@ -17,7 +17,9 @@ const Footer = () => {
 
       <hr className="border-t border-stone" />
 
-      <footer className="relative z-10 bg-cream text-charcoal">
+      <footer
+        className="relative z-10 bg-cream text-charcoal shadow-[0_-10px_30px_10px_rgba(0,0,0,0.1)]"
+      >
         <div className="container-foundation grid gap-10 sm:grid-cols-2 lg:grid-cols-3 py-12 lg:py-20">
           <div>
             <Logo size="default" className="mb-4" />
