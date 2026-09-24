@@ -10,7 +10,7 @@ const linkClass = "hover:text-brass transition-colors duration-300";
 
 const Footer = () => {
   return (
-    <div className="relative isolate pt-50">
+    <div className="relative isolate pt-50 overflow-x-hidden">
       <Suspense fallback={null}>
         <FooterParallaxText />
       </Suspense>
