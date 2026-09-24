@@ -14,7 +14,7 @@ import { GSAP_EASE } from "../utils/motion";
 // rather than risking it being stranded invisible. The target element should
 // start at opacity-0 in markup so there's no pre-animation flash.
 export default function useTextReveal({
-  by = "chars", // "chars" | "words"
+  by = "chars", // "chars" | "words" | "lines"
   distance = 24,
   blur = 10, // keep modest — animating blur() is a repaint per frame
   durationMs = 800,
@@ -43,7 +43,8 @@ export default function useTextReveal({
         }
 
         split = new SplitText(node, { type: by, aria: "auto" });
-        const targets = by === "words" ? split.words : split.chars;
+        const targets =
+          by === "words" ? split.words : by === "lines" ? split.lines : split.chars;
         if (!targets.length) {
           gsap.set(node, { opacity: 1 });
           return;
