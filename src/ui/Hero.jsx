@@ -79,7 +79,7 @@ const Hero = () => {
               <br /> Chosen
             </h1>
           </div>
-          <div className="flex flex-col mt-auto mb-30">
+          <div className="flex flex-col mt-auto mb-30 md:mb-0 md:mt-0">
             <Reveal
               as="p"
               delay={STAGGER_MS * 6}
