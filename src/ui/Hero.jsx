@@ -66,7 +66,7 @@ const Hero = () => {
             <Reveal
               as="p"
               delay={0}
-              className="font-semibold text-sm uppercase tracking-[3px] text-brass-ink mb-4"
+              className="font-semibold text-sm uppercase tracking-[3px] text-ivory mb-4"
             >
               The Vermera Edit
             </Reveal>
@@ -83,7 +83,7 @@ const Hero = () => {
             <Reveal
               as="p"
               delay={STAGGER_MS * 6}
-              className="text-taupe text-lg leading-relaxed mb-10 max-w-md"
+              className="text-espresso text-lg leading-relaxed mb-10 max-w-md"
             >
               A curated edit of bags, jewelry, watches, and beauty essentials,
               each piece selected for its quality and quiet character.
