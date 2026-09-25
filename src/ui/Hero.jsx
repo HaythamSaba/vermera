@@ -11,22 +11,11 @@ const Hero = () => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  // Applied to a wrapper around the <img>, not the image itself, so this
-  // doesn't fight the image's own hover/CSS transforms (GSAP's inline
-  // transform would otherwise always win over a CSS class). scale-[1.15]
-  // gives the wrapper buffer room so the parallax translate never reveals
-  // empty space at the section's edges.
   const parallaxRef = useParallax({ speed: 0.1, scrub: 0.8 });
 
   const { ref: nameRef } = useTextReveal({ staggerMs: 40 });
 
   return (
-    // w-full, not w-screen: this section already sits in an unconstrained,
-    // unpadded ancestor chain (MainPageContent -> main -> AppLayout), so
-    // w-full fills the exact same visual width — but unlike w-screen
-    // (100vw), it doesn't include the vertical scrollbar's gutter, which
-    // would otherwise push the section a few pixels past the real
-    // viewport edge and force the whole page to scroll horizontally.
     <section className="relative w-full h-[calc(100vh-40px)] overflow-hidden bg-stone/30">
       {!imageLoaded && !imageError && (
         <div className="absolute inset-0 flex items-center justify-center">
