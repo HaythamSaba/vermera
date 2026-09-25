@@ -48,7 +48,7 @@ const Hero = () => {
       ) : (
         <div ref={parallaxRef} className="absolute inset-0 scale-[1.15]">
           <img
-            src="/images/test-image.png"
+            src="/images/hero-image.webp"
             alt="A softly styled flatlay of a leather bag, watch, necklace, folded knit, sunglasses, and amber bottles against a sunlit travertine wall, reflecting Vermera's quiet, considered aesthetic."
             fetchPriority="high"
             onLoad={() => setImageLoaded(true)}
@@ -66,7 +66,7 @@ const Hero = () => {
             <Reveal
               as="p"
               delay={0}
-              className="font-semibold text-sm uppercase tracking-[3px] text-ivory mb-4"
+              className={`font-semibold text-sm uppercase tracking-[3px] mb-4 ${imageError || !imageLoaded ? "text-taupe" : "text-ivory"}`}
             >
               The Vermera Edit
             </Reveal>
