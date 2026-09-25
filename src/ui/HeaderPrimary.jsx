@@ -17,7 +17,7 @@ const HeaderPrimary = ({
   onOpenMobileMenu,
   isMobileMenuOpen,
 }) => (
-  <header className="top-0 left-0 right-0 z-60 py-6 font-medium mx-auto px-[clamp(1.25rem,4vw,5rem)] w-full bg-transparent text-charcoal">
+  <header className="top-0 left-0 right-0 z-60 py-2 font-medium mx-auto px-[clamp(1.25rem,4vw,5rem)] w-full bg-transparent text-charcoal">
     <div className="flex w-full justify-between items-center">
       <Logo size="primary" animate />
 
