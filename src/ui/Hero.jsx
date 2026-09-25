@@ -27,7 +27,7 @@ const Hero = () => {
     // (100vw), it doesn't include the vertical scrollbar's gutter, which
     // would otherwise push the section a few pixels past the real
     // viewport edge and force the whole page to scroll horizontally.
-    <section className="relative w-full h-[calc(100vh-90px)] overflow-hidden bg-stone/30">
+    <section className="relative w-full h-[calc(100vh-40px)] overflow-hidden bg-stone/30">
       {!imageLoaded && !imageError && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-8 h-8 border-4 border-stone border-t-brass rounded-full animate-spin" />
