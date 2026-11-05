@@ -23,7 +23,7 @@ import CustomerInfo from "./CustomerInfo";
 import ShippingAddress from "./ShippingAddress";
 import ShippingOptions from "./ShippingOptions";
 import OrderSummary from "./OrderSummary";
-import useOrderTotals from "../../hooks/useOrderTotals";
+import { computeOrderTotals, getSubtotal } from "../../utils/pricing";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
 
@@ -64,10 +64,9 @@ const CreateOrder = () => {
   // placed" apart from "cart genuinely empty".
   const [hasSubmittedOrder, setHasSubmittedOrder] = useState(false);
 
-  const { shippingCost, expressCost, tax, finalTotal } = useOrderTotals(
-    totalPrice,
-    isExpressShipping
-  );
+  const totals = computeOrderTotals(totalPrice, {
+    express: isExpressShipping,
+  });
 
   const isLoadingAddress = addressStatus === "loading";
 
@@ -157,11 +156,7 @@ const CreateOrder = () => {
             cart={cart}
             totalPrice={totalPrice}
             totalQuantity={totalQuantity}
-            baseShipping={shippingCost}
-            expressCost={expressCost}
-            tax={tax}
-            finalTotal={finalTotal}
-            isExpressShipping={isExpressShipping}
+            totals={totals}
           />
         </div>
       </div>
@@ -188,6 +183,12 @@ export async function action({ request }) {
 
   const orderId = generateOrderId();
   const cartItems = JSON.parse(data.cart);
+  const isExpress = data.fastOrder === "on";
+  // Same function the checkout summary used, so the saved order always
+  // matches the total the shopper saw before clicking "Place Order".
+  const totals = computeOrderTotals(getSubtotal(cartItems), {
+    express: isExpress,
+  });
 
   const completeOrder = {
     id: orderId,
@@ -209,9 +210,10 @@ export async function action({ request }) {
       price: parseFloat(item.NewPrice),
       totalPrice: item.totalPrice,
     })),
-    fastOrder: data.fastOrder === "on",
-    shipping: data.fastOrder === "on" ? 30 : 15,
-    tax: cartItems.reduce((sum, item) => sum + item.totalPrice, 0) * 0.08,
+    fastOrder: isExpress,
+    shipping: totals.shipping,
+    tax: totals.tax,
+    total: totals.total,
     createdAt: new Date().toISOString(),
   };
 

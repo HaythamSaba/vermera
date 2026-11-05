@@ -1,16 +1,20 @@
 import { Receipt } from "lucide-react";
 import SimpleCartItem from "../cart/SimpleCartItem";
+import { formatPrice, TAX_RATE } from "../../utils/pricing";
 
-const OrderSummary = ({
-  cart,
-  totalPrice,
-  totalQuantity,
-  baseShipping,
-  expressCost,
-  tax,
-  finalTotal,
-  isExpressShipping,
-}) => {
+// `totals` comes from computeOrderTotals() in utils/pricing.js — the same
+// function the order action uses, so this summary always matches the
+// saved order.
+const OrderSummary = ({ cart, totalQuantity, totals }) => {
+  const {
+    subtotal,
+    standardShipping,
+    expressSurcharge,
+    tax,
+    total,
+    isFreeStandardShipping,
+  } = totals;
+
   return (
     <div className="lg:col-span-1">
       <div className="bg-cream border-2 border-dashed border-stone p-6 sticky top-24">
@@ -34,36 +38,38 @@ const OrderSummary = ({
           <div className="flex justify-between text-sm">
             <span className="text-taupe">Subtotal</span>
             <span className="font-medium text-charcoal">
-              ${totalPrice.toFixed(2)}
+              {formatPrice(subtotal)}
             </span>
           </div>
 
           <div className="flex justify-between text-sm">
             <span className="text-taupe">Standard Shipping</span>
             <span className="font-medium text-charcoal">
-              ${baseShipping.toFixed(2)}
+              {isFreeStandardShipping
+                ? "Complimentary"
+                : formatPrice(standardShipping)}
             </span>
           </div>
 
-          {isExpressShipping && (
+          {expressSurcharge > 0 && (
             <div className="flex justify-between text-sm">
               <span className="text-taupe">Express Shipping</span>
               <span className="font-medium text-brass-ink">
-                + ${expressCost.toFixed(2)}
+                + {formatPrice(expressSurcharge)}
               </span>
             </div>
           )}
 
           <div className="flex justify-between text-sm">
-            <span className="text-taupe">Tax (8%)</span>
+            <span className="text-taupe">Tax ({Math.round(TAX_RATE * 100)}%)</span>
             <span className="font-medium text-charcoal">
-              ${tax.toFixed(2)}
+              {formatPrice(tax)}
             </span>
           </div>
 
           <div className="flex justify-between text-lg font-semibold pt-3 border-t border-stone">
             <span className="text-charcoal">Total</span>
-            <span className="text-espresso">${finalTotal.toFixed(2)}</span>
+            <span className="text-espresso">{formatPrice(total)}</span>
           </div>
         </div>
       </div>

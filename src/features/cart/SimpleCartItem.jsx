@@ -1,3 +1,4 @@
+import { formatPrice } from "../../utils/pricing";
 function SimpleCartItem({ item }) {
   return (
     <div key={item.sku} className="flex gap-3 pb-4 border-b border-stone">
@@ -14,7 +15,7 @@ function SimpleCartItem({ item }) {
         <div className="flex justify-between items-center mt-1">
           <span className="text-sm text-taupe">Qty: {item.quantity}</span>
           <span className="font-semibold text-espresso">
-            ${item.totalPrice.toFixed(2)}
+            {formatPrice(item.totalPrice)}
           </span>
         </div>
       </div>

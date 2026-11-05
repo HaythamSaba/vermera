@@ -12,6 +12,7 @@ import MainButton from "../../ui/MainButton";
 import EmptyCart from "./EmptyCart";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
+import { formatPrice } from "../../utils/pricing";
 
 // `embedded`: render just the card, without the standalone-page container, for
 // reuse inside another page's own layout (e.g. the Profile sidebar). When
@@ -29,7 +30,7 @@ const Cart = ({ embedded = false }) => {
     embedded
       ? null
       : cart.length > 0
-        ? `Your Vermera cart — Items: ${cartItemCount}, Subtotal: $${cartTotal.toFixed(2)}. Review and proceed to checkout.`
+        ? `Your Vermera cart — Items: ${cartItemCount}, Subtotal: ${formatPrice(cartTotal)}. Review and proceed to checkout.`
         : "Your Vermera cart is empty — browse the shop to add bags, dresses, jewelry, shoes, watches, and beauty essentials.",
   );
 
@@ -82,12 +83,12 @@ const Cart = ({ embedded = false }) => {
           <div className="flex justify-between text-sm">
             <span className="text-taupe">Subtotal</span>
             <span className="font-medium text-charcoal">
-              ${cartTotal.toFixed(2)}
+              {formatPrice(cartTotal)}
             </span>
           </div>
           <div className="flex justify-between text-lg font-semibold pt-2 border-t border-stone">
             <span className="text-charcoal">Total</span>
-            <span className="text-espresso">${cartTotal.toFixed(2)}</span>
+            <span className="text-espresso">{formatPrice(cartTotal)}</span>
           </div>
         </div>
 

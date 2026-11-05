@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
+import { FREE_SHIPPING_THRESHOLD, formatPrice } from "../utils/pricing";
 
 // Single editable message shown in the bar. Bump ANNOUNCEMENT_ID whenever
-// the copy changes so a past dismissal doesn't hide the new message.
-const ANNOUNCEMENT_MESSAGE = "Complimentary delivery on orders over €500";
+// the copy changes so a past dismissal doesn't hide the new message. The
+// amount comes from the same constant checkout uses, so the claim can't
+// drift from what's actually charged.
+const ANNOUNCEMENT_MESSAGE = `Complimentary delivery on orders over ${formatPrice(
+  FREE_SHIPPING_THRESHOLD,
+  { wholeUnits: true },
+)}`;
 const ANNOUNCEMENT_ID = "delivery-eur500";
 const STORAGE_KEY = `vermera-announcement-dismissed-${ANNOUNCEMENT_ID}`;
 

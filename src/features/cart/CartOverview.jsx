@@ -7,6 +7,7 @@ import { getTotalCartPrice, getTotalCartQuantity } from "./cartSlice";
 import MainButton from "../../ui/MainButton";
 import useClickOutside from "../../hooks/useClickOutside";
 import useFocusTrap from "../../hooks/useFocusTrap";
+import { formatPrice } from "../../utils/pricing";
 
 const MotionDiv = motion.div;
 
@@ -104,7 +105,7 @@ const CartOverview = () => {
                         Total Quantity: {totalCartQuantity}
                       </p>
                       <p className="text-charcoal">
-                        Total Price: ${totalCartPrice.toFixed(2)}
+                        Total Price: {formatPrice(totalCartPrice)}
                       </p>
                     </div>
                     <div className="flex flex-col justify-center">

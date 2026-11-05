@@ -5,6 +5,7 @@ import MainButton from "../../ui/MainButton";
 import RemoveWishlistItem from "./RemoveWishlistItem";
 import { useToast } from "../../hooks/useToast";
 import { addItem, isInCart, toCartItem } from "../cart/cartSlice";
+import { formatPrice } from "../../utils/pricing";
 
 const WishlistItem = ({ item }) => {
   const dispatch = useDispatch();
@@ -54,11 +55,11 @@ const WishlistItem = ({ item }) => {
         <div className="flex justify-between items-center gap-3">
           <div>
             <span className="font-semibold text-espresso">
-              ${NewPrice.toFixed(2)}
+              {formatPrice(NewPrice)}
             </span>
             {OldPrice && (
               <span className="text-sm text-taupe line-through ml-2">
-                ${OldPrice.toFixed(2)}
+                {formatPrice(OldPrice)}
               </span>
             )}
           </div>

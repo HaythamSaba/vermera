@@ -16,11 +16,16 @@ import Cart from "../cart/Cart";
 import MainButton from "../../ui/MainButton";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
+import { computeOrderTotals, formatPrice, getSubtotal } from "../../utils/pricing";
 
-const orderTotal = (order) =>
-  order.items.reduce((sum, item) => sum + item.totalPrice, 0) +
-  order.shipping +
-  order.tax;
+// Prefer the total saved with the order; older orders without one are
+// re-priced the same way the confirmation page does.
+const orderTotal = (order) => {
+  if (order.total != null) return order.total;
+  const subtotal = getSubtotal(order.items);
+  const fallback = computeOrderTotals(subtotal, { express: order.fastOrder });
+  return subtotal + (order.shipping ?? fallback.shipping) + (order.tax ?? fallback.tax);
+};
 
 const PROFILE_STORAGE_KEY = "furniture_profile";
 const emptyProfile = { name: "", email: "", phone: "", address: "" };
@@ -234,7 +239,7 @@ const Profile = () => {
                         items
                       </p>
                       <p className="font-semibold text-espresso">
-                        ${orderTotal(order).toFixed(2)}
+                        {formatPrice(orderTotal(order))}
                       </p>
                     </div>
                   </Link>

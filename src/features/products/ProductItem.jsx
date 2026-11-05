@@ -23,6 +23,7 @@ import {
   removeItem as removeWishlistItem,
   toWishlistItem,
 } from "../wishlist/wishlistSlice";
+import { formatPrice } from "../../utils/pricing";
 
 const MotionDiv = motion.div;
 const MotionImg = motion.img;
@@ -262,11 +263,11 @@ const ProductItem = ({ product }) => {
 
         <div className="flex items-baseline gap-2 mt-2">
           <span className="font-semibold text-lg text-charcoal group-hover:text-cream">
-            ${NewPrice.toFixed(2)}
+            {formatPrice(NewPrice)}
           </span>
           {OldPrice && (
             <span className="text-sm text-taupe line-through group-hover:text-cream">
-              ${OldPrice.toFixed(2)}
+              {formatPrice(OldPrice)}
             </span>
           )}
         </div>

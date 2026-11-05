@@ -2,12 +2,28 @@
 
 import { useFetcher } from "react-router";
 import { Truck, Zap } from "lucide-react";
+import {
+  computeOrderTotals,
+  formatPrice,
+  getSubtotal,
+} from "../../utils/pricing";
+
+const formatShipping = (amount) =>
+  amount === 0 ? "Complimentary" : formatPrice(amount);
 
 const UpdateOrder = ({ order }) => {
   const fetcher = useFetcher();
 
   const isUpdating = fetcher.state === "submitting";
   const currentlyExpress = order.fastOrder;
+
+  // Priced from this order's own subtotal, so the free-delivery threshold
+  // applies here exactly as it did at checkout.
+  const subtotal = getSubtotal(order.items);
+  const standardShipping = computeOrderTotals(subtotal).shipping;
+  const expressShipping = computeOrderTotals(subtotal, {
+    express: true,
+  }).shipping;
 
   return (
     <div className="flex flex-col gap-3">
@@ -33,7 +49,9 @@ const UpdateOrder = ({ order }) => {
             <Truck className="w-4 h-4" aria-hidden="true" />
             <div className="text-left">
               <p className="font-semibold text-sm">Standard</p>
-              <p className="text-xs">5-7 days • $15.00</p>
+              <p className="text-xs">
+                5-7 days • {formatShipping(standardShipping)}
+              </p>
             </div>
             {!currentlyExpress && (
               <span className="ml-2 text-xs bg-brass/20 text-espresso px-2 py-0.5 rounded">
@@ -62,7 +80,9 @@ const UpdateOrder = ({ order }) => {
             <Zap className="w-4 h-4" aria-hidden="true" />
             <div className="text-left">
               <p className="font-semibold text-sm">Express</p>
-              <p className="text-xs">1-2 days • $40.00</p>
+              <p className="text-xs">
+                1-2 days • {formatShipping(expressShipping)}
+              </p>
             </div>
             {currentlyExpress && (
               <span className="ml-2 text-xs bg-brass/20 text-espresso px-2 py-0.5 rounded">
@@ -103,15 +123,20 @@ export async function action({ request, params }) {
     throw new Error("Order not found");
   }
 
-  // Calculate shipping cost based on type
+  // Re-price through the shared pricing module so the stored shipping and
+  // total stay consistent with checkout (including free standard delivery).
   const isExpress = shippingType === "express";
-  const shippingCost = isExpress ? 40.0 : 15.0;
+  const totals = computeOrderTotals(getSubtotal(orders[orderIndex].items), {
+    express: isExpress,
+  });
 
   // Update the order
   const updatedOrder = {
     ...orders[orderIndex],
     fastOrder: isExpress,
-    shipping: shippingCost,
+    shipping: totals.shipping,
+    tax: totals.tax,
+    total: totals.total,
     updatedAt: new Date().toISOString(),
   };
 

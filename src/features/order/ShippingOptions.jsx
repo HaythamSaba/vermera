@@ -1,5 +1,6 @@
 import SectionHeader from "../../ui/SectionHeader";
 import { Truck } from "lucide-react";
+import { EXPRESS_SURCHARGE, formatPrice } from "../../utils/pricing";
 
 const ShippingOptions = ({ isExpressShipping, setIsExpressShipping }) => {
   return (
@@ -27,7 +28,9 @@ const ShippingOptions = ({ isExpressShipping, setIsExpressShipping }) => {
                 Delivery in 1-2 business days
               </p>
             </div>
-            <span className="font-semibold text-espresso">+ $25.00</span>
+            <span className="font-semibold text-espresso">
+              + {formatPrice(EXPRESS_SURCHARGE)}
+            </span>
           </div>
         </label>
       </div>

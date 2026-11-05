@@ -1,5 +1,6 @@
 import DeleteItem from "./DeleteItem";
 import UpdateItemQuantity from "./UpdateItemQuantity";
+import { formatPrice } from "../../utils/pricing";
 
 const CartItem = ({ item }) => {
   const { sku, productName, category, NewPrice, quantity, totalPrice, image } =
@@ -27,9 +28,9 @@ const CartItem = ({ item }) => {
           <UpdateItemQuantity sku={sku} quantity={quantity} />
 
           <div className="text-right">
-            <p className="text-sm text-taupe">${NewPrice.toFixed(2)} each</p>
+            <p className="text-sm text-taupe">{formatPrice(NewPrice)} each</p>
             <p className="font-semibold text-espresso">
-              ${totalPrice.toFixed(2)}
+              {formatPrice(totalPrice)}
             </p>
           </div>
         </div>

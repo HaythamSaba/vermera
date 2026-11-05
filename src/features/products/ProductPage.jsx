@@ -22,6 +22,7 @@ import {
   removeItem as removeWishlistItem,
   toWishlistItem,
 } from "../wishlist/wishlistSlice";
+import { formatPrice } from "../../utils/pricing";
 
 // Quantity state lives here, keyed by sku at the call site below — React
 // Router keeps ProductPage mounted across a sku change (only loader data
@@ -103,8 +104,8 @@ const ProductPage = () => {
     c.toUpperCase(),
   );
   const priceFact = OldPrice
-    ? `Price: $${NewPrice.toFixed(2)} (was $${OldPrice.toFixed(2)})`
-    : `Price: $${NewPrice.toFixed(2)}`;
+    ? `Price: ${formatPrice(NewPrice)} (was ${formatPrice(OldPrice)})`
+    : `Price: ${formatPrice(NewPrice)}`;
   // First sentence of the real product description, plus the same
   // category/price/stock facts already shown on the page — structured facts
   // read better here than a vague one-liner, per meta description best
@@ -150,10 +151,10 @@ const ProductPage = () => {
             {productName}
           </h1>
           <p className="text-2xl font-semibold text-charcoal mb-6">
-            ${NewPrice.toFixed(2)}
+            {formatPrice(NewPrice)}
             {OldPrice && (
               <span className="text-taupe line-through ml-3 text-lg font-normal">
-                ${OldPrice.toFixed(2)}
+                {formatPrice(OldPrice)}
               </span>
             )}
           </p>

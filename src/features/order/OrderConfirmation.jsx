@@ -17,6 +17,11 @@ import MainButton from "../../ui/MainButton";
 import UpdateOrder from "./UpdateOrder";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
+import {
+  computeOrderTotals,
+  formatPrice,
+  getSubtotal,
+} from "../../utils/pricing";
 
 const OrderConfirmation = () => {
   const order = useLoaderData();
@@ -46,11 +51,14 @@ const OrderConfirmation = () => {
     );
   }
 
-  // Calculate totals from order data
-  const subtotal = order.items.reduce((sum, item) => sum + item.totalPrice, 0);
-  const shipping = order.shipping || 15.0;
-  const tax = order.tax || subtotal * 0.08;
-  const total = subtotal + shipping + tax;
+  // Show the amounts saved with the order (what the shopper agreed to at
+  // checkout). Only orders saved before those fields existed fall back to
+  // recomputing. `??`, not `||`, so complimentary shipping (0) stays 0.
+  const subtotal = getSubtotal(order.items);
+  const fallback = computeOrderTotals(subtotal, { express: order.fastOrder });
+  const shipping = order.shipping ?? fallback.shipping;
+  const tax = order.tax ?? fallback.tax;
+  const total = order.total ?? subtotal + shipping + tax;
 
   const orderDate = new Date(order.createdAt).toLocaleDateString("en-US", {
     year: "numeric",
@@ -178,10 +186,10 @@ const OrderConfirmation = () => {
                   </p>
                   <div className="flex justify-between items-center mt-2">
                     <span className="text-sm text-taupe">
-                      ${item.price.toFixed(2)} × {item.quantity}
+                      {formatPrice(item.price)} × {item.quantity}
                     </span>
                     <span className="font-semibold text-espresso">
-                      ${item.totalPrice.toFixed(2)}
+                      {formatPrice(item.totalPrice)}
                     </span>
                   </div>
                 </div>
@@ -203,7 +211,7 @@ const OrderConfirmation = () => {
             <div className="flex justify-between text-sm">
               <span className="text-taupe">Subtotal</span>
               <span className="font-medium text-charcoal">
-                ${subtotal.toFixed(2)}
+                {formatPrice(subtotal)}
               </span>
             </div>
             <div className="flex justify-between text-sm">
@@ -211,13 +219,13 @@ const OrderConfirmation = () => {
                 Shipping {order.fastOrder && "(Express)"}
               </span>
               <span className="font-medium text-charcoal">
-                ${shipping.toFixed(2)}
+                {shipping === 0 ? "Complimentary" : formatPrice(shipping)}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-taupe">Tax</span>
               <span className="font-medium text-charcoal">
-                ${tax.toFixed(2)}
+                {formatPrice(tax)}
               </span>
             </div>
             <div className="flex justify-between text-lg font-semibold pt-3 border-t border-stone">
@@ -227,7 +235,7 @@ const OrderConfirmation = () => {
                   (you will pay this amount on delivery)
                 </span>
               </p>
-              <span className="text-espresso">${total.toFixed(2)}</span>
+              <span className="text-espresso">{formatPrice(total)}</span>
             </div>
           </div>
         </div>
