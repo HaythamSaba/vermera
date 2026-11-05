@@ -57,3 +57,20 @@ This codebase is mid-migration from a generic gold-toned "Funiro furniture" temp
 - Real semantic elements over div-based fakes: `<button type="button">` (not `<div onClick>`), one real `<h1>` per page, `<nav aria-label="...">` for breadcrumbs, `role="dialog" aria-modal="true" aria-label="..."` for modal/drawer overlays, `aria-hidden="true"` on purely decorative icons, `aria-label` instead of `title` for icon-only buttons.
 - Don't ship fake/dead interactive UI (buttons or affordances with no handler, decorative elements styled to look clickable) — either wire them up for real or don't style them as interactive. Known pre-existing gaps like this (e.g. `Header.jsx`'s decorative Heart icon, `Footer.jsx`'s handler-less newsletter form, `SearchModal.jsx` being order-lookup rather than product search) are documented, intentional-for-now exceptions — don't "fix" them by fabricating fake success states or backends that don't exist; ask before scoping real functionality for them.
 - Don't invent data not backed by a real source: no fake review counts/ratings/testimonials, countdown/urgency messaging, or trust/payment badges — there's no reviews UI, no inventory-velocity data, and no real payment backend (checkout produces a `localStorage`-persisted order record only).
+
+## UI/UX audit workflow
+
+- Audit items are listed in `docs/ui-ux-audit.md`, and its section 5 records the decisions that apply to them. Work on exactly ONE item per request, the one the user names.
+- Never run `git add`, `git commit`, `git push`, or any git command that changes history or the remote. The user handles all git.
+- Stay in scope. List related issues under "Noticed, not fixed" instead of fixing them.
+- After each change, run the build and confirm nothing new breaks or warns.
+- If a fix is much bigger than the audit's effort estimate or needs a decision, stop and ask first.
+- When an item changes something this file documents (like the `SearchModal` exception in V11), update CLAUDE.md in the same change.
+- When done, reply with:
+  - Item ID and title
+  - Previous situation (with file paths)
+  - Solution (with files modified)
+  - Why it matters
+  - How to test manually
+  - A Conventional Commits message (subject max 72 chars, `Refs: audit [ID]` in the body)
+  - Noticed, not fixed
