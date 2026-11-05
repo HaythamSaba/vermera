@@ -6,28 +6,28 @@ import { STAGGER_MS } from "../utils/motion";
 
 const clothes = [
   {
-    image: "./images/lookbook-dresses.webp",
+    image: "/images/lookbook-dresses.webp",
     number: "2",
     category: "Dresses",
     title: "Golden Hour",
     categorySlug: "womens-dresses",
   },
   {
-    image: "./images/lookbook-jewellery.webp",
+    image: "/images/lookbook-jewellery.webp",
     number: "3",
     category: "Jewellery",
     title: "Fine Lines",
     categorySlug: "womens-jewellery",
   },
   {
-    image: "./images/lookbook-shoes.webp",
+    image: "/images/lookbook-shoes.webp",
     number: "4",
     category: "Footwear",
     title: "Every Step",
     categorySlug: "womens-shoes",
   },
   {
-    image: "./images/lookbook-bags.webp",
+    image: "/images/lookbook-bags.webp",
     number: "1",
     category: "Handbags",
     title: "The Structured Tote",
