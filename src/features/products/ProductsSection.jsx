@@ -54,7 +54,7 @@ function ProductsSection({
               id="sortSelect"
               value={sort}
               onChange={(e) => onSortChange(e.target.value)}
-              className="border border-stone bg-cream outline-none p-2 text-sm text-charcoal"
+              className="border border-stone bg-cream p-2 text-sm text-charcoal"
             >
               {SORT_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>

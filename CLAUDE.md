@@ -49,6 +49,8 @@ Tokens live entirely in `src/index.css` under a Tailwind v4 `@theme` block — n
 
 Layout utilities: `.container-foundation` (responsive max-width content wrapper) and `.section` (consistent vertical rhythm) are the standard building blocks for page sections — prefer them over ad hoc padding/margin. `.template` is a legacy fixed-padding container, being phased out.
 
+Focus states: a single sitewide `:focus-visible` rule in `src/index.css` (Tailwind `base` layer) draws a 2px espresso outline on every focusable element. Never add `outline-none` / `outline-hidden` to interactive elements — that utility outranks the base rule and removes the indicator. On dark surfaces (espresso bars, image overlays), put `.surface-dark` on the container so the ring switches to cream.
+
 Icon library is `lucide-react` only — don't add another icon package.
 
 ### Ongoing redesign effort

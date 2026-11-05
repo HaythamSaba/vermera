@@ -62,7 +62,7 @@ const CustomerInfo = ({ formErrors, username }) => {
               }
               className={`w-full pl-11 border ${
                 formErrors?.phoneNumber ? "border-red-500" : "border-stone"
-              } bg-cream outline-none p-3`}
+              } bg-cream p-3`}
             />
           </div>
 
@@ -90,7 +90,7 @@ const CustomerInfo = ({ formErrors, username }) => {
               type="email"
               name="email"
               placeholder="you@example.com"
-              className="w-full pl-11 border border-stone bg-cream outline-none p-3"
+              className="w-full pl-11 border border-stone bg-cream p-3"
             />
           </div>
         </div>

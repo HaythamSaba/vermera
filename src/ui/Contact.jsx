@@ -99,7 +99,7 @@ const Contact = () => {
               required
               rows={6}
               placeholder="Hi, I'd like to ask about..."
-              className="w-full border border-stone bg-cream outline-none p-3 transition resize-none"
+              className="w-full border border-stone bg-cream p-3 transition resize-none"
             />
           </div>
 

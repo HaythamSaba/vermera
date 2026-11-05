@@ -52,6 +52,31 @@ h6 {
   font-family: var(--font-serif);
 }
 
+/* Visible keyboard focus, sitewide (WCAG 2.4.7). :focus-visible only
+   shows for keyboard/assistive navigation, plus text fields, which always
+   match, so mouse clicks on buttons stay ring-free. It lives in the base
+   layer on purpose: a component can still adjust it with a focus-visible:
+   utility, but must not use outline-none / outline-hidden, which would
+   remove it entirely. On dark surfaces, add .surface-dark to the container
+   so the ring switches to cream. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--focus-ring, var(--color-espresso));
+    outline-offset: 3px;
+  }
+
+  /* Fields already have a border; a tighter offset reads as one control. */
+  :where(input, select, textarea):focus-visible {
+    outline-offset: 1px;
+  }
+}
+
+/* Container class for dark backgrounds (espresso bars, image overlays):
+   switches the focus ring above to cream so it stays visible. */
+.surface-dark {
+  --focus-ring: var(--color-cream);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

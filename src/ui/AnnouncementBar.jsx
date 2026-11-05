@@ -42,7 +42,7 @@ const AnnouncementBar = () => {
         <MotionDiv
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="relative bg-espresso text-cream"
+          className="surface-dark relative bg-espresso text-cream"
         >
           <p className="text-center text-xs sm:text-sm tracking-wide py-2 px-10">
             {ANNOUNCEMENT_MESSAGE}

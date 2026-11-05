@@ -39,7 +39,7 @@ const InputField = forwardRef(function InputField(
         {...(value !== undefined ? { value } : { defaultValue })}
         onChange={onChange}
         onKeyDown={onKeyDown}
-        className={`${className} w-full border border-stone bg-cream outline-none p-3 transition`}
+        className={`${className} w-full border border-stone bg-cream p-3 transition`}
       />
     </div>
   );

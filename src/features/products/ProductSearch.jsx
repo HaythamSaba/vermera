@@ -18,7 +18,7 @@ const ProductSearch = ({ value, onChange }) => {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Search products..."
-        className="w-full h-14 px-9 py-2 border border-stone bg-cream outline-none text-sm text-charcoal placeholder:text-taupe focus:border-none focus:ring-1 focus:ring-brass"
+        className="w-full h-14 px-9 py-2 border border-stone bg-cream text-sm text-charcoal placeholder:text-taupe"
       />
       {value && (
         <button

@@ -156,7 +156,7 @@ const Profile = () => {
                           email: e.target.value,
                         })
                       }
-                      className="mt-1 w-full px-3 py-2 border border-stone bg-cream outline-none"
+                      className="mt-1 w-full px-3 py-2 border border-stone bg-cream"
                     />
                   ) : (
                     <p className="text-charcoal">{user.email || "—"}</p>
@@ -178,7 +178,7 @@ const Profile = () => {
                           phone: e.target.value,
                         })
                       }
-                      className="mt-1 w-full px-3 py-2 border border-stone bg-cream outline-none"
+                      className="mt-1 w-full px-3 py-2 border border-stone bg-cream"
                     />
                   ) : (
                     <p className="text-charcoal">{user.phone || "—"}</p>
@@ -200,7 +200,7 @@ const Profile = () => {
                         })
                       }
                       rows="2"
-                      className="mt-1 w-full px-3 py-2 border border-stone bg-cream outline-none"
+                      className="mt-1 w-full px-3 py-2 border border-stone bg-cream"
                     />
                   ) : (
                     <p className="text-charcoal">{user.address || "—"}</p>

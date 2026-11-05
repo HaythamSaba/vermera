@@ -206,7 +206,7 @@ const ProductItem = ({ product }) => {
         )}
 
         {/* Hover overlay — actions only, no product info duplicated here */}
-        <div className="absolute inset-0 bg-espresso/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out flex flex-col items-center justify-center gap-6">
+        <div className="surface-dark absolute inset-0 bg-espresso/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out flex flex-col items-center justify-center gap-6">
           {isOutOfStock ? (
             <span className="text-espresso text-sm font-semibold uppercase tracking-wider bg-cream px-4 py-2 rounded-full">
               Out of Stock

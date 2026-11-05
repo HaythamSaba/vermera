@@ -49,7 +49,7 @@ const CreateUser = () => {
             onChange={(e) => setUsername(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Enter your name"
-            className="w-full px-4 py-3 border border-stone bg-cream outline-none transition"
+            className="w-full px-4 py-3 border border-stone bg-cream transition"
           />
         </div>
 

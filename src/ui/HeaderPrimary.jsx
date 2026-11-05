@@ -65,7 +65,7 @@ const HeaderPrimary = ({
             value={mobileSearchQuery}
             onChange={onMobileSearchChange}
             placeholder="Enter your order ID..."
-            className="w-full border-b border-current bg-transparent py-2 text-sm text-current outline-none placeholder:text-taupe"
+            className="w-full border-b border-current bg-transparent py-2 text-sm text-current placeholder:text-taupe"
           />
           <button
             type="submit"

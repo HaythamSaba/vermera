@@ -82,7 +82,7 @@ function PriceFilterPanel({ minPrice, maxPrice, onApply, onClear }) {
               placeholder="Min"
               value={minPriceInput}
               onChange={(e) => setMinPriceInput(e.target.value)}
-              className="w-full border border-stone bg-cream outline-none p-2 text-sm"
+              className="w-full border border-stone bg-cream p-2 text-sm"
             />
             <span className="text-taupe">–</span>
             <label className="sr-only" htmlFor="maxPriceInput">
@@ -95,7 +95,7 @@ function PriceFilterPanel({ minPrice, maxPrice, onApply, onClear }) {
               placeholder="Max"
               value={maxPriceInput}
               onChange={(e) => setMaxPriceInput(e.target.value)}
-              className="w-full border border-stone bg-cream outline-none p-2 text-sm"
+              className="w-full border border-stone bg-cream p-2 text-sm"
             />
           </div>
           <div className="flex items-center justify-between gap-2">
