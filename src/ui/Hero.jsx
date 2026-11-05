@@ -16,13 +16,9 @@ const Hero = () => {
   const { ref: nameRef } = useTextReveal({ staggerMs: 40 });
 
   return (
+    // While the photo loads, the section's own bg-stone/30 tint is the
+    // placeholder: a calm tinted block rather than a loading spinner.
     <section className="relative w-full h-[calc(100vh-40px)] overflow-hidden bg-stone/30">
-      {!imageLoaded && !imageError && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-8 h-8 border-4 border-stone border-t-brass rounded-full animate-spin" />
-        </div>
-      )}
-
       {imageError ? (
         <div className="absolute inset-0 flex items-center justify-center bg-stone/20 text-taupe">
           <div className="text-center px-6">
@@ -36,16 +32,32 @@ const Hero = () => {
         </div>
       ) : (
         <div ref={parallaxRef} className="absolute inset-0 scale-[1.15]">
-          <img
-            src="/images/hero-image.webp"
-            alt="A softly styled flatlay of a leather bag, watch, necklace, folded knit, sunglasses, and amber bottles against a sunlit travertine wall, reflecting Vermera's quiet, considered aesthetic."
-            fetchPriority="high"
-            onLoad={() => setImageLoaded(true)}
-            onError={() => setImageError(true)}
-            className={`w-full h-full object-cover object-center transition-opacity duration-700 ease-out ${
-              imageLoaded ? "opacity-100" : "opacity-0"
-            }`}
-          />
+          {/* Art direction, not resolution switching: the photo is drawn
+              >=1570 CSS px wide on every screen (object-cover in a ~100vh
+              box), so the full 1672px file is always needed for width. Tall
+              screens only ever see its centre, so they get a centre crop
+              that renders identically at ~1/4 of the bytes. Keep these
+              sources in sync with the preloads in index.html. */}
+          <picture className="block w-full h-full">
+            <source
+              media="(max-aspect-ratio: 3/4)"
+              srcSet="/images/hero-image-portrait.webp"
+              width="780"
+              height="941"
+            />
+            <img
+              src="/images/hero-image.webp"
+              width="1672"
+              height="941"
+              alt="A softly styled flatlay of a leather bag, watch, necklace, folded knit, sunglasses, and amber bottles against a sunlit travertine wall, reflecting Vermera's quiet, considered aesthetic."
+              fetchPriority="high"
+              onLoad={() => setImageLoaded(true)}
+              onError={() => setImageError(true)}
+              className={`w-full h-full object-cover object-center transition-opacity duration-700 ease-out ${
+                imageLoaded ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          </picture>
         </div>
       )}
 

@@ -17,19 +17,34 @@
     after the JS bundle loads and runs. Without this, the browser's preload
     scanner has nothing to find until then (Lighthouse: LCP request
     discovery, "Request is discoverable in initial document" = false).
-    Preloading it here, with the same srcset/sizes Hero.jsx uses, lets the
-    browser start fetching it immediately instead of waiting on JS.
-    Home-only, but this file is shared by every route — the small wasted
-    fetch on other pages is far cheaper than the LCP hit of not doing this.
+    Preloading it here lets the browser start fetching it immediately
+    instead of waiting on JS.
+
+    The two preloads mirror Hero.jsx's <picture> exactly (same files, same
+    media queries, so the browser fetches only the one it will use) — keep
+    them in sync. They're added from this tiny inline script rather than
+    as plain <link> tags because this file is served for every route
+    (vercel.json rewrites deep links here): only the homepage shows the
+    hero, and the landscape file is ~280 KB, too much to waste on a direct
+    visit to /products or a product page. A synchronous script in <head>
+    runs during parsing, so the fetch starts essentially as early.
   -->
-  <link
-    rel="preload"
-    as="image"
-    fetchpriority="high"
-    href="/images/hero-bg-1024.webp"
-    imagesrcset="/images/hero-bg-640.webp 640w, /images/hero-bg-1024.webp 1024w, /images/hero-bg.webp 1408w"
-    imagesizes="(min-width: 1024px) 528px, 100vw"
-  >
+  <script>
+    if (location.pathname === "/") {
+      [
+        ["/images/hero-image-portrait.webp", "(max-aspect-ratio: 3/4)"],
+        ["/images/hero-image.webp", "not all and (max-aspect-ratio: 3/4)"],
+      ].forEach(function (entry) {
+        var link = document.createElement("link");
+        link.rel = "preload";
+        link.as = "image";
+        link.href = entry[0];
+        link.media = entry[1];
+        link.setAttribute("fetchpriority", "high");
+        document.head.appendChild(link);
+      });
+    }
+  </script>
   <!--
     Loaded non-render-blocking: fetch it at high priority via preload, then
     swap it in as the real stylesheet once it arrives (the "print" media

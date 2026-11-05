@@ -33,13 +33,33 @@ async function writeResized(srcFile, outFile, width, quality) {
   );
 }
 
-async function hero() {
-  // Hero.jsx renders this full-bleed on mobile down to ~half the container
-  // on desktop — genuinely different displayed sizes per viewport, so ship
-  // 3 widths for a srcset instead of one fixed file.
-  await writeResized("hero-bg.webp", "hero-bg-640.webp", 640, 78);
-  await writeResized("hero-bg.webp", "hero-bg-1024.webp", 1024, 78);
-  await writeResized("hero-bg.webp", "hero-bg.webp", 1408, 78); // overwrite original in place
+async function heroPortrait() {
+  // Hero.jsx draws hero-image.webp (1672x941) with object-cover inside a
+  // ~100vh-tall box scaled 1.15 for parallax, so it renders >=1570 CSS px
+  // wide on every screen: narrower *width* variants would only blur it.
+  // What tall screens do waste is width: at aspect <= 3/4 (phones, tablets
+  // in portrait) only the central <=770 source px are ever visible. Ship a
+  // centre crop for those via <picture>. At 780px wide the cover scale stays
+  // height-driven for any aspect <= 3/4, so it renders identically.
+  // q82 (not 78): this re-encodes an already-lossy WebP.
+  const src = path.join(DIR, "hero-image.webp");
+  const out = path.join(DIR, "hero-image-portrait.webp");
+  const srcBuffer = fs.readFileSync(src);
+  const { width, height } = await sharp(srcBuffer).metadata();
+  const cropWidth = 780;
+  const cropped = await sharp(srcBuffer)
+    .extract({
+      left: Math.round((width - cropWidth) / 2),
+      top: 0,
+      width: cropWidth,
+      height,
+    })
+    .webp({ quality: 82 })
+    .toBuffer();
+  fs.writeFileSync(out, cropped);
+  console.log(
+    `hero-image-portrait.webp: ${(srcBuffer.length / 1024).toFixed(1)} KiB -> ${(cropped.length / 1024).toFixed(1)} KiB (${cropWidth}x${height} centre crop, q82)`,
+  );
 }
 
 async function lookbookMobileVariant() {
@@ -75,9 +95,9 @@ async function productsBackground() {
 }
 
 (async () => {
-  await lookbookMobileVariant();
+  await heroPortrait();
   // Already applied in an earlier pass — uncomment only if you have a fresh
   // full-resolution source to re-derive these from.
-  // await hero();
+  // await lookbookMobileVariant();
   // await productsBackground();
 })();
