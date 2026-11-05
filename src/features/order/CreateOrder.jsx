@@ -9,10 +9,12 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  clearCart,
   getCart,
   getTotalCartPrice,
   getTotalCartQuantity,
 } from "../cart/cartSlice";
+import store from "../../store";
 import EmptyCart from "../cart/EmptyCart";
 import generateOrderId from "../../utils/helpers";
 import MainButton from "../../ui/MainButton";
@@ -55,6 +57,12 @@ const CreateOrder = () => {
   const totalQuantity = useSelector(getTotalCartQuantity);
 
   const [isExpressShipping, setIsExpressShipping] = useState(false);
+  // Set in the form's onSubmit (a discrete event, so it's committed before
+  // the async action runs). The action empties the cart via a synchronous
+  // Redux update while the router's own navigation state is still pending
+  // in a transition, so navigation.state can't be used to tell "order just
+  // placed" apart from "cart genuinely empty".
+  const [hasSubmittedOrder, setHasSubmittedOrder] = useState(false);
 
   const { shippingCost, expressCost, tax, finalTotal } = useOrderTotals(
     totalPrice,
@@ -68,7 +76,22 @@ const CreateOrder = () => {
     if (!username) navigate("/profile");
   }, [username, navigate]);
 
-  if (cart.length === 0) return <EmptyCart />;
+  if (cart.length === 0) {
+    // The action below empties the cart as soon as the order is saved, but
+    // this page stays mounted while the router loads the confirmation
+    // route — show a neutral holding state instead of flashing "Your cart
+    // is empty" during that hand-off.
+    if (hasSubmittedOrder) {
+      return (
+        <div className="container-foundation section text-center">
+          <p className="text-taupe" role="status">
+            Confirming your order…
+          </p>
+        </div>
+      );
+    }
+    return <EmptyCart />;
+  }
 
   return (
     <div className="container-foundation section">
@@ -82,7 +105,11 @@ const CreateOrder = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
-            <Form method="POST" className="space-y-6">
+            <Form
+              method="POST"
+              className="space-y-6"
+              onSubmit={() => setHasSubmittedOrder(true)}
+            >
               <CustomerInfo formErrors={formErrors} username={username} />
 
               <ShippingAddress
@@ -192,7 +219,11 @@ export async function action({ request }) {
   orders.unshift(completeOrder);
   localStorage.setItem("furniture_orders", JSON.stringify(orders));
 
-  localStorage.removeItem("furniture_cart");
+  // Clear through the store, not localStorage directly: removing only the
+  // persisted key left the in-memory cart full (header badge, /cart), and
+  // the next cart action re-saved those stale items. clearCart also
+  // persists the empty cart. Actions run outside React, hence store.dispatch.
+  store.dispatch(clearCart());
 
   return redirect(`/order/${orderId}`);
 }
