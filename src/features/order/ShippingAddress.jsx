@@ -1,3 +1,4 @@
+import { useState } from "react";
 import SectionHeader from "../../ui/SectionHeader";
 import InputField from "../../ui/InputField";
 import MainButton from "../../ui/MainButton";
@@ -12,6 +13,43 @@ const ShippingAddress = ({
   addressError,
   position,
 }) => {
+  // Controlled, so "Get My Address" can fill fields that are already on
+  // screen. The previous uncontrolled `defaultValue`s were only read on
+  // mount, so a geocoded address arriving later never appeared. Seeded from
+  // any address already fetched this session.
+  const [fields, setFields] = useState(() => ({
+    address: addressComponents?.street || "",
+    city: addressComponents?.city || "",
+    zipCode: addressComponents?.postalCode || "",
+    country: addressComponents?.country || "",
+  }));
+  const [isFilledFromLocation, setIsFilledFromLocation] = useState(false);
+
+  const handleFieldChange = (e) => {
+    const { name, value } = e.target;
+    setFields((current) => ({ ...current, [name]: value }));
+  };
+
+  const handleGetAddress = async () => {
+    try {
+      const { addressComponents: located } = await dispatch(
+        fetchUserAddress(),
+      ).unwrap();
+      // Only overwrite with values the geocoder actually returned, so a
+      // missing postcode (common) doesn't wipe one the shopper typed.
+      setFields((current) => ({
+        address: located.street || current.address,
+        city: located.city || current.city,
+        zipCode: located.postalCode || current.zipCode,
+        country: located.country || current.country,
+      }));
+      setIsFilledFromLocation(true);
+    } catch {
+      // Rejection is already stored in the user slice and rendered below as
+      // addressError — nothing extra to do here.
+    }
+  };
+
   return (
     <div className="bg-cream border border-stone p-6">
       <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
@@ -25,10 +63,7 @@ const ShippingAddress = ({
             type="button"
             variant="outline"
             size="small"
-            onClick={(e) => {
-              e.preventDefault();
-              dispatch(fetchUserAddress());
-            }}
+            onClick={handleGetAddress}
             disabled={isLoadingAddress}
             loading={isLoadingAddress}
             content="Get My Address"
@@ -37,13 +72,21 @@ const ShippingAddress = ({
       </div>
 
       <div className="space-y-4">
+        {isFilledFromLocation && (
+          <p role="status" className="text-sm text-taupe">
+            Address filled from your location. Please check it before placing
+            your order.
+          </p>
+        )}
+
         <InputField
           id="address"
           type="text"
           name="address"
           placeholder="123 Main Street"
           isRequired
-          defaultValue={addressComponents?.street || ""}
+          value={fields.address}
+          onChange={handleFieldChange}
           hasLabel
           labelText="Street Address"
         />
@@ -59,7 +102,8 @@ const ShippingAddress = ({
             name="city"
             placeholder="City"
             isRequired
-            defaultValue={addressComponents?.city || ""}
+            value={fields.city}
+            onChange={handleFieldChange}
             hasLabel
             labelText="City"
           />
@@ -69,7 +113,8 @@ const ShippingAddress = ({
             name="zipCode"
             placeholder="ZIP"
             isRequired
-            defaultValue={addressComponents?.postalCode || ""}
+            value={fields.zipCode}
+            onChange={handleFieldChange}
             hasLabel
             labelText="ZIP Code"
           />
@@ -81,7 +126,8 @@ const ShippingAddress = ({
           name="country"
           placeholder="Country"
           isRequired
-          defaultValue={addressComponents?.country || ""}
+          value={fields.country}
+          onChange={handleFieldChange}
           hasLabel
           labelText="Country"
         />

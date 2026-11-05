@@ -8,6 +8,7 @@ const InputField = forwardRef(function InputField(
     placeholder,
     isRequired,
     defaultValue,
+    value,
     onChange,
     hasLabel,
     onKeyDown,
@@ -33,7 +34,9 @@ const InputField = forwardRef(function InputField(
         name={name}
         required={isRequired}
         placeholder={placeholder}
-        defaultValue={defaultValue}
+        // Controlled when the caller passes `value` (with onChange),
+        // uncontrolled otherwise. Never both: React warns on that.
+        {...(value !== undefined ? { value } : { defaultValue })}
         onChange={onChange}
         onKeyDown={onKeyDown}
         className={`${className} w-full border border-stone bg-cream outline-none p-3 transition`}
