@@ -92,7 +92,7 @@ const ShippingAddress = ({
         />
 
         {addressStatus === "error" && (
-          <p className="text-red-500 text-sm">{addressError}</p>
+          <p className="text-error text-sm">{addressError}</p>
         )}
 
         <div className="grid grid-cols-2 gap-4">

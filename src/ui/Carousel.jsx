@@ -102,7 +102,7 @@ const Carousel = ({ children, clothes }) => {
                         )
                       }
                       aria-label={`Shop ${clothes[actualIndex].category}`}
-                      className="absolute bottom-0 right-0 lg:-right-12 bg-brass hover:bg-brass/80 text-cream p-3 transition-colors inline-flex items-center justify-center cursor-pointer"
+                      className="absolute bottom-0 right-0 lg:-right-12 bg-brass hover:bg-brass/80 text-charcoal p-3 transition-colors inline-flex items-center justify-center cursor-pointer"
                     >
                       <ChevronRight className="w-6 h-6" aria-hidden="true" />
                     </button>

@@ -61,13 +61,13 @@ const CustomerInfo = ({ formErrors, username }) => {
                 formErrors?.phoneNumber ? "phoneNumber-error" : undefined
               }
               className={`w-full pl-11 border ${
-                formErrors?.phoneNumber ? "border-red-500" : "border-stone"
+                formErrors?.phoneNumber ? "border-error" : "border-stone"
               } bg-cream p-3`}
             />
           </div>
 
           {formErrors?.phoneNumber && (
-            <p id="phoneNumber-error" role="alert" className="text-red-500 text-sm mt-1">
+            <p id="phoneNumber-error" role="alert" className="text-error text-sm mt-1">
               {formErrors.phoneNumber}
             </p>
           )}

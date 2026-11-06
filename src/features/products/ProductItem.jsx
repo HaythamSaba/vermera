@@ -142,7 +142,7 @@ const ProductItem = ({ product }) => {
         ) : (
           <>
             {isDiscount && (
-              <span className={`${badgeClass} bg-brass text-cream`}>
+              <span className={`${badgeClass} bg-brass text-charcoal`}>
                 -{Math.round(DiscountPercentage)}%
               </span>
             )}

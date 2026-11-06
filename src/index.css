@@ -29,6 +29,7 @@
      luminance to break that pairing instead. Same minimal-darkening
      approach, see scripts/contrast-fix.cjs. */
   --color-brass-ink: #836a49;
+  --color-error: #a33a2a;
 
   --font-serif: "Fraunces", ui-serif, Georgia, serif;
   --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;

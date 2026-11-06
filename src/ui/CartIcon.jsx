@@ -19,7 +19,7 @@ const CartIcon = ({ className = "", onClick, children }) => {
       <span className="relative inline-flex">
         <ShoppingCart className="cursor-pointer" aria-hidden="true" />
         {totalCartQuantity > 0 && (
-          <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-brass text-cream text-[10px] font-semibold leading-none">
+          <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-brass text-charcoal text-[10px] font-semibold leading-none">
             <AnimatedCount value={totalCartQuantity} />
           </span>
         )}

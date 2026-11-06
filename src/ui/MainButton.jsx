@@ -24,7 +24,7 @@ const MainButton = ({
     primary:
       "bg-brass border border-brass text-charcoal hover:bg-transparent hover:text-brass-ink",
     secondary:
-      "bg-cream text-brass-ink border border-brass hover:bg-brass hover:text-cream",
+      "bg-cream text-brass-ink border border-brass hover:bg-brass hover:text-charcoal",
     outline:
       "bg-transparent text-espresso border border-espresso hover:bg-espresso hover:text-cream",
     ghost:

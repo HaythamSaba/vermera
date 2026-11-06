@@ -131,7 +131,7 @@ const Products = ({
     return (
       <section className="container-foundation flex flex-col items-center border-b border-stone">
         <div className="text-center mb-16">
-          <p className="text-red-600 text-lg mb-4">{error}</p>
+          <p className="text-error text-lg mb-4">{error}</p>
           <MainButton
             content="Retry"
             variant="quiet"
