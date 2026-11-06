@@ -18,7 +18,12 @@ const Hero = () => {
   return (
     // While the photo loads, the section's own bg-stone/30 tint is the
     // placeholder: a calm tinted block rather than a loading spinner.
-    <section className="relative w-full h-[calc(100vh-40px)] overflow-hidden bg-stone/30">
+    // svh, not vh: on mobile, 100vh is measured as if the browser toolbars
+    // were hidden, so on first load the bottom of the hero (the mobile CTA)
+    // sat under the toolbar and the height jumped as the toolbars
+    // collapsed. 100svh is the stable toolbars-visible height, and it equals
+    // 100vh on desktop, so desktop layout is unchanged.
+    <section className="relative w-full h-[calc(100svh-40px)] overflow-hidden bg-stone/30">
       {imageError ? (
         <div className="absolute inset-0 flex items-center justify-center bg-stone/20 text-taupe">
           <div className="text-center px-6">
