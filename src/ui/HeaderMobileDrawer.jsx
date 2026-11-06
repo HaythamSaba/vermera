@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, User, X } from "lucide-react";
 import { Link } from "react-router";
-import { navLinkClass } from "./HeaderDesktopNav";
+import { iconHitAreaClass, navLinkClass } from "./HeaderDesktopNav";
 import WishlistIcon from "./WishlistIcon";
 import CartIcon from "./CartIcon";
 import Logo from "./Logo";
@@ -43,8 +43,9 @@ const HeaderMobileDrawer = ({
                 type="button"
                 onClick={onClose}
                 aria-label="Close menu"
+                className={iconHitAreaClass}
               >
-                <X className="cursor-pointer" aria-hidden="true" />
+                <X aria-hidden="true" />
               </button>
             </div>
 

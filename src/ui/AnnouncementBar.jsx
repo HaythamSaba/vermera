@@ -51,7 +51,7 @@ const AnnouncementBar = () => {
             type="button"
             onClick={handleDismiss}
             aria-label="Dismiss announcement"
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-cream/70 hover:text-cream transition-colors"
+            className="absolute right-0 inset-y-0 w-11 flex items-center justify-center text-cream/70 hover:text-cream transition-colors cursor-pointer"
           >
             <X size={16} aria-hidden="true" />
           </button>

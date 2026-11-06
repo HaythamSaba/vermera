@@ -1,5 +1,5 @@
 import { Menu, Search } from "lucide-react";
-import HeaderDesktopNav from "./HeaderDesktopNav";
+import HeaderDesktopNav, { iconHitAreaClass } from "./HeaderDesktopNav";
 import HeaderDesktopIcons from "./HeaderDesktopIcons";
 import CartIcon from "./CartIcon";
 import Logo from "./Logo";
@@ -29,21 +29,23 @@ const HeaderPrimary = ({
         <button
           type="button"
           onClick={onToggleMobileSearch}
+          className={iconHitAreaClass}
           aria-label={isMobileSearchOpen ? "Close search" : "Open search"}
           aria-expanded={isMobileSearchOpen}
           aria-controls="mobile-search-row"
         >
-          <Search className="cursor-pointer" aria-hidden="true" />
+          <Search aria-hidden="true" />
         </button>
-        <CartIcon />
+        <CartIcon className={iconHitAreaClass} />
         <button
           type="button"
           onClick={onOpenMobileMenu}
+          className={iconHitAreaClass}
           aria-label="Open menu"
           aria-expanded={isMobileMenuOpen}
           aria-controls="mobile-nav-drawer"
         >
-          <Menu className="cursor-pointer" aria-hidden="true" />
+          <Menu aria-hidden="true" />
         </button>
       </div>
     </div>

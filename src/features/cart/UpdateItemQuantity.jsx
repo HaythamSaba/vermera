@@ -13,20 +13,23 @@ const UpdateItemQuantity = ({ sku, quantity }) => {
     dispatch(decreaseItemQuantity(sku));
   };
   return (
-    <div className="flex items-center gap-2 border border-stone bg-cream rounded-md">
+    // size-11: 44x44 buttons (were ~24px with p-1, hard to hit on a phone).
+    <div className="flex items-center border border-stone bg-cream rounded-md">
       <button
         type="button"
         onClick={handleDecrease}
-        className="p-1 hover:bg-stone/30 transition"
+        className="size-11 inline-flex items-center justify-center hover:bg-stone/30 transition"
         aria-label="Decrease quantity"
       >
         <Minus className="w-4 h-4" aria-hidden="true" />
       </button>
-      <span className="px-3 font-medium text-charcoal">{quantity}</span>
+      <span className="px-1 min-w-[2ch] text-center font-medium text-charcoal">
+        {quantity}
+      </span>
       <button
         type="button"
         onClick={handleIncrease}
-        className="p-1 hover:bg-stone/30 transition"
+        className="size-11 inline-flex items-center justify-center hover:bg-stone/30 transition"
         aria-label="Increase quantity"
       >
         <Plus className="w-4 h-4" aria-hidden="true" />

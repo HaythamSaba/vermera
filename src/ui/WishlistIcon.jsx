@@ -13,15 +13,21 @@ const WishlistIcon = ({ className = "", onClick }) => {
     <Link
       to="/wishlist"
       onClick={onClick}
-      className={`relative inline-flex ${className}`}
+      className={`inline-flex ${className}`}
       aria-label={`Wishlist, ${wishlistCount} item${wishlistCount === 1 ? "" : "s"}`}
     >
-      <Heart className="cursor-pointer" aria-hidden="true" />
-      {wishlistCount > 0 && (
-        <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-brass text-charcoal text-[10px] font-semibold leading-none">
-          <AnimatedCount value={wishlistCount} />
-        </span>
-      )}
+      {/* The badge anchors to this inner box (the icon itself), not the link,
+          so callers can pad the link for a bigger tap target (see
+          iconHitAreaClass) without pushing the badge off the heart. Same
+          structure as CartIcon. */}
+      <span className="relative inline-flex">
+        <Heart className="cursor-pointer" aria-hidden="true" />
+        {wishlistCount > 0 && (
+          <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-brass text-charcoal text-[10px] font-semibold leading-none">
+            <AnimatedCount value={wishlistCount} />
+          </span>
+        )}
+      </span>
     </Link>
   );
 };

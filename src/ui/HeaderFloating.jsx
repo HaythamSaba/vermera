@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Search } from "lucide-react";
-import HeaderDesktopNav from "./HeaderDesktopNav";
+import HeaderDesktopNav, { iconHitAreaClass } from "./HeaderDesktopNav";
 import HeaderDesktopIcons from "./HeaderDesktopIcons";
 import CartIcon from "./CartIcon";
 import Logo from "./Logo";
@@ -37,19 +37,21 @@ const HeaderFloating = ({
             <button
               type="button"
               onClick={onSearchClick}
+              className={iconHitAreaClass}
               aria-label="Search your order"
             >
-              <Search className="cursor-pointer" aria-hidden="true" />
+              <Search aria-hidden="true" />
             </button>
-            <CartIcon />
+            <CartIcon className={iconHitAreaClass} />
             <button
               type="button"
               onClick={onOpenMobileMenu}
+              className={iconHitAreaClass}
               aria-label="Open menu"
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-nav-drawer"
             >
-              <Menu className="cursor-pointer" aria-hidden="true" />
+              <Menu aria-hidden="true" />
             </button>
           </div>
         </div>
