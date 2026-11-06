@@ -85,10 +85,7 @@ const HeaderMobileDrawer = ({
                   </Link>
                 </li>
                 <li>
-                  <Link to="/wishlist" onClick={onClose}>
-                    <WishlistIcon className="inline-block mr-3" onClick={onClose} />
-                    Wishlist
-                  </Link>
+                  <WishlistIcon onClick={onClose}>Wishlist</WishlistIcon>
                 </li>
                 <li>
                   <button

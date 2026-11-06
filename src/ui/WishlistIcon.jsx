@@ -5,15 +5,18 @@ import AnimatedCount from "./AnimatedCount";
 import { getWishlistCount } from "../features/wishlist/wishlistSlice";
 
 // Shared wishlist icon + real Redux item count, reused across the primary
-// header, the floating scrolled header, and the mobile drawer.
-const WishlistIcon = ({ className = "", onClick }) => {
+// header, the floating scrolled header, and the mobile drawer. `children`
+// renders a text label inside the same link (the drawer's "Wishlist" row),
+// so callers never wrap this in another <Link>: nested <a> is invalid HTML.
+// Same API as CartIcon.
+const WishlistIcon = ({ className = "", onClick, children }) => {
   const wishlistCount = useSelector(getWishlistCount);
 
   return (
     <Link
       to="/wishlist"
       onClick={onClick}
-      className={`inline-flex ${className}`}
+      className={`inline-flex items-center gap-3 ${className}`}
       aria-label={`Wishlist, ${wishlistCount} item${wishlistCount === 1 ? "" : "s"}`}
     >
       {/* The badge anchors to this inner box (the icon itself), not the link,
@@ -28,6 +31,7 @@ const WishlistIcon = ({ className = "", onClick }) => {
           </span>
         )}
       </span>
+      {children}
     </Link>
   );
 };
