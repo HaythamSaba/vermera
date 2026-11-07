@@ -14,9 +14,9 @@ const MainButton = ({
 }) => {
   // Size styles
   const sizeStyles = {
-    small: "px-6 py-2 text-sm",
-    medium: "px-8 py-3 text-base",
-    large: "px-12 py-4 text-base",
+    small: "px-6 py-2 text-xs",
+    medium: "px-8 py-3 text-sm",
+    large: "px-12 py-4 text-sm",
   };
 
   // Variant styles
@@ -43,7 +43,7 @@ const MainButton = ({
   // Base styles
   const baseStyle = `
     flex items-center justify-center gap-2 
-    capitalize font-bold
+    uppercase font-medium tracking-wide
     cursor-pointer
     transition-all duration-300 
     disabled:opacity-50 disabled:cursor-not-allowed disabled:border disabled:border-stone disabled:hover:bg-stone disabled:hover:text-taupe

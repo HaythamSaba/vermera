@@ -25,16 +25,6 @@ import {
 import { formatPrice } from "../../utils/pricing";
 
 const MotionDiv = motion.div;
-const MotionImg = motion.img;
-
-const imageVariants = {
-  initial: { opacity: 0, scale: 0.8 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.6, ease: "easeOut" },
-  },
-};
 
 const ProductItem = ({ product }) => {
   const dispatch = useDispatch();
@@ -46,8 +36,6 @@ const ProductItem = ({ product }) => {
     OldPrice,
     image,
     isNew,
-    isDiscount,
-    DiscountPercentage,
     stock,
     availabilityStatus,
     category,
@@ -108,8 +96,9 @@ const ProductItem = ({ product }) => {
 
   // Solid, non-translucent badge backgrounds only — every one of these sits
   // directly on a photo, so contrast can't depend on what's underneath.
+  // Square-cornered small caps tags, not pills (quiet-luxury card, audit V13).
   const badgeClass =
-    "rounded-full py-1.5 px-3 text-xs font-semibold uppercase tracking-wider shadow-soft";
+    "rounded-none py-1 px-2 text-[11px] font-medium uppercase tracking-wider";
 
   return (
     <MotionDiv
@@ -134,7 +123,9 @@ const ProductItem = ({ product }) => {
         to={`/products/${sku}`}
         className="group relative flex flex-col flex-1"
       >
-        {/* Status badges — stacked, solid colors, always visible (not hover-only) */}
+        {/* Status badges — stacked, solid colors, always visible (not hover-only).
+            No percentage-off badge: discounts show only as the struck-through
+            original price below (audit decision D6). */}
         <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-2">
           {isOutOfStock ? (
             <span className={`${badgeClass} bg-espresso text-cream`}>
@@ -142,11 +133,6 @@ const ProductItem = ({ product }) => {
             </span>
           ) : (
             <>
-              {isDiscount && (
-                <span className={`${badgeClass} bg-brass text-charcoal`}>
-                  -{Math.round(DiscountPercentage)}%
-                </span>
-              )}
               {isLowStock && (
                 <span className={`${badgeClass} bg-taupe text-cream`}>
                   Low Stock
@@ -163,12 +149,9 @@ const ProductItem = ({ product }) => {
           )}
         </div>
 
-        <div className="relative overflow-hidden bg-stone/20 aspect-4/5 border-8 border-white group-hover:border-espresso">
-          {!imageLoaded && !imageError && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-8 h-8 border-4 border-stone border-t-brass rounded-full animate-spin" />
-            </div>
-          )}
+        {/* Flat image, no frame. While loading, the bg-stone/20 box itself is
+            the placeholder (no spinner); the image fades in over it. */}
+        <div className="relative overflow-hidden bg-stone/20 aspect-4/5">
 
           {imageError ? (
             <div className="w-full h-full flex items-center justify-center text-taupe">
@@ -182,16 +165,17 @@ const ProductItem = ({ product }) => {
               </div>
             </div>
           ) : (
-            <MotionImg
+            <img
               src={image}
-              variants={imageVariants}
-              initial="initial"
-              animate="visible"
-              exit="initial"
               // Decorative inside the link: the <h3> below already names it,
               // so a filled alt would make the link announce the name twice.
               alt=""
-              className={`w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-[1.04] ${
+              // Hover is a gentle 1.02 zoom only. motion-safe/motion-reduce
+              // gate the zoom and fade on the OS reduced-motion setting, since
+              // CSS transitions aren't covered by framer's MotionConfig.
+              // Tailwind v4's scale-* sets the `scale` property (not
+              // `transform`), so that's what the transition must list.
+              className={`w-full h-full object-cover transition-[opacity,scale] duration-500 ease-out motion-safe:group-hover:scale-[1.02] motion-reduce:transition-none ${
                 imageLoaded ? "opacity-100" : "opacity-0"
               }`}
               onLoad={() => setImageLoaded(true)}
@@ -203,33 +187,35 @@ const ProductItem = ({ product }) => {
               language without sitting translucent over a photo of unknown
               background color. */}
           {category && (
-            <span className="absolute bottom-3 left-3 z-10 bg-espresso/90 text-cream text-[11px] font-medium uppercase tracking-wider px-2.5 py-1 rounded-full">
+            <span className="absolute bottom-3 left-3 z-10 bg-espresso/90 text-cream text-[11px] font-medium uppercase tracking-wider px-2 py-1 rounded-none">
               {category}
             </span>
           )}
 
         </div>
 
-        {/* Info panel — fixed min-height so grid rows stay aligned regardless
-            of title length or whether OldPrice is present. */}
+        {/* Info — sits straight on the page, no panel or hover inversion;
+            the hover cue is a hairline underline on the name. Fixed
+            min-height so grid rows stay aligned regardless of title length
+            or whether OldPrice is present. */}
         <div
-          className={`bg-white px-4 py-3.5 min-h-[92px] flex flex-col justify-between group-hover:bg-espresso ${
+          className={`pt-3 min-h-[72px] flex flex-col justify-between ${
             isOutOfStock ? "opacity-60" : ""
           }`}
         >
           <h3
-            className="font-serif font-medium text-lg leading-snug text-charcoal line-clamp-1 group-hover:text-cream"
+            className="font-serif font-medium text-lg leading-snug text-charcoal line-clamp-1 decoration-1 underline-offset-4 group-hover:underline"
             title={productName}
           >
             {productName}
           </h3>
 
           <div className="flex items-baseline gap-2 mt-2">
-            <span className="font-semibold text-lg text-charcoal group-hover:text-cream">
+            <span className="font-medium text-base text-charcoal">
               {formatPrice(NewPrice)}
             </span>
             {OldPrice && (
-              <span className="text-sm text-taupe line-through group-hover:text-cream">
+              <span className="text-sm text-taupe line-through">
                 {formatPrice(OldPrice)}
               </span>
             )}
