@@ -5,8 +5,8 @@ import { EASE } from "../utils/motion";
 
 const MotionSpan = motion.span;
 
-// Shared wishlist heart toggle used on both the product-card quick-add
-// overlay (ProductItem) and the product detail page (ProductPage) — same
+// Shared wishlist heart toggle used on both the product card (ProductItem)
+// and the product detail page (ProductPage) — same
 // bounce-on-toggle behavior in both places, only the button chrome
 // (className/iconSize) differs per call site.
 //

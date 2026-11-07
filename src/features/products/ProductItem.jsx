@@ -1,7 +1,6 @@
-import { ImageOff, Info, ShoppingCart } from "lucide-react";
+import { ImageOff, ShoppingCart } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import MainButton from "../../ui/MainButton";
+import { Link } from "react-router";
 import AddToCartButton from "../../ui/AddToCartButton";
 import WishlistButton from "../../ui/WishlistButton";
 import { useDispatch, useSelector } from "react-redux";
@@ -63,8 +62,6 @@ const ProductItem = ({ product }) => {
   const [imageError, setImageError] = useState(false);
   const [justAddedToCart, confirmAddedToCart] = useAddedConfirmation();
 
-  const navigate = useNavigate();
-
   const isOutOfStock = stock === 0;
   const isLowStock = !isOutOfStock && availabilityStatus === "Low Stock";
 
@@ -98,13 +95,6 @@ const ProductItem = ({ product }) => {
     confirmAddedToCart();
   };
 
-  const handleOpenProductPage = (e) => {
-    e.preventDefault();
-    if (isOutOfStock) return;
-
-    navigate(`/products/${sku}`);
-  };
-
   const handleToggleWishlist = (e) => {
     e.preventDefault();
     if (isItemInWishlist) {
@@ -123,9 +113,11 @@ const ProductItem = ({ product }) => {
 
   return (
     <MotionDiv
-      className="product-card relative group flex flex-col"
+      className="product-card relative flex flex-col"
       variants={cardVariants}
     >
+      {/* Outside the <Link> below: interactive controls can't be nested
+          inside a link. Absolutely positioned over its top-left corner. */}
       <WishlistButton
         isActive={isItemInWishlist}
         onToggle={handleToggleWishlist}
@@ -133,144 +125,141 @@ const ProductItem = ({ product }) => {
         className="absolute top-4 left-4 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-cream/90 text-charcoal hover:text-brass transition-colors cursor-pointer"
       />
 
-      {/* Status badges — stacked, solid colors, always visible (not hover-only) */}
-      <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-2">
-        {isOutOfStock ? (
-          <span className={`${badgeClass} bg-espresso text-cream`}>
-            Sold Out
-          </span>
-        ) : (
-          <>
-            {isDiscount && (
-              <span className={`${badgeClass} bg-brass text-charcoal`}>
-                -{Math.round(DiscountPercentage)}%
-              </span>
-            )}
-            {isLowStock && (
-              <span className={`${badgeClass} bg-taupe text-cream`}>
-                Low Stock
-              </span>
-            )}
-            {isNew && (
-              <span
-                className={`${badgeClass} bg-cream text-charcoal border border-stone`}
-              >
-                New
-              </span>
-            )}
-          </>
-        )}
-      </div>
-
-      <div className="relative overflow-hidden bg-stone/20 aspect-4/5 border-8 border-white group-hover:border-espresso">
-        {!imageLoaded && !imageError && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-8 h-8 border-4 border-stone border-t-brass rounded-full animate-spin" />
-          </div>
-        )}
-
-        {imageError ? (
-          <div className="w-full h-full flex items-center justify-center text-taupe">
-            <div className="text-center">
-              <ImageOff
-                size={40}
-                className="mx-auto mb-2 opacity-60"
-                aria-hidden="true"
-              />
-              <p className="text-sm">Image unavailable</p>
-            </div>
-          </div>
-        ) : (
-          <MotionImg
-            src={image}
-            variants={imageVariants}
-            initial="initial"
-            animate="visible"
-            exit="initial"
-            alt={productName}
-            className={`w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-[1.04] ${
-              imageLoaded ? "opacity-100" : "opacity-0"
-            }`}
-            onLoad={() => setImageLoaded(true)}
-            onError={() => setImageError(true)}
-          />
-        )}
-
-        {/* Category chip — solid espresso, echoes the lookbook caption
-            language without sitting translucent over a photo of unknown
-            background color. */}
-        {category && (
-          <span className="absolute bottom-3 left-3 z-10 bg-espresso/90 text-cream text-[11px] font-medium uppercase tracking-wider px-2.5 py-1 rounded-full">
-            {category}
-          </span>
-        )}
-
-        {/* Hover overlay — actions only, no product info duplicated here */}
-        <div className="surface-dark absolute inset-0 bg-espresso/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out flex flex-col items-center justify-center gap-6">
+      {/* The whole image + name + price block is one real link, so it gets
+          an href (open in new tab, middle-click, Enter), the sitewide focus
+          ring, and works for sold-out items too (the PDP handles them).
+          `group` lives here rather than on the card so the hover treatment
+          only fires over the link itself, not over the Add to Cart row. */}
+      <Link
+        to={`/products/${sku}`}
+        className="group relative flex flex-col flex-1"
+      >
+        {/* Status badges — stacked, solid colors, always visible (not hover-only) */}
+        <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-2">
           {isOutOfStock ? (
-            <span className="text-espresso text-sm font-semibold uppercase tracking-wider bg-cream px-4 py-2 rounded-full">
-              Out of Stock
+            <span className={`${badgeClass} bg-espresso text-cream`}>
+              Sold Out
             </span>
           ) : (
             <>
-              <MainButton
-                onClick={handleOpenProductPage}
-                disabled={isOutOfStock}
-                variant="light"
-                content="More Info"
-              >
-                <Info size={22} />
-              </MainButton>
-              {isItemInCart && !justAddedToCart ? (
-                <div className="flex items-center gap-3">
-                  <UpdateItemQuantity sku={sku} quantity={currentQuantity} />
-                  <DeleteItem sku={sku} />
-                </div>
-              ) : (
-                <AddToCartButton
-                  justAdded={justAddedToCart}
-                  onClick={handleAddToCart}
-                  disabled={isOutOfStock}
-                  variant="light"
-                  icon={<ShoppingCart size={22} aria-hidden="true" />}
-                  label="Add to Cart"
-                />
+              {isDiscount && (
+                <span className={`${badgeClass} bg-brass text-charcoal`}>
+                  -{Math.round(DiscountPercentage)}%
+                </span>
+              )}
+              {isLowStock && (
+                <span className={`${badgeClass} bg-taupe text-cream`}>
+                  Low Stock
+                </span>
+              )}
+              {isNew && (
+                <span
+                  className={`${badgeClass} bg-cream text-charcoal border border-stone`}
+                >
+                  New
+                </span>
               )}
             </>
           )}
         </div>
-      </div>
 
-      {/* Info panel — fixed min-height so grid rows stay aligned regardless
-          of title length or whether OldPrice is present. */}
-      <div
-        role={isOutOfStock ? undefined : "link"}
-        tabIndex={isOutOfStock ? undefined : 0}
-        onClick={handleOpenProductPage}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") handleOpenProductPage(e);
-        }}
-        className={`bg-white px-4 py-3.5 min-h-[92px] flex flex-col justify-between group-hover:bg-espresso ${
-          isOutOfStock ? "opacity-60" : "cursor-pointer"
-        }`}
-      >
-        <h3
-          className="font-serif font-medium text-lg leading-snug text-charcoal line-clamp-1 group-hover:text-cream"
-          title={productName}
-        >
-          {productName}
-        </h3>
+        <div className="relative overflow-hidden bg-stone/20 aspect-4/5 border-8 border-white group-hover:border-espresso">
+          {!imageLoaded && !imageError && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-8 h-8 border-4 border-stone border-t-brass rounded-full animate-spin" />
+            </div>
+          )}
 
-        <div className="flex items-baseline gap-2 mt-2">
-          <span className="font-semibold text-lg text-charcoal group-hover:text-cream">
-            {formatPrice(NewPrice)}
-          </span>
-          {OldPrice && (
-            <span className="text-sm text-taupe line-through group-hover:text-cream">
-              {formatPrice(OldPrice)}
+          {imageError ? (
+            <div className="w-full h-full flex items-center justify-center text-taupe">
+              <div className="text-center">
+                <ImageOff
+                  size={40}
+                  className="mx-auto mb-2 opacity-60"
+                  aria-hidden="true"
+                />
+                <p className="text-sm">Image unavailable</p>
+              </div>
+            </div>
+          ) : (
+            <MotionImg
+              src={image}
+              variants={imageVariants}
+              initial="initial"
+              animate="visible"
+              exit="initial"
+              // Decorative inside the link: the <h3> below already names it,
+              // so a filled alt would make the link announce the name twice.
+              alt=""
+              className={`w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-[1.04] ${
+                imageLoaded ? "opacity-100" : "opacity-0"
+              }`}
+              onLoad={() => setImageLoaded(true)}
+              onError={() => setImageError(true)}
+            />
+          )}
+
+          {/* Category chip — solid espresso, echoes the lookbook caption
+              language without sitting translucent over a photo of unknown
+              background color. */}
+          {category && (
+            <span className="absolute bottom-3 left-3 z-10 bg-espresso/90 text-cream text-[11px] font-medium uppercase tracking-wider px-2.5 py-1 rounded-full">
+              {category}
             </span>
           )}
+
         </div>
+
+        {/* Info panel — fixed min-height so grid rows stay aligned regardless
+            of title length or whether OldPrice is present. */}
+        <div
+          className={`bg-white px-4 py-3.5 min-h-[92px] flex flex-col justify-between group-hover:bg-espresso ${
+            isOutOfStock ? "opacity-60" : ""
+          }`}
+        >
+          <h3
+            className="font-serif font-medium text-lg leading-snug text-charcoal line-clamp-1 group-hover:text-cream"
+            title={productName}
+          >
+            {productName}
+          </h3>
+
+          <div className="flex items-baseline gap-2 mt-2">
+            <span className="font-semibold text-lg text-charcoal group-hover:text-cream">
+              {formatPrice(NewPrice)}
+            </span>
+            {OldPrice && (
+              <span className="text-sm text-taupe line-through group-hover:text-cream">
+                {formatPrice(OldPrice)}
+              </span>
+            )}
+          </div>
+        </div>
+      </Link>
+
+      {/* Always-visible secondary action, outside the link — replaces the
+          old hover-only overlay, which was invisible on touch and to
+          keyboard focus but still clickable. min-h-11 keeps every card's
+          row the same height (44px tap target) whatever state it's in. */}
+      <div className="mt-3 min-h-11 flex items-center">
+        {isOutOfStock ? (
+          <p className="text-sm text-taupe">Currently unavailable</p>
+        ) : isItemInCart && !justAddedToCart ? (
+          <div className="flex items-center gap-3">
+            <UpdateItemQuantity sku={sku} quantity={currentQuantity} />
+            <DeleteItem sku={sku} />
+          </div>
+        ) : (
+          <AddToCartButton
+            justAdded={justAddedToCart}
+            onClick={handleAddToCart}
+            variant="outline"
+            size="small"
+            className="w-full min-h-11"
+            icon={<ShoppingCart size={18} aria-hidden="true" />}
+            label="Add to Cart"
+          />
+        )}
       </div>
     </MotionDiv>
   );
