@@ -12,13 +12,16 @@ const ShippingAddress = ({
   isLoadingAddress,
   addressError,
   position,
+  savedAddress = "",
 }) => {
   // Controlled, so "Get My Address" can fill fields that are already on
   // screen. The previous uncontrolled `defaultValue`s were only read on
   // mount, so a geocoded address arriving later never appeared. Seeded from
-  // any address already fetched this session.
+  // any address already fetched this session, else the Profile page's saved
+  // address. That one is a single free-text line, so it goes into Street
+  // Address as-is for the shopper to check.
   const [fields, setFields] = useState(() => ({
-    address: addressComponents?.street || "",
+    address: addressComponents?.street || savedAddress,
     city: addressComponents?.city || "",
     zipCode: addressComponents?.postalCode || "",
     country: addressComponents?.country || "",

@@ -15,7 +15,6 @@ const CartOverview = () => {
   const totalCartQuantity = useSelector(getTotalCartQuantity);
   const totalCartPrice = useSelector(getTotalCartPrice);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const username = useSelector((state) => state.user.username);
   const navigate = useNavigate();
   const containerRef = useRef();
   const toggleButtonRef = useRef();
@@ -46,7 +45,6 @@ const CartOverview = () => {
 
   const handleNavigate = () => {
     setIsCartOpen(false);
-    if (!username) return navigate("/profile");
     navigate("/cart");
   };
 

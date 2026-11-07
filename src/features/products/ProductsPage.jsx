@@ -1,6 +1,5 @@
 import CoverBackgroundSection from "../../ui/CoverBackgroundSection";
 import { useLoaderData, useNavigate, useSearchParams } from "react-router";
-import { useSelector } from "react-redux";
 import { useState } from "react";
 import ProductsSection from "./ProductsSection";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
@@ -20,7 +19,6 @@ const ProductsPage = () => {
   const sort = searchParams.get("sort") || "newest";
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
-  const username = useSelector((state) => state.user.username);
   const [products, setProducts] = useState(loaderProducts || []);
   const [loading, setLoading] = useState(false);
   const [displayCount, setDisplayCount] = useState(8);
@@ -67,7 +65,6 @@ const ProductsPage = () => {
 
       <ProductsSection
         navigate={navigate}
-        username={username}
         category={category}
         sort={sort}
         minPrice={minPrice}

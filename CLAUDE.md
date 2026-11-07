@@ -39,7 +39,7 @@ Routes: `/` and `/products` both use the same `productsLoader` (full unfiltered 
 
 Redux Toolkit store (`src/store.js`) has two slices:
 - `cartSlice` (`src/features/cart/cartSlice.js`) — cart items keyed by `sku`, persisted to `localStorage["furniture_cart"]` on every mutating action. Full product objects are spread into cart items on `addItem`, plus `quantity`/`totalPrice`.
-- `userSlice` (`src/features/users/userSlice.js`) — in-memory only (not persisted); a full page reload or the `navigate`/`location.reload()` browser-automation tools will reset it, so state-dependent flows (e.g. checkout) must be tested via real in-app link/button clicks, not raw navigation.
+- `userSlice` (`src/features/users/userSlice.js`) — in-memory only (not persisted); a full page reload or the `navigate`/`location.reload()` browser-automation tools will reset it, so flows that read it (the `/profile` name prompt, a geocoded "Get My Address" result) must be tested via real in-app link/button clicks, not raw navigation. Checkout is guest checkout (audit decision D1): nothing gates `/cart` or `/order/newOrder` on `username`. The form is prefilled from the saved profile in `localStorage["furniture_profile"]` (read via `src/features/users/profileStorage.js`), and from the session's `username` as a name fallback.
 
 ### Design system
 

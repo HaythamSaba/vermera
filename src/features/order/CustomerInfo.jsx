@@ -3,7 +3,15 @@ import SectionHeader from "../../ui/SectionHeader";
 import InputField from "../../ui/InputField";
 import { Mail, Phone, User } from "lucide-react";
 
-const CustomerInfo = ({ formErrors, username }) => {
+// Uncontrolled fields: the defaults (from the saved profile, or the name
+// entered on the Profile page this session) are known at mount and never
+// change while the form is open, so defaultValue is enough.
+const CustomerInfo = ({
+  formErrors,
+  defaultName = "",
+  defaultPhone = "",
+  defaultEmail = "",
+}) => {
   const phoneInputRef = useRef(null);
 
   // Move focus (and the viewport) to the phone field when server-side
@@ -32,7 +40,7 @@ const CustomerInfo = ({ formErrors, username }) => {
           name="fullName"
           placeholder="John Doe"
           isRequired
-          defaultValue={username}
+          defaultValue={defaultName}
           hasLabel
           labelText="Full Name"
         />
@@ -55,6 +63,7 @@ const CustomerInfo = ({ formErrors, username }) => {
               type="tel"
               name="phoneNumber"
               required
+              defaultValue={defaultPhone}
               placeholder="+1 (555) 123-4567"
               aria-invalid={!!formErrors?.phoneNumber}
               aria-describedby={
@@ -89,6 +98,7 @@ const CustomerInfo = ({ formErrors, username }) => {
               id="email"
               type="email"
               name="email"
+              defaultValue={defaultEmail}
               placeholder="you@example.com"
               className="w-full pl-11 border border-stone bg-cream p-3"
             />

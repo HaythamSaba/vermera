@@ -17,6 +17,7 @@ import MainButton from "../../ui/MainButton";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
 import { computeOrderTotals, formatPrice, getSubtotal } from "../../utils/pricing";
+import { PROFILE_STORAGE_KEY, loadStoredProfile } from "./profileStorage";
 
 // Prefer the total saved with the order; older orders without one are
 // re-priced the same way the confirmation page does.
@@ -26,20 +27,6 @@ const orderTotal = (order) => {
   const fallback = computeOrderTotals(subtotal, { express: order.fastOrder });
   return subtotal + (order.shipping ?? fallback.shipping) + (order.tax ?? fallback.tax);
 };
-
-const PROFILE_STORAGE_KEY = "furniture_profile";
-const emptyProfile = { name: "", email: "", phone: "", address: "" };
-
-function loadStoredProfile() {
-  try {
-    const stored = JSON.parse(localStorage.getItem(PROFILE_STORAGE_KEY));
-    return stored && typeof stored === "object"
-      ? { ...emptyProfile, ...stored }
-      : emptyProfile;
-  } catch {
-    return emptyProfile;
-  }
-}
 
 const Profile = () => {
   const username = useSelector((state) => state.user.username);

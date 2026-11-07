@@ -29,7 +29,6 @@ const Products = ({
   displayCount: displayCountProp,
   setDisplayCount: setDisplayCountProp,
   navigate: navigateProp,
-  username,
   searchQuery = "",
 }) => {
   const isControlled = productsProp !== undefined;
@@ -115,7 +114,6 @@ const Products = ({
     category || minPrice != null || maxPrice != null || searchQuery.trim();
 
   const handleViewCart = () => {
-    if (!username) return navigate("/profile");
     navigate("/cart");
   };
 

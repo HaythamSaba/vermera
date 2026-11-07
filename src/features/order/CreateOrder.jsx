@@ -4,9 +4,8 @@ import {
   useActionData,
   useNavigation,
   redirect,
-  useNavigate,
 } from "react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearCart,
@@ -26,6 +25,7 @@ import OrderSummary from "./OrderSummary";
 import { computeOrderTotals, getSubtotal } from "../../utils/pricing";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
+import { loadStoredProfile } from "../users/profileStorage";
 
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
@@ -40,7 +40,6 @@ const CreateOrder = () => {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const formErrors = useActionData();
-  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -56,6 +55,10 @@ const CreateOrder = () => {
   const totalPrice = useSelector(getTotalCartPrice);
   const totalQuantity = useSelector(getTotalCartQuantity);
 
+  // Guest checkout (audit decision D1): no name gate. Details saved on the
+  // Profile page, if any, only prefill the form; read once on mount.
+  const [savedProfile] = useState(loadStoredProfile);
+
   const [isExpressShipping, setIsExpressShipping] = useState(false);
   // Set in the form's onSubmit (a discrete event, so it's committed before
   // the async action runs). The action empties the cart via a synchronous
@@ -69,11 +72,6 @@ const CreateOrder = () => {
   });
 
   const isLoadingAddress = addressStatus === "loading";
-
-  // Redirect: nicer than navigate inside render
-  useEffect(() => {
-    if (!username) navigate("/profile");
-  }, [username, navigate]);
 
   if (cart.length === 0) {
     // The action below empties the cart as soon as the order is saved, but
@@ -109,7 +107,12 @@ const CreateOrder = () => {
               className="space-y-6"
               onSubmit={() => setHasSubmittedOrder(true)}
             >
-              <CustomerInfo formErrors={formErrors} username={username} />
+              <CustomerInfo
+                formErrors={formErrors}
+                defaultName={savedProfile.name || username}
+                defaultPhone={savedProfile.phone}
+                defaultEmail={savedProfile.email}
+              />
 
               <ShippingAddress
                 dispatch={dispatch}
@@ -118,6 +121,7 @@ const CreateOrder = () => {
                 isLoadingAddress={isLoadingAddress}
                 addressError={addressError}
                 position={position}
+                savedAddress={savedProfile.address}
               />
 
               <ShippingOptions

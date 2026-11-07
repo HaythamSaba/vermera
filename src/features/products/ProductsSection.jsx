@@ -20,7 +20,6 @@ function ProductsSection({
   error,
   displayCount,
   setDisplayCount,
-  username,
   category,
   sort,
   minPrice,
@@ -81,7 +80,6 @@ function ProductsSection({
 
       <Products
         navigate={navigate}
-        username={username}
         category={category}
         sort={sort}
         minPrice={minPrice}
