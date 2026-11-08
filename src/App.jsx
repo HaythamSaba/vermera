@@ -33,6 +33,22 @@ const router = createBrowserRouter([
             Component: m.default,
           })),
         loader: productsLoader,
+        // The search box writes ?q= on every keystroke; that only filters
+        // the already-loaded list client-side, so skip re-running the loader
+        // (and the top progress bar) when nothing but q changed.
+        shouldRevalidate: ({ currentUrl, nextUrl, defaultShouldRevalidate }) => {
+          if (currentUrl.pathname !== nextUrl.pathname) {
+            return defaultShouldRevalidate;
+          }
+          const withoutQuery = (url) => {
+            const params = new URLSearchParams(url.search);
+            params.delete("q");
+            return params.toString();
+          };
+          return withoutQuery(currentUrl) !== withoutQuery(nextUrl)
+            ? defaultShouldRevalidate
+            : false;
+        },
         errorElement: <Error />,
       },
       {

@@ -91,7 +91,7 @@ const HeaderMobileDrawer = ({
                   <button
                     type="button"
                     onClick={onSearchClick}
-                    aria-label="Search your order"
+                    aria-label="Search products"
                     className="flex items-center cursor-pointer"
                   >
                     <Search

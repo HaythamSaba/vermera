@@ -38,7 +38,7 @@ const HeaderFloating = ({
               type="button"
               onClick={onSearchClick}
               className={iconHitAreaClass}
-              aria-label="Search your order"
+              aria-label="Search products"
             >
               <Search aria-hidden="true" />
             </button>

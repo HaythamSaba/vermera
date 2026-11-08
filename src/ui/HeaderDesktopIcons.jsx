@@ -20,7 +20,7 @@ const HeaderDesktopIcons = ({ onSearchClick }) => (
       <button
         type="button"
         onClick={onSearchClick}
-        aria-label="Search your order"
+        aria-label="Search products"
         className={iconHitAreaClass}
       >
         <Search aria-hidden="true" />

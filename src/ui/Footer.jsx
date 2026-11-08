@@ -60,6 +60,11 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/profile#track-order" className={linkClass}>
+                  Track an order
+                </Link>
+              </li>
+              <li>
                 <Link to="/contact" className={linkClass}>
                   Contact Us
                 </Link>

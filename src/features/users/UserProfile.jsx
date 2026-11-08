@@ -12,6 +12,7 @@ import {
 import { useSelector } from "react-redux";
 import { Link } from "react-router";
 import CreateUser from "./CreateUser";
+import OrderLookup from "../order/OrderLookup";
 import Cart from "../cart/Cart";
 import MainButton from "../../ui/MainButton";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
@@ -74,7 +75,19 @@ const Profile = () => {
     setIsEditing(false);
   };
 
-  if (!username) return <CreateUser />;
+  // Order lookup sits outside the name prompt too, so the footer's "Track
+  // an order" link (/profile#track-order) works without entering a name.
+  if (!username)
+    return (
+      <>
+        <CreateUser />
+        <div className="container-foundation pb-16">
+          <div className="max-w-md mx-auto">
+            <OrderLookup />
+          </div>
+        </div>
+      </>
+    );
 
   return (
     <div className="container-foundation section">
@@ -240,6 +253,7 @@ const Profile = () => {
 
         <div className="space-y-6">
           <Cart embedded />
+          <OrderLookup />
         </div>
       </div>
     </div>

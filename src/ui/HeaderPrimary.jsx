@@ -58,15 +58,15 @@ const HeaderPrimary = ({
           className="flex items-end gap-3"
         >
           <label htmlFor="mobile-search-input" className="sr-only">
-            Search your order by ID
+            Search products
           </label>
           <input
             id="mobile-search-input"
             ref={mobileSearchInputRef}
-            type="text"
+            type="search"
             value={mobileSearchQuery}
             onChange={onMobileSearchChange}
-            placeholder="Enter your order ID..."
+            placeholder="Search products…"
             className="w-full border-b border-current bg-transparent py-2 text-sm text-current placeholder:text-taupe"
           />
           <button

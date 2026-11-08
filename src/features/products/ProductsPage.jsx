@@ -1,9 +1,17 @@
 import CoverBackgroundSection from "../../ui/CoverBackgroundSection";
-import { useLoaderData, useNavigate, useSearchParams } from "react-router";
+import {
+  useLoaderData,
+  useLocation,
+  useNavigate,
+  useNavigationType,
+  useSearchParams,
+} from "react-router";
 import { useState } from "react";
 import ProductsSection from "./ProductsSection";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
+
+const FROM_SEARCH_BOX = "fromProductSearchBox";
 
 const ProductsPage = () => {
   useDocumentTitle("Shop");
@@ -23,7 +31,25 @@ const ProductsPage = () => {
   const [loading, setLoading] = useState(false);
   const [displayCount, setDisplayCount] = useState(8);
   const [error, setError] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  // The search lives in the URL (?q=) so a header search can land here
+  // already filtered and a search is shareable/reloadable. The box itself
+  // is driven by local state, though: router updates are async, so binding
+  // the input straight to the URL dropped keystrokes when typing fast.
+  // Typing writes through to the URL with a REPLACE marked FROM_SEARCH_BOX;
+  // any other change of location (header search while already here, and
+  // back/forward — a POP restores the marker too, so it's excluded) re-seeds
+  // the box from the URL.
+  const location = useLocation();
+  const navigationType = useNavigationType();
+  const urlQuery = searchParams.get("q") ?? "";
+  const [searchQuery, setSearchQuery] = useState(urlQuery);
+  const [syncedLocationKey, setSyncedLocationKey] = useState(location.key);
+  if (location.key !== syncedLocationKey) {
+    setSyncedLocationKey(location.key);
+    const isOwnKeystroke =
+      navigationType === "REPLACE" && location.state?.[FROM_SEARCH_BOX];
+    if (!isOwnKeystroke) setSearchQuery(urlQuery);
+  }
 
   // Client-side filter on top of whatever category/sort/price fetch already
   // produced — no extra network round trip, so results update every
@@ -39,7 +65,7 @@ const ProductsPage = () => {
       )
     : products;
 
-  const updateParams = (updates) => {
+  const updateParams = (updates, navigateOptions) => {
     const next = new URLSearchParams(searchParams);
     Object.entries(updates).forEach(([key, value]) => {
       if (value === null || value === "") {
@@ -48,7 +74,16 @@ const ProductsPage = () => {
         next.set(key, value);
       }
     });
-    setSearchParams(next);
+    setSearchParams(next, navigateOptions);
+  };
+
+  // replace: typing shouldn't push one history entry per keystroke.
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+    updateParams(
+      { q: value.trim() ? value : null },
+      { replace: true, state: { [FROM_SEARCH_BOX]: true } },
+    );
   };
 
   const handleSortChange = (value) => {
@@ -81,7 +116,7 @@ const ProductsPage = () => {
         onFilterApply={updateParams}
         onFilterClear={handleFilterClear}
         searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
+        onSearchChange={handleSearchChange}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import SearchModal from "../features/order/SearchModal";
+import SearchModal from "../features/products/SearchModal";
+import { getProductSearchPath } from "../features/products/productSearchPath";
 import useClickOutside from "../hooks/useClickOutside";
 import useLockBodyScroll from "../hooks/useLockBodyScroll";
 import useFocusTrap from "../hooks/useFocusTrap";
@@ -102,8 +103,8 @@ const Header = () => {
 
   const handleMobileSearchSubmit = (e) => {
     e.preventDefault();
-    if (!mobileSearchQuery) return;
-    navigate(`/order/${mobileSearchQuery}`);
+    if (!mobileSearchQuery.trim()) return;
+    navigate(getProductSearchPath(mobileSearchQuery));
     setIsMobileSearchOpen(false);
     setMobileSearchQuery("");
   };
