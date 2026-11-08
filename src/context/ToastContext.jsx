@@ -10,7 +10,7 @@ const MotionDiv = motion.div;
 // Single provider mounted once in AppLayout so any route/component can fire
 // a transient confirmation (e.g. "added to cart") without prop-drilling.
 // Reduced motion is handled for free — this renders inside AppLayout's
-// MotionConfig(reducedMotion="user"), same as the mobile drawer/CartOverview.
+// MotionConfig(reducedMotion="user"), same as the mobile drawer.
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
   const nextId = useRef(0);

@@ -10,7 +10,7 @@ export const DURATION = {
 };
 
 // framer-motion pieces only (dialog/panel exit animations — mobile drawer,
-// CartOverview, AnnouncementBar). framer-motion's `ease` prop accepts a
+// AnnouncementBar). framer-motion's `ease` prop accepts a
 // cubic-bezier array directly.
 export const EASE = {
   out: [0.16, 1, 0.3, 1],

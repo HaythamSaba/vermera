@@ -22,7 +22,7 @@ import { useToast } from "../hooks/useToast";
 import { STAGGER_MS } from "../utils/motion";
 
 // Matches the codebase convention elsewhere (AnnouncementBar, Header,
-// Products, ProductItem, CartOverview) — aliasing to a plain identifier
+// Products, ProductItem) — aliasing to a plain identifier
 // before using it as a JSX tag, rather than `<motion.div>` directly, is what
 // lets no-unused-vars recognize the import as used.
 const MotionDiv = motion.div;
