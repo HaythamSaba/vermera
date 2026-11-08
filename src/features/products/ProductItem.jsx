@@ -75,7 +75,9 @@ const ProductItem = ({ product }) => {
     e.preventDefault();
     if (isOutOfStock) return;
     dispatch(addItem(toCartItem(product)));
-    showToast(`${productName} added to cart`);
+    showToast(`${productName} added to cart`, {
+      action: { label: "View cart", to: "/cart" },
+    });
     // Briefly confirms "Added" on this same button before the card swaps to
     // the permanent quantity stepper below (see the isItemInCart branch),
     // so the click gets an immediate local confirmation instead of the
@@ -232,7 +234,11 @@ const ProductItem = ({ product }) => {
           <p className="text-sm text-taupe">Currently unavailable</p>
         ) : isItemInCart && !justAddedToCart ? (
           <div className="flex items-center gap-3">
-            <UpdateItemQuantity sku={sku} quantity={currentQuantity} />
+            <UpdateItemQuantity
+              sku={sku}
+              quantity={currentQuantity}
+              max={stock}
+            />
             <DeleteItem sku={sku} />
           </div>
         ) : (

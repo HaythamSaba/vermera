@@ -27,7 +27,9 @@ const WishlistItem = ({ item }) => {
   const handleAddToCart = () => {
     if (isOutOfStock) return;
     dispatch(addItem(toCartItem(item)));
-    showToast(`${productName} added to cart`);
+    showToast(`${productName} added to cart`, {
+      action: { label: "View cart", to: "/cart" },
+    });
   };
 
   return (

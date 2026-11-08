@@ -127,7 +127,9 @@ const ProductPage = () => {
   const handleAddToCart = (quantity) => {
     if (isOutOfStock) return;
     dispatch(addItem(toCartItem(product, quantity)));
-    showToast(`${productName} added to cart`);
+    showToast(`${productName} added to cart`, {
+      action: { label: "View cart", to: "/cart" },
+    });
   };
 
   const handleToggleWishlist = () => {

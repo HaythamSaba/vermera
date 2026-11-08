@@ -18,6 +18,12 @@ const saveToLocalStorage = (cart) => {
   }
 };
 
+// Highest quantity allowed for a line: its product's stock when known.
+// Items saved before `stock` was stored on cart lines have none and stay
+// uncapped rather than being blocked.
+const maxQuantityFor = (item) =>
+  Number.isFinite(item.stock) && item.stock > 0 ? item.stock : Infinity;
+
 const initialState = {
   cart: loadFromLocalStorage(),
 };
@@ -26,9 +32,10 @@ const initialState = {
 // price the order — not the full transformed product (description, stock,
 // dimensions, images[], etc.). Narrowing at the point of dispatch keeps the
 // persisted localStorage payload small and avoids coupling the cart to
-// fields (like the gallery's images[]) it never renders.
+// fields (like the gallery's images[]) it never renders. `stock` is kept so
+// the cart's quantity stepper can be capped like the PDP's.
 export const toCartItem = (
-  { sku, productName, image, NewPrice, category },
+  { sku, productName, image, NewPrice, category, stock },
   quantity = 1,
 ) => ({
   sku,
@@ -36,6 +43,7 @@ export const toCartItem = (
   image,
   NewPrice,
   category,
+  stock,
   quantity,
 });
 
@@ -55,16 +63,22 @@ const cartSlice = createSlice({
       const existingItem = state.cart.find((item) => item.sku === newItem.sku);
 
       if (existingItem) {
-        // Item already exists, increase quantity
-        existingItem.quantity += qtyToAdd;
+        // Item already exists, increase quantity (never past stock — e.g.
+        // adding 3 more on the PDP when 4 of 5 are already in the cart).
+        if (Number.isFinite(newItem.stock)) existingItem.stock = newItem.stock;
+        existingItem.quantity = Math.min(
+          existingItem.quantity + qtyToAdd,
+          maxQuantityFor(existingItem),
+        );
         existingItem.totalPrice =
           parseFloat(existingItem.NewPrice) * existingItem.quantity;
       } else {
         // New item, add to cart
+        const quantity = Math.min(qtyToAdd, maxQuantityFor(newItem));
         state.cart.push({
           ...newItem,
-          quantity: qtyToAdd,
-          totalPrice: parseFloat(newItem.NewPrice) * qtyToAdd,
+          quantity,
+          totalPrice: parseFloat(newItem.NewPrice) * quantity,
         });
       }
 
@@ -81,7 +95,7 @@ const cartSlice = createSlice({
     increaseItemQuantity: (state, action) => {
       // payload = sku
       const item = state.cart.find((item) => item.sku === action.payload);
-      if (item) {
+      if (item && item.quantity < maxQuantityFor(item)) {
         item.quantity++;
         item.totalPrice = parseFloat(item.NewPrice) * item.quantity;
         saveToLocalStorage(state.cart);
@@ -113,11 +127,21 @@ const cartSlice = createSlice({
           // Remove if quantity is 0 or less
           state.cart = state.cart.filter((i) => i.sku !== sku);
         } else {
-          item.quantity = quantity;
+          item.quantity = Math.min(quantity, maxQuantityFor(item));
           item.totalPrice = parseFloat(item.NewPrice) * item.quantity;
         }
         saveToLocalStorage(state.cart);
       }
+    },
+
+    // Undo for a removal: puts the exact removed line back where it was.
+    // payload = { item, index }
+    restoreItem: (state, action) => {
+      const { item, index } = action.payload;
+      if (state.cart.some((line) => line.sku === item.sku)) return;
+      const at = Math.min(Math.max(index, 0), state.cart.length);
+      state.cart.splice(at, 0, item);
+      saveToLocalStorage(state.cart);
     },
 
     clearCart: (state) => {
@@ -133,6 +157,7 @@ export const {
   increaseItemQuantity,
   decreaseItemQuantity,
   updateItemQuantity,
+  restoreItem,
   clearCart,
 } = cartSlice.actions;
 

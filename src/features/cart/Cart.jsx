@@ -1,28 +1,29 @@
-import { ShoppingCart, Trash2 } from "lucide-react";
-import { useSelector, useDispatch } from "react-redux";
+import { ShoppingCart } from "lucide-react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import CartItem from "./CartItem";
 import {
   getCart,
   getTotalCartQuantity,
   getTotalCartPrice,
-  clearCart,
 } from "./cartSlice";
 import MainButton from "../../ui/MainButton";
 import EmptyCart from "./EmptyCart";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
-import { formatPrice } from "../../utils/pricing";
+import {
+  computeOrderTotals,
+  formatPrice,
+  FREE_SHIPPING_THRESHOLD,
+} from "../../utils/pricing";
 
 // `embedded`: render just the card, without the standalone-page container, for
 // reuse inside another page's own layout (e.g. the Profile sidebar). When
 // embedded, the host page owns the document title, so skip setting our own.
 const Cart = ({ embedded = false }) => {
   useDocumentTitle(embedded ? null : "Cart");
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const username = useSelector((state) => state.user.username);
   const cart = useSelector(getCart);
   const cartItemCount = useSelector(getTotalCartQuantity);
   const cartTotal = useSelector(getTotalCartPrice);
@@ -34,39 +35,32 @@ const Cart = ({ embedded = false }) => {
         : "Your Vermera cart is empty — browse the shop to add bags, dresses, jewelry, shoes, watches, and beauty essentials.",
   );
 
-  const handleClearCart = () => {
-    if (window.confirm("Are you sure you want to clear your cart?")) {
-      dispatch(clearCart());
-    }
-  };
-
   const handleCheckout = () => {
-    if (cart.length === 0) {
-      alert("Your cart is empty!");
-      return;
-    }
     navigate("/order/newOrder");
   };
 
   if (cart.length === 0) return <EmptyCart embedded={embedded} />;
 
+  // Same shared pricing as checkout (standard delivery), so shipping and
+  // tax aren't a surprise there. Express is chosen at checkout.
+  const estimate = computeOrderTotals(cartTotal);
+  // The page's <h1> on /cart; a section heading when embedded in Profile.
+  const Heading = embedded ? "h2" : "h1";
+
   const card = (
     <div className="bg-cream border border-stone p-6 sm:p-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-serif font-medium text-espresso flex items-center">
-            <ShoppingCart className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
-            Cart Summary{!embedded && username && `, ${username}`}
-          </h2>
-          {cart.length > 0 && (
-            <MainButton
-              variant="danger"
-              onClick={handleClearCart}
-              title="Clear cart"
-            >
-              <Trash2 className="w-4 h-4" />
-              Clear Cart
-            </MainButton>
-          )}
+          <Heading
+            className={`font-serif font-medium text-espresso flex items-center ${
+              embedded ? "text-xl" : "text-3xl"
+            }`}
+          >
+            <ShoppingCart
+              className={`${embedded ? "w-5 h-5" : "w-6 h-6"} mr-2 text-brass`}
+              aria-hidden="true"
+            />
+            Your cart
+          </Heading>
         </div>
 
         <div className="space-y-4 mb-6 overflow-y-auto">
@@ -83,13 +77,33 @@ const Cart = ({ embedded = false }) => {
           <div className="flex justify-between text-sm">
             <span className="text-taupe">Subtotal</span>
             <span className="font-medium text-charcoal">
-              {formatPrice(cartTotal)}
+              {formatPrice(estimate.subtotal)}
+            </span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-taupe">Standard delivery</span>
+            <span className="font-medium text-charcoal">
+              {estimate.isFreeStandardShipping
+                ? "Free"
+                : formatPrice(estimate.standardShipping)}
+            </span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-taupe">Estimated tax</span>
+            <span className="font-medium text-charcoal">
+              {formatPrice(estimate.tax)}
             </span>
           </div>
           <div className="flex justify-between text-lg font-semibold pt-2 border-t border-stone">
-            <span className="text-charcoal">Total</span>
-            <span className="text-espresso">{formatPrice(cartTotal)}</span>
+            <span className="text-charcoal">Estimated total</span>
+            <span className="text-espresso">{formatPrice(estimate.total)}</span>
           </div>
+          <p className="text-xs text-taupe">
+            {estimate.isFreeStandardShipping
+              ? "Free standard delivery applied."
+              : `Free standard delivery on orders over ${formatPrice(FREE_SHIPPING_THRESHOLD, { wholeUnits: true })}.`}{" "}
+            Express delivery can be chosen at checkout.
+          </p>
         </div>
 
         <MainButton

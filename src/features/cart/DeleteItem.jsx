@@ -1,20 +1,35 @@
-import { useDispatch } from "react-redux";
-import { deleteItem } from "./cartSlice";
-import { Trash2 } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteItem, getCart, restoreItem } from "./cartSlice";
+import { useToast } from "../../hooks/useToast";
 
+// Quiet text "Remove" (not a red trash pill) with an Undo toast: removal is
+// instant, so the toast's Undo puts the exact line back in its old position.
 const DeleteItem = ({ sku }) => {
   const dispatch = useDispatch();
+  const showToast = useToast();
+  const cart = useSelector(getCart);
+
   const handleDelete = () => {
+    const index = cart.findIndex((line) => line.sku === sku);
+    if (index === -1) return;
+    const item = cart[index];
     dispatch(deleteItem(sku));
+    showToast(`${item.productName} removed`, {
+      action: {
+        label: "Undo",
+        onClick: () => dispatch(restoreItem({ item, index })),
+      },
+    });
   };
+
   return (
     <button
       type="button"
       onClick={handleDelete}
-      className="text-red-500 hover:text-red-700 transition ml-2 p-4 bg-cream rounded-full hover:bg-red-100"
-      aria-label="Remove item"
+      aria-label={`Remove ${cart.find((line) => line.sku === sku)?.productName ?? "item"} from cart`}
+      className="min-h-11 px-1 text-sm text-taupe underline underline-offset-4 decoration-stone hover:text-charcoal hover:decoration-charcoal transition-colors cursor-pointer"
     >
-      <Trash2 className="w-4 h-4" aria-hidden="true" />
+      Remove
     </button>
   );
 };

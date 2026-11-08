@@ -2,7 +2,10 @@ import { useDispatch } from "react-redux";
 import { Minus, Plus } from "lucide-react";
 import { decreaseItemQuantity, increaseItemQuantity } from "./cartSlice";
 
-const UpdateItemQuantity = ({ sku, quantity }) => {
+// `max`: the product's stock, when known — "+" is disabled there (the
+// reducer also caps it), matching the PDP's quantity selector.
+const UpdateItemQuantity = ({ sku, quantity, max }) => {
+  const isAtMax = Number.isFinite(max) && quantity >= max;
   const dispatch = useDispatch();
 
   const handleIncrease = () => {
@@ -29,8 +32,9 @@ const UpdateItemQuantity = ({ sku, quantity }) => {
       <button
         type="button"
         onClick={handleIncrease}
-        className="size-11 inline-flex items-center justify-center hover:bg-stone/30 transition"
-        aria-label="Increase quantity"
+        disabled={isAtMax}
+        className="size-11 inline-flex items-center justify-center hover:bg-stone/30 transition disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+        aria-label={isAtMax ? `Increase quantity (maximum ${max} in stock)` : "Increase quantity"}
       >
         <Plus className="w-4 h-4" aria-hidden="true" />
       </button>
