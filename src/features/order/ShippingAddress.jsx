@@ -1,8 +1,6 @@
 import { useState } from "react";
-import SectionHeader from "../../ui/SectionHeader";
 import InputField from "../../ui/InputField";
 import MainButton from "../../ui/MainButton";
-import { MapPin } from "lucide-react";
 import { fetchUserAddress } from "../users/userSlice";
 
 const ShippingAddress = ({
@@ -13,6 +11,7 @@ const ShippingAddress = ({
   addressError,
   position,
   savedAddress = "",
+  errors = {},
 }) => {
   // Controlled, so "Get My Address" can fill fields that are already on
   // screen. The previous uncontrolled `defaultValue`s were only read on
@@ -54,12 +53,17 @@ const ShippingAddress = ({
   };
 
   return (
-    <div className="bg-cream border border-stone p-6">
-      <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
-        <SectionHeader
-          title="Shipping Address"
-          icon={<MapPin className="w-6 h-6 mr-2 text-brass" aria-hidden="true" />}
-        />
+    <section
+      aria-labelledby="shipping-address-heading"
+      className="bg-cream border border-stone p-6"
+    >
+      <div className="flex justify-between items-center mb-5 flex-wrap gap-3">
+        <h2
+          id="shipping-address-heading"
+          className="text-xs font-medium uppercase tracking-[0.2em] text-taupe"
+        >
+          Shipping address
+        </h2>
 
         {!position.latitude && !position.longitude && (
           <MainButton
@@ -86,12 +90,15 @@ const ShippingAddress = ({
           id="address"
           type="text"
           name="address"
-          placeholder="123 Main Street"
           isRequired
+          hideRequiredMark
           value={fields.address}
           onChange={handleFieldChange}
           hasLabel
-          labelText="Street Address"
+          labelText="Street address"
+          autoComplete="street-address"
+          enterKeyHint="next"
+          error={errors.address}
         />
 
         {addressStatus === "error" && (
@@ -103,23 +110,29 @@ const ShippingAddress = ({
             id="city"
             type="text"
             name="city"
-            placeholder="City"
             isRequired
+            hideRequiredMark
             value={fields.city}
             onChange={handleFieldChange}
             hasLabel
             labelText="City"
+            autoComplete="address-level2"
+            enterKeyHint="next"
+            error={errors.city}
           />
           <InputField
             id="zipCode"
             type="text"
             name="zipCode"
-            placeholder="ZIP"
             isRequired
+            hideRequiredMark
             value={fields.zipCode}
             onChange={handleFieldChange}
             hasLabel
-            labelText="ZIP Code"
+            labelText="Postcode"
+            autoComplete="postal-code"
+            enterKeyHint="next"
+            error={errors.zipCode}
           />
         </div>
 
@@ -127,15 +140,18 @@ const ShippingAddress = ({
           id="country"
           type="text"
           name="country"
-          placeholder="Country"
           isRequired
+          hideRequiredMark
           value={fields.country}
           onChange={handleFieldChange}
           hasLabel
           labelText="Country"
+          autoComplete="country-name"
+          enterKeyHint="next"
+          error={errors.country}
         />
       </div>
-    </div>
+    </section>
   );
 };
 

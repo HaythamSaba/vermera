@@ -1,4 +1,3 @@
-import { Receipt } from "lucide-react";
 import SimpleCartItem from "../cart/SimpleCartItem";
 import { formatPrice, TAX_RATE } from "../../utils/pricing";
 
@@ -17,11 +16,10 @@ const OrderSummary = ({ cart, totalQuantity, totals }) => {
 
   return (
     <div className="lg:col-span-1">
-      <div className="bg-cream border-2 border-dashed border-stone p-6 sticky top-24">
+      <div className="bg-cream border border-stone p-6 sticky top-24">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="xl:text-2xl text-lg font-serif font-medium text-espresso flex items-center">
-            <Receipt className="w-6 h-6 mr-2 text-brass" aria-hidden="true" />
-            <span>Order Summary</span>
+          <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-taupe">
+            Order summary
           </h2>
           <span className="ml-auto text-sm text-taupe">
             {totalQuantity} {totalQuantity === 1 ? "item" : "items"}
@@ -43,7 +41,7 @@ const OrderSummary = ({ cart, totalQuantity, totals }) => {
           </div>
 
           <div className="flex justify-between text-sm">
-            <span className="text-taupe">Standard Shipping</span>
+            <span className="text-taupe">Standard delivery</span>
             <span className="font-medium text-charcoal">
               {isFreeStandardShipping
                 ? "Complimentary"
@@ -53,7 +51,7 @@ const OrderSummary = ({ cart, totalQuantity, totals }) => {
 
           {expressSurcharge > 0 && (
             <div className="flex justify-between text-sm">
-              <span className="text-taupe">Express Shipping</span>
+              <span className="text-taupe">Express delivery</span>
               <span className="font-medium text-brass-ink">
                 + {formatPrice(expressSurcharge)}
               </span>

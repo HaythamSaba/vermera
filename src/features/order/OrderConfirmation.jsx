@@ -1,18 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 
 import { useLoaderData, useNavigate } from "react-router";
-import {
-  CheckCircle,
-  Package,
-  Truck,
-  MapPin,
-  Phone,
-  Mail,
-  User,
-  CreditCard,
-  Calendar,
-  ChartNoAxesColumn,
-} from "lucide-react";
 import MainButton from "../../ui/MainButton";
 import UpdateOrder from "./UpdateOrder";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
@@ -82,35 +70,29 @@ const OrderConfirmation = () => {
     <div className="container-foundation section">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-10">
-          <div className="flex justify-center mb-4">
-            <CheckCircle className="w-20 h-20 text-brass" aria-hidden="true" />
-          </div>
-          <h1 className="text-4xl font-serif font-semibold text-espresso mb-2">
-            Order Confirmed!
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-taupe mb-3">Order confirmed</p>
+          <h1 className="text-4xl font-serif font-medium text-espresso mb-3">
+            Thank you, {order.customer.name}.
           </h1>
-          <p className="text-lg text-taupe">
-            Thank you for your purchase, {order.customer.name}
+          <p className="text-taupe">
+            Your order number is{" "}
+            <span className="font-serif text-xl text-espresso">
+              #{order.id}
+            </span>
           </p>
         </div>
 
         <div className="bg-cream border border-stone p-6 mb-6">
-          <h3 className="text-lg font-serif font-medium text-espresso mb-4 flex items-center">
-            <ChartNoAxesColumn className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
-            Order Status #{order.id}
-          </h3>
+          <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-taupe mb-4">Order details</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-start gap-3">
-              <Calendar className="w-5 h-5 text-taupe mt-1" aria-hidden="true" />
-              <div>
-                <p className="text-sm text-taupe">Order Date</p>
-                <p className="font-medium text-charcoal">{orderDate}</p>
-              </div>
+            <div>
+              <p className="text-sm text-taupe">Order date</p>
+              <p className="font-medium text-charcoal">{orderDate}</p>
             </div>
 
-            <div className="flex items-start gap-3">
-              <Truck className="w-5 h-5 text-taupe mt-1" aria-hidden="true" />
+            <div>
               <div>
-                <p className="text-sm text-taupe">Estimated Delivery</p>
+                <p className="text-sm text-taupe">Estimated delivery</p>
                 <p className="font-medium text-charcoal">
                   {deliveryDate}
                   {order.fastOrder && (
@@ -126,30 +108,18 @@ const OrderConfirmation = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div className="bg-cream border border-stone p-6">
-            <h3 className="text-lg font-serif font-medium text-espresso mb-4 flex items-center">
-              <User className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
-              Customer Information
-            </h3>
+            <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-taupe mb-4">Contact</h2>
             <div className="space-y-2 text-sm">
               <p className="text-charcoal font-medium">{order.customer.name}</p>
-              <p className="text-taupe flex items-center">
-                <Phone className="w-4 h-4 mr-2" aria-hidden="true" />
-                {order.customer.phone}
-              </p>
+              <p className="text-taupe">{order.customer.phone}</p>
               {order.customer.email && (
-                <p className="text-taupe flex items-center">
-                  <Mail className="w-4 h-4 mr-2" aria-hidden="true" />
-                  {order.customer.email}
-                </p>
+                <p className="text-taupe">{order.customer.email}</p>
               )}
             </div>
           </div>
 
           <div className="bg-cream border border-stone p-6">
-            <h3 className="text-lg font-serif font-medium text-espresso mb-4 flex items-center">
-              <MapPin className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
-              Shipping Address
-            </h3>
+            <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-taupe mb-4">Shipping address</h2>
             <div className="space-y-1 text-sm text-taupe">
               <p>{order.customer.address}</p>
               <p>
@@ -161,10 +131,7 @@ const OrderConfirmation = () => {
         </div>
 
         <div className="bg-cream border border-stone p-6 mb-6">
-          <h3 className="text-lg font-serif font-medium text-espresso mb-4 flex items-center">
-            <Package className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
-            Order Items ({order.items.length})
-          </h3>
+          <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-taupe mb-4">Items ({order.items.length})</h2>
 
           <div className="space-y-4">
             {order.items.map((item) => (
@@ -178,9 +145,9 @@ const OrderConfirmation = () => {
                   className="w-20 h-20 object-cover border border-stone"
                 />
                 <div className="flex-1">
-                  <h4 className="font-medium text-charcoal">
+                  <h3 className="font-medium text-charcoal">
                     {item.productName}
-                  </h4>
+                  </h3>
                   <p className="text-sm text-taupe capitalize">
                     Category: {item.category}
                   </p>
@@ -200,10 +167,7 @@ const OrderConfirmation = () => {
 
         <div className="bg-cream border border-stone p-6 mb-6">
           <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
-            <h3 className="text-lg font-serif font-medium text-espresso flex items-center">
-              <CreditCard className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
-              Payment Summary
-            </h3>
+            <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-taupe">Payment summary</h2>
             <UpdateOrder order={order} />
           </div>
 
@@ -245,9 +209,7 @@ const OrderConfirmation = () => {
           variant="outline"
           content="Continue Shopping"
           onClick={() => navigate("/products")}
-        >
-          <Package size={18} />
-        </MainButton>
+        />
       </div>
     </div>
   );
