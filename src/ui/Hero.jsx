@@ -1,19 +1,36 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { ImageOff } from "lucide-react";
+import { motion } from "framer-motion";
 import MainButton from "./MainButton";
-import Reveal from "./Reveal";
 import useParallax from "../hooks/useParallax";
-import { STAGGER_MS } from "../utils/motion";
-import useTextReveal from "../hooks/useTextReveal";
+import { DURATION, EASE } from "../utils/motion";
+
+const MotionP = motion.p;
+const MotionH1 = motion.h1;
+const MotionDiv = motion.div;
+
+// Above-the-fold copy enters as whole blocks (fade + 12px rise, 600ms), all
+// within 200ms of each other, so the headline and CTA are readable almost
+// immediately instead of after a ~2s per-letter reveal. Reduced motion is
+// handled by AppLayout's MotionConfig(reducedMotion="user"): the rise is
+// dropped and only the opacity fade remains.
+const heroEntrance = (delayMs = 0) => ({
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  transition: {
+    duration: DURATION.reveal / 1000,
+    delay: delayMs / 1000,
+    ease: EASE.out,
+  },
+});
 
 const Hero = () => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  // The site's one parallax (the footer watermark is static).
   const parallaxRef = useParallax({ speed: 0.1, scrub: 0.8 });
-
-  const { ref: nameRef } = useTextReveal({ staggerMs: 40 });
 
   return (
     // While the photo loads, the section's own bg-stone/30 tint is the
@@ -69,38 +86,36 @@ const Hero = () => {
       <div className="relative z-10 h-full flex mt-10 md:mt-0 md:items-center container-foundation">
         <div className="flex flex-col max-w-xl">
           <div className="flex flex-col">
-            <Reveal
-              as="p"
-              delay={0}
+            <MotionP
+              {...heroEntrance(0)}
               className={`font-semibold text-sm uppercase tracking-[3px] mb-4 ${imageError || !imageLoaded ? "text-taupe" : "text-ivory"}`}
             >
               The Vermera Edit
-            </Reveal>
-            <h1
-              ref={nameRef}
+            </MotionP>
+            <MotionH1
+              {...heroEntrance(0)}
               className="font-serif text-espresso font-semibold text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6"
             >
               Timeless Pieces,
               <br /> Thoughtfully
               <br /> Chosen
-            </h1>
+            </MotionH1>
           </div>
           <div className="flex flex-col mt-auto mb-30 md:mb-0 md:mt-0">
-            <Reveal
-              as="p"
-              delay={STAGGER_MS * 6}
+            <MotionP
+              {...heroEntrance(100)}
               className="text-espresso text-lg leading-relaxed mb-10 max-w-md"
             >
               A curated edit of bags, jewelry, watches, and beauty essentials,
               each piece selected for its quality and quiet character.
-            </Reveal>
-            <Reveal delay={STAGGER_MS * 8}>
+            </MotionP>
+            <MotionDiv {...heroEntrance(200)}>
               <MainButton
                 content="Shop the Collection"
                 variant="primary"
                 onClick={() => navigate("/products")}
               />
-            </Reveal>
+            </MotionDiv>
           </div>
         </div>
       </div>

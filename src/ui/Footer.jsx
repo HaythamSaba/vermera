@@ -1,19 +1,23 @@
-import { lazy, Suspense } from "react";
 import { Link } from "react-router";
 import { supportedCategories } from "../services/apiProducts";
 import { CATEGORY_LABELS } from "../features/products/categoryLabels";
 import Logo from "./Logo";
-
-const FooterParallaxText = lazy(() => import("./FooterParallaxText"));
 
 const linkClass = "hover:text-brass transition-colors duration-300";
 
 const Footer = () => {
   return (
     <div className="relative isolate pt-50 overflow-x-hidden">
-      <Suspense fallback={null}>
-        <FooterParallaxText />
-      </Suspense>
+      {/* Static watermark (it used to parallax, which loaded GSAP on every
+          route; the hero keeps the site's one parallax). Fluid size:
+          clamp(3.25rem,14vw,12.5rem) never overflows a 320px viewport and
+          reaches the original 200px from ~1428px up. */}
+      <p
+        aria-hidden="true"
+        className="absolute top-[12%] md:top-[2%] ml-20 left-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-[clamp(3.25rem,14vw,12.5rem)] text-taupe/40 text-center tracking-widest select-none pointer-events-none -z-10 whitespace-nowrap"
+      >
+        VERMERA
+      </p>
 
       <hr className="border-t border-stone" />
 

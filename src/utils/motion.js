@@ -6,6 +6,7 @@
 export const DURATION = {
   small: 200, // micro-interactions (badges, icon states)
   component: 400, // component-level transitions (dialogs, panels)
+  reveal: 600, // above-the-fold content and product-card entrances
   editorial: 800, // section-level entrance reveals
 };
 
@@ -28,6 +29,11 @@ export const GSAP_EASE = {
 };
 
 export const STAGGER_MS = 120;
+
+// Product grids: a short stagger that restarts every GRID_STAGGER_CAP cards,
+// so a long grid (or a "Load More" batch) never builds up a long queue.
+export const GRID_STAGGER_MS = 70;
+export const GRID_STAGGER_CAP = 8;
 
 export const SIZE_CLASSES = {
   primary: "text-4xl",

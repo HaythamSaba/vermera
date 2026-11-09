@@ -13,7 +13,7 @@ import {
 import DeleteItem from "../cart/DeleteItem";
 import UpdateItemQuantity from "../cart/UpdateItemQuantity";
 import { motion, useReducedMotion } from "framer-motion";
-import { DURATION, EASE } from "../../utils/motion";
+import { DURATION, EASE, GRID_STAGGER_MS } from "../../utils/motion";
 import { useToast } from "../../hooks/useToast";
 import useAddedConfirmation from "../../hooks/useAddedConfirmation";
 import {
@@ -26,7 +26,9 @@ import { formatPrice } from "../../utils/pricing";
 
 const MotionDiv = motion.div;
 
-const ProductItem = ({ product }) => {
+// staggerIndex: position within the grid's current stagger group (set by
+// Products.jsx); only matters where a parent drives the "visible" variant.
+const ProductItem = ({ product, staggerIndex = 0 }) => {
   const dispatch = useDispatch();
   const showToast = useToast();
 
@@ -54,20 +56,23 @@ const ProductItem = ({ product }) => {
   const isLowStock = !isOutOfStock && availabilityStatus === "Low Stock";
 
   const prefersReducedMotion = useReducedMotion();
-  // Timing/distance only — no per-index delay here. Stagger order across
-  // the grid is entirely the parent's job (Products.jsx's cardParentVariants
-  // staggerChildren); adding a second, independent delay here would compound
-  // with it into a much slower reveal than either config alone implies.
+  // Card fade + short rise, staggered GRID_STAGGER_MS per position. The
+  // stagger lives only here (the parent grid no longer staggers), so the two
+  // can't compound into a slow queue.
   const cardVariants = {
     initial: prefersReducedMotion
       ? { opacity: 1, y: 0 }
-      : { opacity: 0, y: 32 },
+      : { opacity: 0, y: 16 },
     visible: {
       opacity: 1,
       y: 0,
       transition: prefersReducedMotion
         ? { duration: 0 }
-        : { duration: DURATION.editorial / 1000, ease: EASE.out },
+        : {
+            duration: DURATION.reveal / 1000,
+            ease: EASE.out,
+            delay: (staggerIndex * GRID_STAGGER_MS) / 1000,
+          },
     },
   };
 

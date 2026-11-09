@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import ProductItem from "./ProductItem";
 import MainButton from "../../ui/MainButton";
 import LoadingSpinner from "../../ui/LoadingSpinner";
@@ -7,7 +7,7 @@ import { getProducts } from "../../services/apiProducts";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { getTotalCartQuantity } from "../cart/cartSlice";
-import { STAGGER_MS } from "../../utils/motion";
+import { GRID_STAGGER_CAP } from "../../utils/motion";
 
 const MotionDiv = motion.div;
 
@@ -49,8 +49,6 @@ const Products = ({
 
   const totalCartQuantity = useSelector(getTotalCartQuantity);
 
-  const prefersReducedMotion = useReducedMotion();
-
   // whileInView's own cascade only reaches the children that exist at the
   // moment it fires — cards added later via Load More would never receive
   // it and stay stuck at their `initial` variant. `initial`/`animate` DO
@@ -69,15 +67,10 @@ const Products = ({
   const gridRef = useMemo(() => ({ current: gridNode }), [gridNode]);
   const isGridInView = useInView(gridRef, { once: true, amount: 0.1 });
 
-  const cardParentVariants = {
-    initial: prefersReducedMotion ? { opacity: 1 } : { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: prefersReducedMotion
-        ? { duration: 0 }
-        : { when: "beforeChildren", staggerChildren: STAGGER_MS / 1000 },
-    },
-  };
+  // The grid itself doesn't animate (no parent fade queued before the
+  // cards); it only passes "initial"/"visible" down. Each card adds its own
+  // stagger delay from the staggerIndex passed below.
+  const cardParentVariants = { initial: {}, visible: {} };
 
   // Controlled mode: the route loader already applied the URL's filters, so
   // the data on mount is current — only re-fetch when the filters actually
@@ -209,8 +202,14 @@ const Products = ({
               loading ? "opacity-40 pointer-events-none" : "opacity-100"
             }`}
           >
-            {displayedProducts.map((product) => (
-              <ProductItem key={product.sku || product.id} product={product} />
+            {displayedProducts.map((product, index) => (
+              <ProductItem
+                key={product.sku || product.id}
+                product={product}
+                // Restarts every GRID_STAGGER_CAP cards, so a "Load More"
+                // batch staggers in like the first page.
+                staggerIndex={index % GRID_STAGGER_CAP}
+              />
             ))}
           </MotionDiv>
         </div>
