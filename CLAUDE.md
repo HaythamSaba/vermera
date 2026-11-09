@@ -31,7 +31,7 @@ Routes: `/` and `/products` both use the same `productsLoader`, which applies th
 
 `src/features/products/Products.jsx` supports two rendering modes via optional props (`products`/`setProducts`/`loading`/`setLoading`, etc.):
 - **Controlled** (used by `ProductsPage.jsx` → `ProductsSection.jsx`): state lives in the parent, seeded from the router loader, so `products` is never empty during a filter/sort refetch. It only re-fetches when the filter key changes (the loader already applied the initial one), so there's no loading flash on first paint. `ProductsPage` resets `displayCount` whenever category/sort/price/search changes.
-- **Uncontrolled/self-managed** (used bare on the homepage via `MainPageContent.jsx`): fetches its own data on mount.
+- **Uncontrolled/self-managed**: fetches its own data on mount. Currently has no caller: the homepage now shows "The Edit" (`src/ui/TheEdit.jsx`), a curated pick of up to 8 products (one in-stock piece per category, after the one pictured on that category's tile) from the `/` loader data, with a "View all" link (audit decision D9). It's kept because removing it is a separate cleanup decision.
 
 `isControlled = productsProp !== undefined` is the switch. When touching this component, preserve both paths — the loading UI intentionally shows a full spinner only on a true first load (`loading && products.length === 0`) and otherwise keeps the stale grid visible (dimmed, `aria-busy`) during a background refetch.
 

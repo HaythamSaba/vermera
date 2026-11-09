@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Hero from "./Hero";
 import CategoryShowcase from "./CategoryShowcase";
-import Products from "../features/products/Products";
+import TheEdit from "./TheEdit";
 import EditorialBanner from "./EditorialBanner";
 import ServiceValues from "./ServiceValues";
 import InspirationSection from "./InspirationSection";
@@ -17,7 +17,7 @@ const MainPageContent = () => {
     <div>
       <Hero />
       <CategoryShowcase />
-      <Products />
+      <TheEdit />
       <InspirationSection />
       <ServiceValues />
       <EditorialBanner />
