@@ -1,17 +1,43 @@
+import { ChevronDown, X } from "lucide-react";
 import CategoriesList from "./CategoriesList";
 import Products from "./Products";
 import PriceFilterPanel from "./PriceFilterPanel";
 import ProductSearch from "./ProductSearch";
+import { CATEGORY_LABELS } from "./categoryLabels";
+import { SORT_OPTIONS } from "./sortOptions";
+import { formatPrice } from "../../utils/pricing";
 
-// Matches the sort values apiProducts.js's getProducts() already supports.
-const SORT_OPTIONS = [
-  { value: "newest", label: "Newest" },
-  { value: "oldest", label: "Oldest" },
-  { value: "price_asc", label: "Price: Low to High" },
-  { value: "price_desc", label: "Price: High to Low" },
-  { value: "name_asc", label: "Name: A to Z" },
-  { value: "name_desc", label: "Name: Z to A" },
-];
+const wholeEuros = (value) => formatPrice(value, { wholeUnits: true });
+
+// One chip per active filter, each removable on its own. `remove` lists the
+// URL params that chip clears.
+function getActiveFilterChips({ category, minPrice, maxPrice, searchQuery }) {
+  const chips = [];
+  if (category) {
+    chips.push({
+      key: "category",
+      label: CATEGORY_LABELS[category] ?? category,
+      remove: ["category"],
+    });
+  }
+  if (minPrice != null || maxPrice != null) {
+    const label =
+      minPrice != null && maxPrice != null
+        ? `${wholeEuros(minPrice)} – ${wholeEuros(maxPrice)}`
+        : minPrice != null
+          ? `From ${wholeEuros(minPrice)}`
+          : `Up to ${wholeEuros(maxPrice)}`;
+    chips.push({ key: "price", label, remove: ["minPrice", "maxPrice"] });
+  }
+  if (searchQuery.trim()) {
+    chips.push({
+      key: "q",
+      label: `“${searchQuery.trim()}”`,
+      remove: ["q"],
+    });
+  }
+  return chips;
+}
 
 function ProductsSection({
   products,
@@ -30,13 +56,30 @@ function ProductsSection({
   onSortChange,
   onFilterApply,
   onFilterClear,
+  onRemoveFilter,
+  onClearAll,
   searchQuery,
   onSearchChange,
 }) {
+  const chips = getActiveFilterChips({
+    category,
+    minPrice,
+    maxPrice,
+    searchQuery,
+  });
+  const resultCount = products.length;
+
   return (
     <div>
-      <div className="container-foundation flex items-center justify-center">
-        <div className="flex flex-wrap items-center justify-center lg:w-xl gap-6 py-6 border-stone">
+      <div className="container-foundation pt-8">
+        <CategoriesList />
+
+        {/* One quiet toolbar row: search, Price, Sort, result count. */}
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 py-4">
+          <div className="w-full sm:w-72">
+            <ProductSearch value={searchQuery} onChange={onSearchChange} />
+          </div>
+
           <PriceFilterPanel
             minPrice={minPrice}
             maxPrice={maxPrice}
@@ -44,15 +87,15 @@ function ProductsSection({
             onClear={onFilterClear}
           />
 
-          <div className="flex items-center gap-2">
-            <label htmlFor="sortSelect" className="text-charcoal text-sm">
-              Sort
+          <div className="relative flex items-center gap-1.5 text-sm">
+            <label htmlFor="sortSelect" className="text-taupe">
+              Sort:
             </label>
             <select
               id="sortSelect"
               value={sort}
               onChange={(e) => onSortChange(e.target.value)}
-              className="border border-stone bg-cream p-2 text-sm text-charcoal"
+              className="min-h-11 appearance-none bg-transparent pr-5 text-charcoal cursor-pointer"
             >
               {SORT_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -60,21 +103,51 @@ function ProductsSection({
                 </option>
               ))}
             </select>
+            <ChevronDown
+              className="pointer-events-none absolute right-0 w-4 h-4 text-taupe"
+              aria-hidden="true"
+            />
           </div>
 
-          <p className="border-l border-stone pl-6 text-taupe">
-            Showing 1 - {Math.min(displayCount, products.length)} of{" "}
-            {products.length}
+          <p
+            className="sm:ml-auto text-sm text-taupe"
+            role="status"
+            aria-live="polite"
+          >
+            {resultCount} {resultCount === 1 ? "product" : "products"}
           </p>
         </div>
-      </div>
 
-      <CategoriesList
-        navigate={navigate}
-        loading={loading}
-        setLoading={setLoading}
-      />
-      <ProductSearch value={searchQuery} onChange={onSearchChange} />
+        {chips.length > 0 && (
+          <ul
+            aria-label="Active filters"
+            className="flex flex-wrap items-center gap-2 pb-4"
+          >
+            {chips.map((chip) => (
+              <li key={chip.key}>
+                <button
+                  type="button"
+                  onClick={() => onRemoveFilter(chip.remove)}
+                  aria-label={`Remove filter: ${chip.label}`}
+                  className="min-h-9 inline-flex items-center gap-1.5 border border-stone bg-cream px-3 text-sm text-charcoal hover:border-espresso transition-colors cursor-pointer"
+                >
+                  {chip.label}
+                  <X className="w-3.5 h-3.5 text-taupe" aria-hidden="true" />
+                </button>
+              </li>
+            ))}
+            <li>
+              <button
+                type="button"
+                onClick={onClearAll}
+                className="min-h-9 px-1 text-sm text-taupe underline underline-offset-4 decoration-stone hover:text-charcoal cursor-pointer"
+              >
+                Clear all
+              </button>
+            </li>
+          </ul>
+        )}
+      </div>
 
       <Products
         navigate={navigate}
@@ -91,6 +164,7 @@ function ProductsSection({
         error={error}
         setError={setError}
         searchQuery={searchQuery}
+        onClearFilters={onClearAll}
       />
     </div>
   );

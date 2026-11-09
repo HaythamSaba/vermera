@@ -2,12 +2,20 @@ import { useNavigate, useSearchParams } from "react-router";
 import { supportedCategories } from "../../services/apiProducts";
 import { CATEGORY_LABELS } from "./categoryLabels";
 
+const tabClass = (isActive) =>
+  `shrink-0 py-3 -mb-px border-b-2 whitespace-nowrap text-sm cursor-pointer transition-colors duration-300 ${
+    isActive
+      ? "border-espresso text-espresso font-medium"
+      : "border-transparent text-taupe hover:text-charcoal"
+  }`;
+
+// Underlined text tabs (not boxed buttons) on one hairline, scrolling
+// sideways on narrow screens. Changing category keeps sort/price/search.
 function CategoriesList() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const activeCategory = searchParams.get("category") || "all";
 
-  // Preserve any existing sort/price-filter params — only category changes.
   const handleSelect = (slug) => {
     const next = new URLSearchParams(searchParams);
     if (slug === "all") {
@@ -23,34 +31,19 @@ function CategoriesList() {
     <div
       role="group"
       aria-label="Filter by category"
-      className="container-foundation flex gap-3 py-6 px-8 mb-8 bg-cream border border-stone overflow-x-auto"
+      // overflow-y-hidden: overflow-x-auto would otherwise make the tabs'
+      // -mb-px (overlapping the hairline) scroll vertically by 1px.
+      className="flex gap-6 sm:gap-8 overflow-x-auto overflow-y-hidden border-b border-stone"
     >
-      <button
-        type="button"
-        key="all"
-        aria-pressed={activeCategory === "all"}
-        className={`py-2 px-4 w-full text-center whitespace-nowrap cursor-pointer transition-colors duration-300 border ${
-          activeCategory === "all"
-            ? "bg-espresso text-cream border-espresso"
-            : "bg-cream text-charcoal border-stone hover:border-brass"
-        }`}
-        onClick={() => handleSelect("all")}
-      >
-        All
-      </button>
-      {supportedCategories.map((slug) => (
+      {["all", ...supportedCategories].map((slug) => (
         <button
           type="button"
           key={slug}
           aria-pressed={activeCategory === slug}
-          className={`py-2 px-4 w-full text-center whitespace-nowrap cursor-pointer transition-colors duration-300 border ${
-            activeCategory === slug
-              ? "bg-espresso text-cream border-espresso"
-              : "bg-cream text-charcoal border-stone hover:border-brass"
-          }`}
+          className={tabClass(activeCategory === slug)}
           onClick={() => handleSelect(slug)}
         >
-          {CATEGORY_LABELS[slug] ?? slug}
+          {slug === "all" ? "All" : (CATEGORY_LABELS[slug] ?? slug)}
         </button>
       ))}
     </div>

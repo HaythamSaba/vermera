@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import ProductItem from "./ProductItem";
 import MainButton from "../../ui/MainButton";
@@ -30,6 +30,7 @@ const Products = ({
   setDisplayCount: setDisplayCountProp,
   navigate: navigateProp,
   searchQuery = "",
+  onClearFilters,
 }) => {
   const isControlled = productsProp !== undefined;
 
@@ -78,6 +79,13 @@ const Products = ({
     },
   };
 
+  // Controlled mode: the route loader already applied the URL's filters, so
+  // the data on mount is current — only re-fetch when the filters actually
+  // change. Tracking the last-fetched key (rather than "skip the first
+  // run") also stays correct under StrictMode's double effect run.
+  const filterKey = JSON.stringify([category, sort, minPrice, maxPrice]);
+  const lastFetchedKeyRef = useRef(isControlled ? filterKey : null);
+
   useEffect(() => {
     // Self-managed mode: fetch once on mount since no external loader supplied the data.
     if (!isControlled) {
@@ -94,6 +102,8 @@ const Products = ({
     // Controlled mode: re-fetch whenever category, sort, or price filters
     // change, including back to "no filter" (falsy values still mean "show
     // everything" per getProducts' own contract).
+    if (lastFetchedKeyRef.current === filterKey) return;
+    lastFetchedKeyRef.current = filterKey;
     const fetchFiltered = async () => {
       setLoading(true);
       const data = await getProducts({ category, sort, minPrice, maxPrice });
@@ -102,7 +112,7 @@ const Products = ({
     };
     fetchFiltered();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, sort, minPrice, maxPrice, isControlled]);
+  }, [filterKey, isControlled]);
 
   const handleLoadMore = () => {
     setDisplayCount((prev) => prev + 8);
@@ -140,18 +150,35 @@ const Products = ({
     );
   }
 
+  // On the Shop page the route's <h1> already says "Shop", so the
+  // "Our Products" heading is kept only for the homepage (self-managed).
+  const heading = isControlled ? (
+    <h2 className="sr-only">Products</h2>
+  ) : (
+    <h2 className="text-[40px] font-serif font-medium text-espresso">
+      Our Products
+    </h2>
+  );
+
   if (products.length === 0) {
     return (
       <section className="container-foundation flex flex-col items-center border-b border-stone">
-        <div className="text-center mb-16">
-          <h2 className="text-[40px] font-serif font-medium text-espresso mb-4">
-            Our Products
-          </h2>
-          <p className="text-taupe text-lg">
+        <div className="text-center my-16">
+          {heading}
+          <p className="text-taupe text-lg mt-4">
             {hasActiveFilters
               ? "No products match your current filters."
               : "No products available at the moment."}
           </p>
+          {hasActiveFilters && onClearFilters && (
+            <MainButton
+              content="Clear all filters"
+              variant="outline"
+              size="small"
+              className="mt-6 mx-auto"
+              onClick={onClearFilters}
+            />
+          )}
         </div>
       </section>
     );
@@ -160,16 +187,11 @@ const Products = ({
   return (
     <div className="bg-ivory border-b border-stone">
       <section className="container-foundation flex flex-col ">
-        <div className="text-center mb-16">
-          <h2 className="text-[40px] font-serif font-medium text-espresso">
-            Our Products
-          </h2>
-          {category && (
-            <p className="text-taupe mt-2 text-lg capitalize">
-              Showing {category} collection
-            </p>
-          )}
-        </div>
+        {isControlled ? (
+          heading
+        ) : (
+          <div className="text-center mb-16">{heading}</div>
+        )}
 
         <div className="relative">
           {loading && (
