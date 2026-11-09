@@ -25,11 +25,8 @@ const GalleryPrimaryImage = ({ src, alt, fetchPriority = "auto" }) => {
 
   return (
     <>
-      {!imageLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-8 h-8 border-4 border-stone border-t-brass rounded-full animate-spin"></div>
-        </div>
-      )}
+      {/* No spinner: the panel's own bg-stone/20 tint is the placeholder,
+          and the image fades in over it once loaded. */}
       <img
         src={src}
         alt={alt}

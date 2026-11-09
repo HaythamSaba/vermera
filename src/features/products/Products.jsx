@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import ProductItem from "./ProductItem";
 import MainButton from "../../ui/MainButton";
-import LoadingSpinner from "../../ui/LoadingSpinner";
+import ProductCardSkeleton from "./ProductCardSkeleton";
 import { getProducts } from "../../services/apiProducts";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -10,6 +10,10 @@ import { getTotalCartQuantity } from "../cart/cartSlice";
 import { GRID_STAGGER_CAP } from "../../utils/motion";
 
 const MotionDiv = motion.div;
+
+const PRODUCT_GRID_CLASSES =
+  "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8 w-full";
+const SKELETON_COUNT = 8;
 
 // `products`/`setProducts`/`loading`/`setLoading` are optional: pass them in
 // (as ProductsPage does, sourced from the router loader) to control this
@@ -25,7 +29,6 @@ const Products = ({
   products: productsProp,
   loading: loadingProp,
   setLoading: setLoadingProp,
-  error = null,
   displayCount: displayCountProp,
   setDisplayCount: setDisplayCountProp,
   navigate: navigateProp,
@@ -120,26 +123,27 @@ const Products = ({
     navigate("/cart");
   };
 
-  // Only take over the whole section for the very first load, when there's
-  // nothing on screen yet. Once products exist, a filter/sort/category
-  // change re-fetches in the background — the stale grid stays visible
-  // (dimmed) below instead of being replaced by a spinner.
+  // Only the very first load, with nothing on screen yet, shows skeleton
+  // cards in the grid's own layout. Once products exist, a filter/sort/
+  // category change re-fetches in the background — the stale grid stays
+  // visible (dimmed, aria-busy) below instead of being replaced.
+  // (There's no error state: getProducts falls back to the mock catalog
+  // rather than throwing, and the page says so via FallbackCatalogNotice.)
   if (loading && products.length === 0) {
-    return <LoadingSpinner />;
-  }
-
-  if (error) {
     return (
-      <section className="container-foundation flex flex-col items-center border-b border-stone">
-        <div className="text-center mb-16">
-          <p className="text-error text-lg mb-4">{error}</p>
-          <MainButton
-            content="Retry"
-            variant="quiet"
-            onClick={() => window.location.reload()}
-          />
-        </div>
-      </section>
+      <div className="bg-ivory border-b border-stone">
+        <section
+          className="container-foundation flex flex-col"
+          aria-busy="true"
+          aria-label="Loading products"
+        >
+          <div className={PRODUCT_GRID_CLASSES}>
+            {Array.from({ length: SKELETON_COUNT }, (_, index) => (
+              <ProductCardSkeleton key={index} />
+            ))}
+          </div>
+        </section>
+      </div>
     );
   }
 
@@ -186,19 +190,14 @@ const Products = ({
           <div className="text-center mb-16">{heading}</div>
         )}
 
-        <div className="relative">
-          {loading && (
-            <div className="absolute inset-0 z-10 flex justify-center pt-16 bg-ivory/60">
-              <div className="w-10 h-10 border-4 border-stone border-t-brass rounded-full animate-spin" />
-            </div>
-          )}
+        <div>
           <MotionDiv
             ref={setGridNode}
             variants={cardParentVariants}
             initial="initial"
             animate={isGridInView ? "visible" : "initial"}
             aria-busy={loading}
-            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8 w-full transition-opacity duration-200 ${
+            className={`${PRODUCT_GRID_CLASSES} transition-opacity duration-200 ${
               loading ? "opacity-40 pointer-events-none" : "opacity-100"
             }`}
           >

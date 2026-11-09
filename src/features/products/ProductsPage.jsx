@@ -19,7 +19,7 @@ const FROM_SEARCH_BOX = "fromProductSearchBox";
 
 const ProductsPage = () => {
   useDocumentTitle("Shop");
-  const loaderProducts = useLoaderData();
+  const { products: loaderProducts, isFallbackCatalog } = useLoaderData();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const category = searchParams.get("category");
@@ -35,7 +35,6 @@ const ProductsPage = () => {
   const [products, setProducts] = useState(loaderProducts || []);
   const [loading, setLoading] = useState(false);
   const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
-  const [error, setError] = useState(null);
   // The search lives in the URL (?q=) so a header search can land here
   // already filtered and a search is shareable/reloadable. The box itself
   // is driven by local state, though: router updates are async, so binding
@@ -135,8 +134,7 @@ const ProductsPage = () => {
         setProducts={setProducts}
         loading={loading}
         setLoading={setLoading}
-        error={error}
-        setError={setError}
+        isFallbackCatalog={isFallbackCatalog}
         onSortChange={handleSortChange}
         onFilterApply={updateParams}
         onFilterClear={handleFilterClear}

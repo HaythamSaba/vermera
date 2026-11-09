@@ -5,6 +5,7 @@ import PriceFilterPanel from "./PriceFilterPanel";
 import ProductSearch from "./ProductSearch";
 import { CATEGORY_LABELS } from "./categories";
 import { SORT_OPTIONS } from "./sortOptions";
+import FallbackCatalogNotice from "../../ui/FallbackCatalogNotice";
 import { formatPrice } from "../../utils/pricing";
 
 const wholeEuros = (value) => formatPrice(value, { wholeUnits: true });
@@ -42,7 +43,7 @@ function getActiveFilterChips({ category, minPrice, maxPrice, searchQuery }) {
 function ProductsSection({
   products,
   loading,
-  error,
+  isFallbackCatalog = false,
   displayCount,
   setDisplayCount,
   category,
@@ -52,7 +53,6 @@ function ProductsSection({
   navigate,
   setProducts,
   setLoading,
-  setError,
   onSortChange,
   onFilterApply,
   onFilterClear,
@@ -118,6 +118,8 @@ function ProductsSection({
           </p>
         </div>
 
+        {isFallbackCatalog && <FallbackCatalogNotice className="pb-4" />}
+
         {chips.length > 0 && (
           <ul
             aria-label="Active filters"
@@ -161,8 +163,6 @@ function ProductsSection({
         setProducts={setProducts}
         loading={loading}
         setLoading={setLoading}
-        error={error}
-        setError={setError}
         searchQuery={searchQuery}
         onClearFilters={onClearAll}
       />

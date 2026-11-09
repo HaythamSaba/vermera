@@ -2,6 +2,7 @@ import { Link, useLoaderData } from "react-router";
 import { supportedCategories } from "../features/products/categories";
 import ProductItem from "../features/products/ProductItem";
 import Reveal from "./Reveal";
+import FallbackCatalogNotice from "./FallbackCatalogNotice";
 
 const MAX_PIECES = 8;
 
@@ -26,7 +27,7 @@ function pickEdit(products) {
 // of the full paginated catalog (which lives on /products). Reads the "/"
 // route's loader data — the full catalog — so it costs no extra fetch.
 function TheEdit() {
-  const products = useLoaderData() ?? [];
+  const { products = [], isFallbackCatalog = false } = useLoaderData() ?? {};
   const pieces = pickEdit(products);
 
   if (pieces.length === 0) return null;
@@ -56,6 +57,8 @@ function TheEdit() {
           View all
         </Link>
       </Reveal>
+
+      {isFallbackCatalog && <FallbackCatalogNotice className="-mt-6 mb-8" />}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {pieces.map((product) => (

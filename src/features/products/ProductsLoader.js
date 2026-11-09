@@ -2,6 +2,7 @@ import {
   getProductById,
   getProducts,
   getProductsByCategory,
+  isFallbackCatalog,
 } from "../../services/apiProducts";
 import { normalizeSort } from "./sortOptions";
 
@@ -9,15 +10,17 @@ import { normalizeSort } from "./sortOptions";
 // /products?category=tops&sort=price_asc is already filtered and sorted
 // (previously it rendered the full catalog, then refetched). On "/" there
 // are no params, so this is the plain catalog. ?q= is a client-side filter
-// in ProductsPage and isn't applied here.
+// in ProductsPage and isn't applied here. `isFallbackCatalog` tells the page
+// to show the "saved copy of the catalog" notice.
 export async function loader({ request }) {
   const params = new URL(request.url).searchParams;
-  return getProducts({
+  const products = await getProducts({
     category: params.get("category"),
     sort: normalizeSort(params.get("sort")),
     minPrice: params.get("minPrice"),
     maxPrice: params.get("maxPrice"),
   });
+  return { products, isFallbackCatalog: await isFallbackCatalog() };
 }
 
 export async function productLoader({ params }) {

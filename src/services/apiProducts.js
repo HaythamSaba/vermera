@@ -169,6 +169,13 @@ export async function getProductById(sku) {
   return null; // caller (productLoader) is responsible for the not-found state
 }
 
+// True when the catalog is the bundled mock snapshot (DummyJSON couldn't be
+// reached), so the UI can say so. Shares the cached catalog request.
+export async function isFallbackCatalog() {
+  const { fromMock } = await fetchScopedCatalog();
+  return fromMock;
+}
+
 // Helper function to get products by category
 export async function getProductsByCategory(category, limit = 20) {
   return getProducts({ category, limit });
