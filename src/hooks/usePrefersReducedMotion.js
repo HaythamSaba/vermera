@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 
 const QUERY = "(prefers-reduced-motion: reduce)";
 
-// Single source of truth for the JS-side reduced-motion signal. Every
-// non-framer-motion animation mechanism (useScrollReveal, hover transforms,
-// etc.) must consume this directly — framer-motion's own MotionConfig only
-// governs framer-motion-driven components, not CSS classes or
-// IntersectionObserver-based reveals.
+// Single source of truth for the JS-side reduced-motion signal. Anything
+// MotionConfig(reducedMotion="user") doesn't govern must consume this
+// directly: CSS-class motion, and framer-motion values bound through `style`
+// (e.g. useParallax's scroll-linked transform).
 export default function usePrefersReducedMotion() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
     try {

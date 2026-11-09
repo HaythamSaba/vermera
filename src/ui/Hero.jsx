@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { ImageOff } from "lucide-react";
 import { motion } from "framer-motion";
@@ -30,7 +30,8 @@ const Hero = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   // The site's one parallax (the footer watermark is static).
-  const parallaxRef = useParallax({ speed: 0.1, scrub: 0.8 });
+  const parallaxRef = useRef(null);
+  const parallaxStyle = useParallax(parallaxRef, { speed: 0.1 });
 
   return (
     // While the photo loads, the section's own bg-stone/30 tint is the
@@ -53,7 +54,11 @@ const Hero = () => {
           </div>
         </div>
       ) : (
-        <div ref={parallaxRef} className="absolute inset-0 scale-[1.15]">
+        <MotionDiv
+          ref={parallaxRef}
+          style={parallaxStyle}
+          className="absolute inset-0 scale-[1.15]"
+        >
           {/* Art direction, not resolution switching: the photo is drawn
               >=1570 CSS px wide on every screen (object-cover in a ~100vh
               box), so the full 1672px file is always needed for width. Tall
@@ -80,7 +85,7 @@ const Hero = () => {
               }`}
             />
           </picture>
-        </div>
+        </MotionDiv>
       )}
 
       <div className="relative z-10 h-full flex mt-10 md:mt-0 md:items-center container-foundation">

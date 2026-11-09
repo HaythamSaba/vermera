@@ -1,6 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router";
-import { supportedCategories } from "../../services/apiProducts";
-import { CATEGORY_LABELS } from "./categoryLabels";
+import { CATEGORY_LABELS, supportedCategories } from "./categories";
 
 const tabClass = (isActive) =>
   `shrink-0 py-3 -mb-px border-b-2 whitespace-nowrap text-sm cursor-pointer transition-colors duration-300 ${

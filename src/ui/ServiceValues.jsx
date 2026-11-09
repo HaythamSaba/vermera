@@ -1,5 +1,9 @@
 import { Search, ShoppingBag, Sparkles, Truck } from "lucide-react";
-import useStaggerReveal from "../hooks/useStaggerReveal";
+import { motion } from "framer-motion";
+import RevealGroup from "./RevealGroup";
+import { CARD_REVEAL_VARIANTS } from "../utils/motion";
+
+const MotionDiv = motion.div;
 
 // Only claims backed by real, working functionality — no free shipping,
 // no 24/7 support, no returns policy, no payment-method promises, since
@@ -29,23 +33,17 @@ const SERVICE_VALUES = [
 ];
 
 const ServiceValues = () => {
-  const { containerRef } = useStaggerReveal(".service-card", [], {
-    durationMs: 500,
-  });
-
   return (
     <section className="bg-white border-b border-stone">
       <section className="container-foundation section">
-        <div
-          ref={containerRef}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10"
-        >
+        <RevealGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
           {SERVICE_VALUES.map((item) => {
             const Icon = item.icon;
             return (
-              <div
+              <MotionDiv
                 key={item.title}
-                className="service-card relative text-center sm:text-left bg-cream p-8 border border-stone hover:shadow-soft hover:-translate-y-1.5 transition-all duration-300"
+                variants={CARD_REVEAL_VARIANTS}
+                className="relative text-center sm:text-left bg-cream p-8 border border-stone hover:shadow-soft hover:-translate-y-1.5 transition-all duration-300"
               >
                 <Icon
                   className="mx-auto sm:mx-0 mb-4 text-brass"
@@ -59,10 +57,10 @@ const ServiceValues = () => {
                 <p className="text-taupe text-sm leading-relaxed">
                   {item.description}
                 </p>
-              </div>
+              </MotionDiv>
             );
           })}
-        </div>
+        </RevealGroup>
       </section>
     </section>
   );

@@ -1,6 +1,8 @@
 import { Link } from "react-router";
-import { supportedCategories } from "../services/apiProducts";
-import { CATEGORY_LABELS } from "../features/products/categoryLabels";
+import {
+  CATEGORY_LABELS,
+  supportedCategories,
+} from "../features/products/categories";
 import Logo from "./Logo";
 
 const linkClass = "hover:text-brass transition-colors duration-300";

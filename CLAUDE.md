@@ -17,7 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Data source and product shape
 
-All product data flows through `src/services/apiProducts.js`, which fetches from `https://dummyjson.com`, scopes results to a fixed `supportedCategories` allowlist (`womens-bags`, `womens-dresses`, `womens-jewellery`, `womens-shoes`, `womens-watches`, `tops`, `skin-care`, `beauty`, `sunglasses`), and falls back to `src/data/mockProducts.json` on any fetch/parse failure. Every consumer gets data through this module's `getProducts()` / `getProductById()` / `getProductsByCategory()` / `getCategories()` — never fetch DummyJSON directly from a component.
+All product data flows through `src/services/apiProducts.js`, which fetches from `https://dummyjson.com`, scopes results to a fixed `supportedCategories` allowlist (`womens-bags`, `womens-dresses`, `womens-jewellery`, `womens-shoes`, `womens-watches`, `tops`, `skin-care`, `beauty`, `sunglasses`; defined with `CATEGORY_LABELS` in `src/features/products/categories.js` so UI like the Footer can list categories without importing the API layer), and falls back to `src/data/mockProducts.json` on any fetch/parse failure. The mock is loaded with a dynamic `import()` only when needed, so it stays out of the entry chunk — never import it statically. Every consumer gets data through this module's `getProducts()` / `getProductById()` / `getProductsByCategory()` / `getCategories()` — never fetch DummyJSON directly from a component.
 
 All raw DummyJSON items are normalized by `transformProduct()` into the shape used throughout the UI: `{id, sku, productName, description, category, NewPrice, OldPrice, isNew, isDiscount, DiscountPercentage, image, stock, woodType, dimensions}`. `sku` (stringified) is the canonical identity used for cart keys, product URLs, React list keys, and localStorage — `id` is only a fallback list key. `isNew` is always `false` (DummyJSON has no trustworthy "new" signal) and `woodType` is always `undefined` (no DummyJSON equivalent) — both are intentional, not bugs; don't try to "fix" them by deriving fake values.
 
@@ -52,6 +52,8 @@ Layout utilities: `.container-foundation` (responsive max-width content wrapper)
 Focus states: a single sitewide `:focus-visible` rule in `src/index.css` (Tailwind `base` layer) draws a 2px espresso outline on every focusable element. Never add `outline-none` / `outline-hidden` to interactive elements — that utility outranks the base rule and removes the indicator. On dark surfaces (espresso bars, image overlays), put `.surface-dark` on the container so the ring switches to cream.
 
 Icon library is `lucide-react` only — don't add another icon package.
+
+Motion library is Framer Motion only (audit decision D3; GSAP was removed). Scroll entrances use `src/ui/Reveal.jsx` (single element) and `src/ui/RevealGroup.jsx` + the variants in `src/utils/motion.js` (staggered groups); the hero parallax is `src/hooks/useParallax.js`. `MotionConfig reducedMotion="user"` in `AppLayout` covers animations, but values bound through `style` (like the parallax) must check `usePrefersReducedMotion()` themselves.
 
 ### Ongoing redesign effort
 

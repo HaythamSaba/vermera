@@ -1,19 +1,14 @@
-// services/productsAPI.js
-import mockProducts from "../data/mockProducts.json";
+import { supportedCategories } from "../features/products/categories";
 
 const BASE_URL = "https://dummyjson.com";
 
-export const supportedCategories = [
-  "womens-bags",
-  "womens-dresses",
-  "womens-jewellery",
-  "womens-shoes",
-  "womens-watches",
-  "tops",
-  "skin-care",
-  "beauty",
-  "sunglasses",
-];
+// The ~86 kB offline snapshot is only needed when DummyJSON fails (or for a
+// sku-miss double check), so it's loaded on demand into its own chunk rather
+// than shipped in the entry bundle.
+async function loadMockProducts() {
+  const { default: mockProducts } = await import("../data/mockProducts.json");
+  return mockProducts;
+}
 
 function normalizeCategory(category) {
   if (!category) return null; // undefined, null, "" → no filter
@@ -53,7 +48,7 @@ function fetchScopedCatalog() {
       console.warn(
         `[productsAPI] Falling back to mock data — ${error.message}`,
       );
-      return { items: mockProducts, fromMock: true };
+      return { items: await loadMockProducts(), fromMock: true };
     }
   })();
 
@@ -166,6 +161,7 @@ export async function getProductById(sku) {
   // the offline snapshot (covers a sku that only exists there). Skipped when
   // fromMock is already true, since `items` IS mockProducts in that case.
   if (!fromMock) {
+    const mockProducts = await loadMockProducts();
     const mockMatch = mockProducts.find((p) => String(p.sku ?? p.id) === sku);
     if (mockMatch) return transformProduct(mockMatch);
   }
@@ -179,9 +175,7 @@ export async function getProductsByCategory(category, limit = 20) {
 }
 
 // Categories supported by this storefront (DummyJSON slugs): see
-// `supportedCategories` above — womens-bags, womens-dresses,
-// womens-jewellery, womens-shoes, womens-watches, tops, skin-care, beauty,
-// sunglasses.
+// `supportedCategories` in src/features/products/categories.js.
 
 export async function getCategories() {
   // Fetch DummyJSON's full category list, then narrow it to the slugs this

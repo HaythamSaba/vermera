@@ -11,9 +11,9 @@ const AppLayout = () => {
 
   return (
     // Governs every framer-motion component in the tree (floating header,
-    // mobile drawer, announcement bar, cart overview, toasts). CSS
-    // transitions and IntersectionObserver-based reveals are unaffected by
-    // this — they each consume usePrefersReducedMotion() directly.
+    // mobile drawer, announcement bar, cart overview, toasts, scroll
+    // reveals). CSS transitions and style-bound motion values (useParallax)
+    // are unaffected by this — they consume usePrefersReducedMotion().
     <MotionConfig reducedMotion="user">
       <ToastProvider>
         <div>

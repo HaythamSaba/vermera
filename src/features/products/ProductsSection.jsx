@@ -3,7 +3,7 @@ import CategoriesList from "./CategoriesList";
 import Products from "./Products";
 import PriceFilterPanel from "./PriceFilterPanel";
 import ProductSearch from "./ProductSearch";
-import { CATEGORY_LABELS } from "./categoryLabels";
+import { CATEGORY_LABELS } from "./categories";
 import { SORT_OPTIONS } from "./sortOptions";
 import { formatPrice } from "../../utils/pricing";
 

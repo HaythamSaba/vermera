@@ -1,5 +1,5 @@
 import { Link, useLoaderData } from "react-router";
-import { supportedCategories } from "../services/apiProducts";
+import { supportedCategories } from "../features/products/categories";
 import ProductItem from "../features/products/ProductItem";
 import Reveal from "./Reveal";
 

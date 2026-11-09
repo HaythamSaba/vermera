@@ -10,30 +10,41 @@ export const DURATION = {
   editorial: 800, // section-level entrance reveals
 };
 
-// framer-motion pieces only (dialog/panel exit animations — mobile drawer,
-// AnnouncementBar). framer-motion's `ease` prop accepts a
-// cubic-bezier array directly.
+// framer-motion's `ease` prop accepts a cubic-bezier array directly.
 export const EASE = {
   out: [0.16, 1, 0.3, 1],
   inOut: [0.65, 0, 0.35, 1],
 };
 
-// GSAP pieces only (useScrollReveal, useStaggerReveal, useParallax).
-// GSAP's `ease` option takes its own named-ease strings, not CSS/framer
-// values — power curves read as smooth deceleration without ever feeling
-// bouncy or "template-y"; never use back/elastic/bounce here.
-export const GSAP_EASE = {
-  out: "power3.out",
-  inOut: "sine.inOut",
-  linear: "none",
-};
-
 export const STAGGER_MS = 120;
+
+// Scroll-entrance variants for a staggered group (see RevealGroup.jsx): the
+// container only orchestrates; each child declares `variants` built with
+// revealItemVariants() and inherits the hidden/visible state from it.
+export const revealGroupVariants = (staggerMs = STAGGER_MS) => ({
+  hidden: {},
+  visible: { transition: { staggerChildren: staggerMs / 1000 } },
+});
+
+export const revealItemVariants = ({
+  distance = 32,
+  durationMs = DURATION.editorial,
+} = {}) => ({
+  hidden: { opacity: 0, y: distance },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: durationMs / 1000, ease: EASE.out },
+  },
+});
 
 // Product grids: a short stagger that restarts every GRID_STAGGER_CAP cards,
 // so a long grid (or a "Load More" batch) never builds up a long queue.
 export const GRID_STAGGER_MS = 70;
 export const GRID_STAGGER_CAP = 8;
+
+// Shared by the small card grids (ServiceValues, About's contact cards).
+export const CARD_REVEAL_VARIANTS = revealItemVariants({ durationMs: 500 });
 
 export const SIZE_CLASSES = {
   primary: "text-4xl",

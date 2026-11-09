@@ -14,12 +14,11 @@ import Reveal from "./Reveal";
 import AboutSection from "./AboutSection";
 import AboutSectionHeading from "./AboutSectionHeading";
 import ContactChannelCard from "./ContactChannelCard";
-import useStaggerReveal from "../hooks/useStaggerReveal";
-import useTextReveal from "../hooks/useTextReveal";
+import RevealGroup from "./RevealGroup";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import useMetaDescription from "../hooks/useMetaDescription";
 import { useToast } from "../hooks/useToast";
-import { STAGGER_MS } from "../utils/motion";
+import { CARD_REVEAL_VARIANTS, STAGGER_MS } from "../utils/motion";
 
 // Matches the codebase convention elsewhere (AnnouncementBar, Header,
 // Products, ProductItem) — aliasing to a plain identifier
@@ -64,15 +63,6 @@ const About = () => {
   const showToast = useToast();
   const [copied, setCopied] = useState(false);
 
-  // Contact channel cards get their own coordinated reveal, same pattern as
-  // ServiceValues' .service-card grid on the homepage.
-  const { containerRef } = useStaggerReveal(".contact-channel", [], {
-    durationMs: 500,
-  });
-
-  // TESTING: per-letter blur-in reveal on the name heading.
-  const { ref: nameRef } = useTextReveal({ staggerMs: 22 });
-
   const handleCopyEmail = async () => {
     try {
       await navigator.clipboard.writeText(CONTACT_EMAIL);
@@ -102,12 +92,13 @@ const About = () => {
             >
               Frontend Developer · Ljubljana, Slovenia
             </Reveal>
-            <h1
-              ref={nameRef}
-              className="font-serif text-espresso font-semibold text-5xl sm:text-6xl leading-tight mb-6 opacity-0"
+            <Reveal
+              as="h1"
+              delay={STAGGER_MS}
+              className="font-serif text-espresso font-semibold text-5xl sm:text-6xl leading-tight mb-6"
             >
               Haytham
-            </h1>
+            </Reveal>
             <Reveal
               as="p"
               delay={STAGGER_MS * 2}
@@ -205,15 +196,17 @@ const About = () => {
           </Reveal>
         </div>
 
-        <div
-          ref={containerRef}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-6"
-        >
+        {/* Contact cards reveal as one staggered group, same pattern as
+            ServiceValues on the homepage. */}
+        <RevealGroup className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {CONTACT_LINKS.map((channel) => (
             <ContactChannelCard key={channel.label} {...channel} />
           ))}
 
-          <div className="contact-channel flex items-center gap-4 p-5 border border-stone bg-cream hover:border-brass transition-colors duration-300">
+          <MotionDiv
+            variants={CARD_REVEAL_VARIANTS}
+            className="flex items-center gap-4 p-5 border border-stone bg-cream hover:border-brass transition-colors duration-300"
+          >
             <Mail className="w-5 h-5 text-brass shrink-0" aria-hidden="true" />
             <div className="flex-1 min-w-0">
               <p className="font-medium text-charcoal">Email</p>
@@ -236,8 +229,8 @@ const About = () => {
                 <Copy className="w-5 h-5" aria-hidden="true" />
               )}
             </button>
-          </div>
-        </div>
+          </MotionDiv>
+        </RevealGroup>
       </AboutSection>
     </div>
   );

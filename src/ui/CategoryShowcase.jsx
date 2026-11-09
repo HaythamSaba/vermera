@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { getProducts, supportedCategories } from "../services/apiProducts";
-import { CATEGORY_LABELS } from "../features/products/categoryLabels";
+import { motion } from "framer-motion";
+import { getProducts } from "../services/apiProducts";
+import {
+  CATEGORY_LABELS,
+  supportedCategories,
+} from "../features/products/categories";
 import Reveal from "./Reveal";
-import useStaggerReveal from "../hooks/useStaggerReveal";
+import RevealGroup from "./RevealGroup";
+import { revealItemVariants } from "../utils/motion";
+
+const MotionLink = motion.create(Link);
+const tileVariants = revealItemVariants({ distance: 32, durationMs: 850 });
 
 function CategoryShowcase() {
   // One representative product per category, fetched once from the real
   // catalog (live DummyJSON data, or the same mock fallback the rest of the
   // app already relies on) — never invented placeholder data.
   const [categoryProducts, setCategoryProducts] = useState({});
-  // Tiles are all present from the first render (mapped from the static
-  // supportedCategories list) — only their inner image content swaps from
-  // skeleton to real photo later — so a one-time setup (empty deps) is
-  // correct here, unlike the product grid where cards don't exist until an
-  // async fetch resolves.
-  const { containerRef: gridRef } = useStaggerReveal(".category-tile", []);
 
   useEffect(() => {
     let isMounted = true;
@@ -47,21 +49,22 @@ function CategoryShowcase() {
         </p>
       </Reveal>
 
-      <div
-        ref={gridRef}
-        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6"
-      >
+      {/* Tiles are all present from the first render (mapped from the
+          static supportedCategories list) — only their image swaps from
+          skeleton to photo later — so the group reveal runs once. */}
+      <RevealGroup className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
         {supportedCategories.map((slug, index) => {
           const product = categoryProducts[slug];
           const label = CATEGORY_LABELS[slug] ?? slug;
           const isFeatured = index === 0;
 
           return (
-            <Link
+            <MotionLink
               key={slug}
+              variants={tileVariants}
               to={`/products?category=${slug}`}
               aria-label={`Shop ${label}`}
-              className={`category-tile group flex flex-col ${
+              className={`group flex flex-col ${
                 isFeatured ? "col-span-2 row-span-2" : ""
               }`}
             >
@@ -85,10 +88,10 @@ function CategoryShowcase() {
               <p className="font-medium text-lg text-charcoal group-hover:text-brass transition-colors duration-300">
                 {label}
               </p>
-            </Link>
+            </MotionLink>
           );
         })}
-      </div>
+      </RevealGroup>
     </section>
   );
 }

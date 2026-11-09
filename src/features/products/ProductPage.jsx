@@ -9,7 +9,7 @@ import WishlistButton from "../../ui/WishlistButton";
 import ProductGallery from "./ProductGallery";
 import ProductItem from "./ProductItem";
 import QuantitySelector from "./QuantitySelector";
-import { CATEGORY_LABELS } from "./categoryLabels";
+import { CATEGORY_LABELS } from "./categories";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
 import { useToast } from "../../hooks/useToast";

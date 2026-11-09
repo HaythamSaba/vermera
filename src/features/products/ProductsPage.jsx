@@ -10,7 +10,7 @@ import { useState } from "react";
 import ProductsSection from "./ProductsSection";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
-import { CATEGORY_LABELS } from "./categoryLabels";
+import { CATEGORY_LABELS } from "./categories";
 import { DEFAULT_SORT, normalizeSort } from "./sortOptions";
 
 const PAGE_SIZE = 8;
