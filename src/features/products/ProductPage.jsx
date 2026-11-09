@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLoaderData } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { RotateCcw, ShieldCheck, Truck } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { addItem, toCartItem } from "../cart/cartSlice";
 import AddToCartButton from "../../ui/AddToCartButton";
+import Breadcrumb from "../../ui/Breadcrumb";
 import WishlistButton from "../../ui/WishlistButton";
 import ProductGallery from "./ProductGallery";
 import ProductItem from "./ProductItem";
 import QuantitySelector from "./QuantitySelector";
+import { CATEGORY_LABELS } from "./categoryLabels";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
 import { useToast } from "../../hooks/useToast";
@@ -23,6 +25,9 @@ import {
   toWishlistItem,
 } from "../wishlist/wishlistSlice";
 import { formatPrice } from "../../utils/pricing";
+
+const eyebrowClass =
+  "text-xs font-medium uppercase tracking-[0.2em] text-taupe";
 
 // Quantity state lives here, keyed by sku at the call site below — React
 // Router keeps ProductPage mounted across a sku change (only loader data
@@ -73,6 +78,69 @@ const AddToCartControls = ({
   );
 };
 
+// Native <details>/<summary>: keyboard and screen-reader support for free,
+// no JS state. The chevron only rotates (motion-safe) — no height animation.
+const Accordion = ({ title, defaultOpen = false, children }) => (
+  <details className="group border-b border-stone" open={defaultOpen}>
+    <summary className="flex items-center justify-between gap-4 py-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden text-sm font-medium uppercase tracking-[0.15em] text-charcoal">
+      {title}
+      <ChevronDown
+        className="w-4 h-4 shrink-0 text-taupe motion-safe:transition-transform group-open:rotate-180"
+        aria-hidden="true"
+      />
+    </summary>
+    <div className="pb-5">{children}</div>
+  </details>
+);
+
+// rows: [label, value] pairs; empty values are skipped.
+const FactList = ({ rows }) => (
+  <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
+    {rows
+      .filter(([, value]) => value)
+      .map(([label, value]) => (
+        <div key={label} className="contents">
+          <dt className="text-taupe">{label}</dt>
+          <dd className="text-charcoal">{value}</dd>
+        </div>
+      ))}
+  </dl>
+);
+
+// Mobile-only (<lg) bar with price + Add to Cart, shown while the main
+// controls are off-screen (on phones they start below the gallery) and
+// hidden again past the end of the product content, so it never covers the
+// footer. `inert` takes it out of the tab order/accessibility tree while
+// hidden. Adds a quantity of 1; the main controls handle larger amounts.
+const MobileBuyBar = ({ isVisible, productName, price, onAdd }) => {
+  const [justAdded, confirmAdded] = useAddedConfirmation();
+
+  return (
+    <div
+      inert={!isVisible}
+      className={`lg:hidden fixed inset-x-0 bottom-0 z-40 bg-cream border-t border-stone px-4 py-3 flex items-center gap-4 motion-safe:transition-transform motion-safe:duration-300 ${
+        isVisible ? "translate-y-0" : "translate-y-full"
+      }`}
+    >
+      <div className="min-w-0 flex-1">
+        <p className="text-sm text-charcoal line-clamp-1">{productName}</p>
+        <p className="text-sm font-medium text-espresso">{price}</p>
+      </div>
+      <AddToCartButton
+        justAdded={justAdded}
+        label="Add to Cart"
+        variant="quiet"
+        size="small"
+        className="min-h-11 shrink-0"
+        onClick={() => {
+          onAdd(1);
+          confirmAdded();
+        }}
+      />
+    </div>
+  );
+};
+
 const ProductPage = () => {
   const { product, relatedProducts } = useLoaderData();
   useDocumentTitle(product.productName);
@@ -80,6 +148,7 @@ const ProductPage = () => {
   const showToast = useToast();
 
   const {
+    sku,
     productName,
     description,
     NewPrice,
@@ -87,7 +156,6 @@ const ProductPage = () => {
     images,
     category,
     brand,
-    tags,
     woodType,
     dimensions,
     stock,
@@ -97,12 +165,12 @@ const ProductPage = () => {
     returnPolicy,
   } = product;
 
-  let formattedCategory = category.replace(/-/g, " ");
+  const categoryLabel =
+    CATEGORY_LABELS[category] ??
+    category.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
   const isOutOfStock = stock === 0;
-  const categoryTitleCase = formattedCategory.replace(/\b\w/g, (c) =>
-    c.toUpperCase(),
-  );
+  const isLowStock = !isOutOfStock && availabilityStatus === "Low Stock";
   const priceFact = OldPrice
     ? `Price: ${formatPrice(NewPrice)} (was ${formatPrice(OldPrice)})`
     : `Price: ${formatPrice(NewPrice)}`;
@@ -111,18 +179,50 @@ const ProductPage = () => {
   // read better here than a vague one-liner, per meta description best
   // practice.
   useMetaDescription(
-    `${description ? description.split(".")[0].trim() + ". " : ""}Category: ${categoryTitleCase}, ${priceFact}, ${isOutOfStock ? "Out of Stock" : "In Stock"}.`,
+    `${description ? description.split(".")[0].trim() + ". " : ""}Category: ${categoryLabel}, ${priceFact}, ${isOutOfStock ? "Out of Stock" : "In Stock"}.`,
   );
-  const isLowStock = !isOutOfStock && availabilityStatus === "Low Stock";
-  const isWishlisted = useSelector(isInWishlist(product.sku));
+  const isWishlisted = useSelector(isInWishlist(sku));
 
   // Read for display before recording this visit, so the current product
   // never appears in its own "Recently Viewed" list.
-  const recentlyViewed = getRecentlyViewed(product.sku);
+  const recentlyViewed = getRecentlyViewed(sku);
 
   useEffect(() => {
     recordProductView(product);
   }, [product]);
+
+  // Drives MobileBuyBar: is the main Add to Cart row on screen, and has the
+  // end of the product content (a sentinel after Recently Viewed) been
+  // reached or scrolled past? Starts as "CTA visible" so the bar never
+  // flashes in before the observer's first report.
+  const ctaRef = useRef(null);
+  const contentEndRef = useRef(null);
+  const [isCtaVisible, setIsCtaVisible] = useState(true);
+  const [isPastContent, setIsPastContent] = useState(false);
+
+  useEffect(() => {
+    const cta = ctaRef.current;
+    const contentEnd = contentEndRef.current;
+    if (!cta || !contentEnd || !("IntersectionObserver" in window)) return;
+    const ctaObserver = new IntersectionObserver(([entry]) =>
+      setIsCtaVisible(entry.isIntersecting),
+    );
+    // The root is stretched far above the viewport, so the sentinel counts
+    // as "intersecting" whenever it's at or above the viewport's bottom
+    // edge. With a plain viewport root, a fast scroll or jump (End key,
+    // scrollTo) can carry it from below to above without it ever
+    // intersecting, and no callback fires.
+    const endObserver = new IntersectionObserver(
+      ([entry]) => setIsPastContent(entry.isIntersecting),
+      { rootMargin: "100000px 0px 0px 0px" },
+    );
+    ctaObserver.observe(cta);
+    endObserver.observe(contentEnd);
+    return () => {
+      ctaObserver.disconnect();
+      endObserver.disconnect();
+    };
+  }, []);
 
   const handleAddToCart = (quantity) => {
     if (isOutOfStock) return;
@@ -134,7 +234,7 @@ const ProductPage = () => {
 
   const handleToggleWishlist = () => {
     if (isWishlisted) {
-      dispatch(removeWishlistItem(product.sku));
+      dispatch(removeWishlistItem(sku));
       showToast(`${productName} removed from wishlist`);
     } else {
       dispatch(addWishlistItem(toWishlistItem(product)));
@@ -142,107 +242,86 @@ const ProductPage = () => {
     }
   };
 
+  const detailRows = [
+    ["Brand", brand],
+    ["Material", woodType],
+    [
+      "Dimensions",
+      dimensions &&
+        `${dimensions.width} W × ${dimensions.height} H × ${dimensions.depth} D cm`,
+    ],
+  ];
+  const shippingRows = [
+    ["Delivery", shippingInformation],
+    ["Warranty", warrantyInformation],
+    ["Returns", returnPolicy],
+  ];
+  const hasDetails = detailRows.some(([, value]) => value);
+  const hasShipping = shippingRows.some(([, value]) => value);
+
   return (
     <div className="container-foundation section">
+      <Breadcrumb
+        className="text-sm text-taupe mb-8"
+        path={[
+          { label: "Home", to: "/" },
+          { label: "Shop", to: "/products" },
+          { label: categoryLabel, to: `/products?category=${category}` },
+          productName,
+        ]}
+      />
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
         <ProductGallery images={images} productName={productName} />
 
+        {/* Order: category → name → price (+ stock note) → description →
+            buy controls → details accordions. */}
         <div>
-          <p className="text-taupe capitalize mb-2">{formattedCategory}</p>
-          <h1 className="font-serif text-espresso font-semibold text-3xl sm:text-4xl leading-tight mb-4">
+          <p className={`${eyebrowClass} mb-3`}>{categoryLabel}</p>
+          <h1 className="font-serif text-espresso font-medium text-3xl sm:text-4xl leading-tight mb-4">
             {productName}
           </h1>
-          <p className="text-2xl font-semibold text-charcoal mb-6">
+          <p className="text-2xl font-medium text-charcoal">
             {formatPrice(NewPrice)}
             {OldPrice && (
               <span className="text-taupe line-through ml-3 text-lg font-normal">
+                <span className="sr-only">Was </span>
                 {formatPrice(OldPrice)}
               </span>
             )}
           </p>
-          <p className="text-taupe leading-relaxed mb-8">{description}</p>
-
-          {tags.length > 0 && (
-            <ul className="flex flex-wrap gap-2 mb-8" aria-label="Product tags">
-              {tags.map((tag) => (
-                <li
-                  key={tag}
-                  className="rounded-full border border-stone px-3 py-1 text-xs text-taupe capitalize"
-                >
-                  {tag}
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {brand && (
-            <p className="mb-2 text-charcoal">
-              <strong className="font-medium">Brand:</strong> {brand}
+          {/* Stock only as a status, never a raw count. */}
+          {(isOutOfStock || isLowStock) && (
+            <p className={`${eyebrowClass} mt-2`}>
+              {isOutOfStock ? "Sold out" : "Low stock"}
             </p>
           )}
-          {woodType && (
-            <p className="mb-2 text-charcoal">
-              <strong className="font-medium">Wood Type:</strong> {woodType}
-            </p>
-          )}
-          {dimensions && (
-            <p className="mb-2 text-charcoal">
-              <strong className="font-medium">Dimensions:</strong>{" "}
-              {dimensions.width}W x {dimensions.height}H x {dimensions.depth}D
-              cm
-            </p>
-          )}
-          <p className="mb-8 text-charcoal flex items-center gap-3">
-            <span>
-              <strong className="font-medium">Stock:</strong>{" "}
-              {isOutOfStock ? "Out of stock" : `${stock} available`}
-            </span>
-            {isLowStock && (
-              <span className="rounded-full bg-taupe text-cream py-1 px-3 text-xs font-semibold uppercase tracking-wider">
-                Low Stock
-              </span>
-            )}
-          </p>
+          <p className="text-taupe leading-relaxed mt-6 mb-8">{description}</p>
 
-          <AddToCartControls
-            key={product.sku}
-            product={product}
-            isOutOfStock={isOutOfStock}
-            onAdd={handleAddToCart}
-            isWishlisted={isWishlisted}
-            onToggleWishlist={handleToggleWishlist}
-          />
+          <div ref={ctaRef}>
+            <AddToCartControls
+              key={sku}
+              product={product}
+              isOutOfStock={isOutOfStock}
+              onAdd={handleAddToCart}
+              isWishlisted={isWishlisted}
+              onToggleWishlist={handleToggleWishlist}
+            />
+          </div>
 
-          {(shippingInformation || warrantyInformation || returnPolicy) && (
-            <ul className="mt-8 pt-8 border-t border-stone flex flex-col gap-3">
-              {shippingInformation && (
-                <li className="flex items-center gap-3 text-charcoal">
-                  <Truck
-                    className="w-5 h-5 text-brass shrink-0"
-                    aria-hidden="true"
-                  />
-                  {shippingInformation}
-                </li>
+          {(hasDetails || hasShipping) && (
+            <div className="mt-10 border-t border-stone">
+              {hasDetails && (
+                <Accordion title="Details" defaultOpen>
+                  <FactList rows={detailRows} />
+                </Accordion>
               )}
-              {warrantyInformation && (
-                <li className="flex items-center gap-3 text-charcoal">
-                  <ShieldCheck
-                    className="w-5 h-5 text-brass shrink-0"
-                    aria-hidden="true"
-                  />
-                  {warrantyInformation}
-                </li>
+              {hasShipping && (
+                <Accordion title="Shipping & returns">
+                  <FactList rows={shippingRows} />
+                </Accordion>
               )}
-              {returnPolicy && (
-                <li className="flex items-center gap-3 text-charcoal">
-                  <RotateCcw
-                    className="w-5 h-5 text-brass shrink-0"
-                    aria-hidden="true"
-                  />
-                  {returnPolicy}
-                </li>
-              )}
-            </ul>
+            </div>
           )}
         </div>
       </div>
@@ -274,6 +353,18 @@ const ProductPage = () => {
             ))}
           </div>
         </section>
+      )}
+
+      {/* 1px tall: zero-area targets intersect unreliably. */}
+      <div ref={contentEndRef} aria-hidden="true" className="h-px" />
+
+      {!isOutOfStock && (
+        <MobileBuyBar
+          isVisible={!isCtaVisible && !isPastContent}
+          productName={productName}
+          price={formatPrice(NewPrice)}
+          onAdd={handleAddToCart}
+        />
       )}
     </div>
   );

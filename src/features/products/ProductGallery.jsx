@@ -6,7 +6,9 @@ import { ChevronLeft, ChevronRight, ImageOff } from "lucide-react";
 // React remount it — and so reset imageLoaded/imageError — whenever the
 // active image changes, so a fallback shown for one image never lingers
 // over the next.
-const GalleryPrimaryImage = ({ src, alt }) => {
+// fetchPriority: "high" for the first image (the PDP's LCP element), so the
+// browser fetches it ahead of thumbnails and below-the-fold cards.
+const GalleryPrimaryImage = ({ src, alt, fetchPriority = "auto" }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -31,6 +33,7 @@ const GalleryPrimaryImage = ({ src, alt }) => {
       <img
         src={src}
         alt={alt}
+        fetchPriority={fetchPriority}
         onLoad={() => setImageLoaded(true)}
         onError={() => setImageError(true)}
         className={`w-full h-full object-cover transition-opacity duration-300 ${
@@ -106,7 +109,12 @@ const ProductGallery = ({ images, productName }) => {
         tabIndex={0}
         onKeyDown={handlePanelKeyDown}
       >
-        <GalleryPrimaryImage key={activeIndex} src={activeSrc} alt={productName} />
+        <GalleryPrimaryImage
+          key={activeIndex}
+          src={activeSrc}
+          alt={productName}
+          fetchPriority={activeIndex === 0 ? "high" : "auto"}
+        />
 
         {hasMultiple && (
           <>
