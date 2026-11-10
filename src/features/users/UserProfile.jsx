@@ -1,21 +1,13 @@
 import { STORAGE_KEYS } from "../../utils/storageKeys";
-import { useState } from "react";
-import {
-  User,
-  Package,
-  MapPin,
-  Phone,
-  Mail,
-  Edit2,
-  Save,
-  X,
-} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Package, MapPin, Phone, Mail, Pencil } from "lucide-react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router";
 import CreateUser from "./CreateUser";
 import OrderLookup from "../order/OrderLookup";
 import Cart from "../cart/Cart";
 import MainButton from "../../ui/MainButton";
+import InputField from "../../ui/InputField";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
 import { computeOrderTotals, formatPrice, getSubtotal } from "../../utils/pricing";
@@ -61,7 +53,28 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState(user);
 
-  const handleSave = () => {
+  // Keyboard focus follows the mode switch: into the first field when
+  // editing starts, back to the Edit button when it ends (save or cancel),
+  // so focus is never dropped onto <body> when the form unmounts.
+  const firstFieldRef = useRef(null);
+  const editButtonRef = useRef(null);
+  const hasToggledRef = useRef(false);
+  useEffect(() => {
+    if (!hasToggledRef.current) return;
+    (isEditing ? firstFieldRef : editButtonRef).current?.focus();
+  }, [isEditing]);
+
+  const startEditing = () => {
+    hasToggledRef.current = true;
+    setEditedUser(user);
+    setIsEditing(true);
+  };
+
+  const updateField = (field) => (e) =>
+    setEditedUser({ ...editedUser, [field]: e.target.value });
+
+  const handleSave = (e) => {
+    e.preventDefault();
     setUser(editedUser);
     try {
       localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(editedUser));
@@ -90,126 +103,131 @@ const Profile = () => {
       </>
     );
 
+  const initial = username.trim().charAt(0).toUpperCase();
+
+  const details = [
+    { label: "Email", icon: Mail, value: user.email },
+    { label: "Phone", icon: Phone, value: user.phone },
+    { label: "Address", icon: MapPin, value: user.address },
+  ];
+
   return (
     <div className="container-foundation section">
-      <div className="bg-cream border border-stone p-6 mb-6">
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div className="flex items-center space-x-4">
-            <div className="w-20 h-20 bg-stone/20 rounded-full flex items-center justify-center">
-              <User className="w-10 h-10 text-brass" aria-hidden="true" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-serif font-semibold text-espresso">
-                {username}
-              </h1>
-            </div>
-          </div>
-          {!isEditing && (
-            <MainButton
-              variant="quiet"
-              size="small"
-              onClick={() => setIsEditing(true)}
-            >
-              <Edit2 className="w-4 h-4" />
-              Edit Profile
-            </MainButton>
-          )}
+      <div className="bg-cream border border-stone p-6 mb-6 flex items-center gap-4">
+        {/* Quiet monogram instead of a generic user icon. Decorative: the
+            name is right beside it. */}
+        <div
+          aria-hidden="true"
+          className="w-16 h-16 shrink-0 rounded-full border border-stone flex items-center justify-center font-serif text-2xl text-espresso"
+        >
+          {initial}
         </div>
+        <h1 className="text-3xl font-serif font-semibold text-espresso">
+          {username}
+        </h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-cream border border-stone p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-serif font-medium text-espresso">
+          <section
+            aria-labelledby="personal-info-heading"
+            className="bg-cream border border-stone p-6"
+          >
+            <div className="flex items-center justify-between gap-4 mb-4">
+              <h2
+                id="personal-info-heading"
+                className="text-xl font-serif font-medium text-espresso"
+              >
                 Personal Information
               </h2>
-              {isEditing && (
-                <div className="flex gap-2">
-                  <MainButton size="small" variant="quiet" onClick={handleSave}>
-                    <Save className="w-4 h-4" />
-                    Save
-                  </MainButton>
-                  <MainButton
-                    size="small"
-                    variant="outline"
-                    onClick={handleCancel}
-                  >
-                    <X className="w-4 h-4" />
-                    Cancel
-                  </MainButton>
-                </div>
+              {!isEditing && (
+                <button
+                  ref={editButtonRef}
+                  type="button"
+                  onClick={startEditing}
+                  className="min-h-11 inline-flex items-center gap-2 text-sm text-charcoal underline underline-offset-4 decoration-stone hover:decoration-charcoal transition-colors cursor-pointer"
+                >
+                  <Pencil className="w-4 h-4" aria-hidden="true" />
+                  Edit details
+                </button>
               )}
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <Mail className="w-5 h-5 text-taupe mt-1" aria-hidden="true" />
-                <div className="flex-1">
-                  <p className="text-sm text-taupe">Email</p>
-                  {isEditing ? (
-                    <input
-                      type="email"
-                      value={editedUser.email}
-                      onChange={(e) =>
-                        setEditedUser({
-                          ...editedUser,
-                          email: e.target.value,
-                        })
-                      }
-                      className="mt-1 w-full px-3 py-2 border border-stone bg-cream"
-                    />
-                  ) : (
-                    <p className="text-charcoal">{user.email || "—"}</p>
-                  )}
+            {isEditing ? (
+              <form onSubmit={handleSave} className="space-y-4">
+                <InputField
+                  ref={firstFieldRef}
+                  id="profile-email"
+                  type="email"
+                  name="email"
+                  hasLabel
+                  labelText="Email"
+                  autoComplete="email"
+                  value={editedUser.email}
+                  onChange={updateField("email")}
+                />
+                <InputField
+                  id="profile-phone"
+                  type="tel"
+                  name="phone"
+                  hasLabel
+                  labelText="Phone"
+                  autoComplete="tel"
+                  inputMode="tel"
+                  value={editedUser.phone}
+                  onChange={updateField("phone")}
+                />
+                <div>
+                  <label
+                    htmlFor="profile-address"
+                    className="block text-sm font-medium text-charcoal mb-2"
+                  >
+                    Address
+                  </label>
+                  <textarea
+                    id="profile-address"
+                    name="address"
+                    autoComplete="street-address"
+                    rows="2"
+                    value={editedUser.address}
+                    onChange={updateField("address")}
+                    className="w-full border border-stone bg-cream p-3 transition"
+                  />
                 </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <Phone className="w-5 h-5 text-taupe mt-1" aria-hidden="true" />
-                <div className="flex-1">
-                  <p className="text-sm text-taupe">Phone</p>
-                  {isEditing ? (
-                    <input
-                      type="tel"
-                      value={editedUser.phone}
-                      onChange={(e) =>
-                        setEditedUser({
-                          ...editedUser,
-                          phone: e.target.value,
-                        })
-                      }
-                      className="mt-1 w-full px-3 py-2 border border-stone bg-cream"
-                    />
-                  ) : (
-                    <p className="text-charcoal">{user.phone || "—"}</p>
-                  )}
+                <div className="flex items-center gap-4 pt-2">
+                  <MainButton type="submit" size="small" variant="quiet">
+                    Save
+                  </MainButton>
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    className="min-h-11 px-1 text-sm text-taupe underline underline-offset-4 decoration-stone hover:text-charcoal cursor-pointer"
+                  >
+                    Cancel
+                  </button>
                 </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-taupe mt-1" aria-hidden="true" />
-                <div className="flex-1">
-                  <p className="text-sm text-taupe">Address</p>
-                  {isEditing ? (
-                    <textarea
-                      value={editedUser.address}
-                      onChange={(e) =>
-                        setEditedUser({
-                          ...editedUser,
-                          address: e.target.value,
-                        })
-                      }
-                      rows="2"
-                      className="mt-1 w-full px-3 py-2 border border-stone bg-cream"
-                    />
-                  ) : (
-                    <p className="text-charcoal">{user.address || "—"}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
+              </form>
+            ) : (
+              <dl className="space-y-4">
+                {details.map(({ label, icon, value }) => {
+                  // Capitalised local so ESLint sees the JSX usage (same
+                  // pattern as ContactChannelCard).
+                  const Icon = icon;
+                  return (
+                    <div key={label} className="flex items-start gap-3">
+                      <dt className="flex items-center gap-3 w-28 shrink-0 text-sm text-taupe pt-0.5">
+                        <Icon className="w-5 h-5" aria-hidden="true" />
+                        {label}
+                      </dt>
+                      <dd className="text-charcoal min-w-0 break-words">
+                        {value || "—"}
+                      </dd>
+                    </div>
+                  );
+                })}
+              </dl>
+            )}
+          </section>
 
           <div className="bg-cream border border-stone p-6">
             <h2 className="text-xl font-serif font-medium text-espresso mb-4 flex items-center">
