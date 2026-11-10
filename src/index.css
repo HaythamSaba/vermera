@@ -31,8 +31,8 @@
   --color-brass-ink: #836a49;
   --color-error: #a33a2a;
 
-  --font-serif: "Fraunces", ui-serif, Georgia, serif;
-  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces Variable", ui-serif, Georgia, serif;
+  --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
 
   --shadow-soft:
     0 1px 2px rgba(28, 28, 28, 0.04), 0 10px 28px -16px rgba(28, 28, 28, 0.18);
