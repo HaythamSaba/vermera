@@ -4,7 +4,7 @@ export async function getAddress({ latitude, longitude }) {
       `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`,
       {
         headers: {
-          "User-Agent": "FurnitureStore/1.0", // Required by Nominatim
+          "User-Agent": "Vermera/1.0", // Required by Nominatim
         },
       }
     );

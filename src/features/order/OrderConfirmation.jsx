@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from "../../utils/storageKeys";
 /* eslint-disable react-refresh/only-export-components */
 
 import { useLoaderData, useNavigate } from "react-router";
@@ -218,7 +219,7 @@ const OrderConfirmation = () => {
 export async function loader({ params }) {
   const { orderId } = params;
 
-  const ordersJSON = localStorage.getItem("furniture_orders");
+  const ordersJSON = localStorage.getItem(STORAGE_KEYS.orders);
 
   if (!ordersJSON) {
     throw new Response("No orders found", { status: 404 });

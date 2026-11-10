@@ -30,7 +30,7 @@ const Footer = () => {
           <div>
             <Logo size="default" className="mb-4" />
             <p className="text-taupe max-w-xs">
-              Considered pieces for everyday living.
+              A considered edit for every day.
             </p>
           </div>
 
@@ -77,7 +77,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/about" className={linkClass}>
-                  About the Developer
+                  About the developer
                 </Link>
               </li>
             </ul>

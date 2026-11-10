@@ -1,3 +1,6 @@
+// Must stay first: moves saved data off the legacy furniture_* keys
+// before store.js reads localStorage.
+import "./utils/migrateStorage";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 // Self-hosted variable fonts: DM Sans (body, wght axis) and Fraunces

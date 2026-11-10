@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from "../../utils/storageKeys";
 /* eslint-disable react-refresh/only-export-components */
 
 import { useFetcher } from "react-router";
@@ -109,7 +110,7 @@ export async function action({ request, params }) {
   const shippingType = formData.get("shippingType"); // "standard" or "express"
 
   // Get orders from localStorage
-  const ordersJSON = localStorage.getItem("furniture_orders");
+  const ordersJSON = localStorage.getItem(STORAGE_KEYS.orders);
   if (!ordersJSON) {
     throw new Error("No orders found");
   }
@@ -144,7 +145,7 @@ export async function action({ request, params }) {
   orders[orderIndex] = updatedOrder;
 
   // Save back to localStorage
-  localStorage.setItem("furniture_orders", JSON.stringify(orders));
+  localStorage.setItem(STORAGE_KEYS.orders, JSON.stringify(orders));
 
   // Return the updated order to refresh the page
   return updatedOrder;

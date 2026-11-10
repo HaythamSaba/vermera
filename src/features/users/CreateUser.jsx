@@ -62,7 +62,7 @@ const CreateUser = () => {
         />
 
         <p className="text-center text-sm text-taupe mt-6">
-          Considered pieces for everyday living.
+          A considered edit for every day.
         </p>
       </div>
     </div>

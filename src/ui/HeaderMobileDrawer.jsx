@@ -66,11 +66,6 @@ const HeaderMobileDrawer = ({
                     Contact
                   </Link>
                 </li>
-                <li className={navLinkClass}>
-                  <Link to="/about" onClick={onClose}>
-                    About
-                  </Link>
-                </li>
 
                 <hr className="border-stone" />
 

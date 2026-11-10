@@ -148,12 +148,12 @@ const Products = ({
   }
 
   // On the Shop page the route's <h1> already says "Shop", so the
-  // "Our Products" heading is kept only for the homepage (self-managed).
+  // "The Collection" heading is kept only for self-managed mode.
   const heading = isControlled ? (
     <h2 className="sr-only">Products</h2>
   ) : (
     <h2 className="text-[40px] font-serif font-medium text-espresso">
-      Our Products
+      The Collection
     </h2>
   );
 

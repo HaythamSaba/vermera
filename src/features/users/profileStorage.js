@@ -1,8 +1,9 @@
+import { STORAGE_KEYS } from "../../utils/storageKeys";
 // The shopper's saved details (Profile page → "Edit"), persisted to
 // localStorage like the cart and orders. Shared by UserProfile (reads and
 // writes it) and checkout (prefills the form from it — guest checkout, so
 // nothing here is required to place an order).
-export const PROFILE_STORAGE_KEY = "furniture_profile";
+export const PROFILE_STORAGE_KEY = STORAGE_KEYS.profile;
 
 export const emptyProfile = { name: "", email: "", phone: "", address: "" };
 

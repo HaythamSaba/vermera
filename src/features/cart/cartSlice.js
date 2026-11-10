@@ -1,9 +1,10 @@
+import { STORAGE_KEYS } from "../../utils/storageKeys";
 import { createSlice } from "@reduxjs/toolkit";
 
 // Helper functions for localStorage
 const loadFromLocalStorage = () => {
   try {
-    const data = localStorage.getItem("furniture_cart");
+    const data = localStorage.getItem(STORAGE_KEYS.cart);
     return data ? JSON.parse(data) : [];
   } catch {
     return [];
@@ -12,7 +13,7 @@ const loadFromLocalStorage = () => {
 
 const saveToLocalStorage = (cart) => {
   try {
-    localStorage.setItem("furniture_cart", JSON.stringify(cart));
+    localStorage.setItem(STORAGE_KEYS.cart, JSON.stringify(cart));
   } catch (error) {
     console.error("Failed to save cart:", error);
   }

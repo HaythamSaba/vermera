@@ -23,22 +23,22 @@ const EditorialBanner = () => {
             delay={EDITORIAL_STAGGER}
             className="font-serif text-espresso font-semibold text-3xl sm:text-4xl lg:text-5xl leading-tight mb-6"
           >
-            Objects made to belong.
+            Fewer pieces, chosen well.
           </Reveal>
           <Reveal
             as="p"
             delay={EDITORIAL_STAGGER * 2}
             className="text-taupe text-lg leading-relaxed"
           >
-            Discover considered forms, warm materials, and details designed for
-            everyday living.
+            Bags, jewellery, watches and beauty, edited to the pieces worth
+            reaching for again and again.
           </Reveal>
           <Reveal
             delay={EDITORIAL_STAGGER * 3}
             className="mt-8 flex justify-center"
           >
             <MainButton
-              content="Explore Our Products"
+              content="Shop the Collection"
               size="medium"
               variant="primary"
               onClick={() => navigate("/products")}

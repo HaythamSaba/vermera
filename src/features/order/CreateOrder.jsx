@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from "../../utils/storageKeys";
 /* eslint-disable react-refresh/only-export-components */
 import {
   Form,
@@ -286,9 +287,9 @@ export async function action({ request }) {
     createdAt: new Date().toISOString(),
   };
 
-  const orders = JSON.parse(localStorage.getItem("furniture_orders") || "[]");
+  const orders = JSON.parse(localStorage.getItem(STORAGE_KEYS.orders) || "[]");
   orders.unshift(completeOrder);
-  localStorage.setItem("furniture_orders", JSON.stringify(orders));
+  localStorage.setItem(STORAGE_KEYS.orders, JSON.stringify(orders));
 
   // Clear through the store, not localStorage directly: removing only the
   // persisted key left the in-memory cart full (header badge, /cart), and

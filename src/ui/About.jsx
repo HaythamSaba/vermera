@@ -56,7 +56,7 @@ const CONTACT_LINKS = [
 // Vermera shell (same Header/Footer chrome as every other route) — content
 // is about Haytham, not the fictional Vermera brand.
 const About = () => {
-  useDocumentTitle("About");
+  useDocumentTitle("About the developer");
   useMetaDescription(
     "Haytham Saba — Frontend Developer based in Ljubljana, Slovenia. Background, the decisions behind this project, and how to get in touch.",
   );
@@ -82,7 +82,7 @@ const About = () => {
           column, no card layout) so this reads as the developer's own page,
           not another product/category banner. */}
       <div className="container-foundation section">
-        <Breadcrumb path={["Home", "About"]} />
+        <Breadcrumb path={["Home", "About the developer"]} />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div className="max-w-2xl mt-10">
             <Reveal

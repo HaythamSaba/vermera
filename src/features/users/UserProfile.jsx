@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from "../../utils/storageKeys";
 import { useState } from "react";
 import {
   User,
@@ -43,7 +44,7 @@ const Profile = () => {
   const [orders] = useState(() => {
     try {
       const stored = JSON.parse(
-        localStorage.getItem("furniture_orders") || "[]"
+        localStorage.getItem(STORAGE_KEYS.orders) || "[]"
       );
       return Array.isArray(stored) ? stored : [];
     } catch {

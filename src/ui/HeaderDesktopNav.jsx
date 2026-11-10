@@ -10,7 +10,8 @@ export const navLinkClass =
 export const iconHitAreaClass =
   "inline-flex items-center justify-center p-2.5 -m-2.5 cursor-pointer";
 
-// Shared Home/Shop/Contact/About nav list, reused identically by the
+// Shared Home/Shop/Contact nav list (the developer page is linked from
+// the footer only, audit decision D7), reused identically by the
 // primary header and the floating scrolled header.
 const HeaderDesktopNav = () => (
   <ul className="gap-10 lg:gap-12 xl:gap-20 items-center justify-between hidden lg:flex">
@@ -22,9 +23,6 @@ const HeaderDesktopNav = () => (
     </li>
     <li className={navLinkClass}>
       <Link to="/contact">Contact</Link>
-    </li>
-    <li className={navLinkClass}>
-      <Link to="/about">About</Link>
     </li>
   </ul>
 );

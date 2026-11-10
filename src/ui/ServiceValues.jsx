@@ -1,69 +1,66 @@
-import { Search, ShoppingBag, Sparkles, Truck } from "lucide-react";
+import { PackageSearch, Sparkles, Truck } from "lucide-react";
 import { motion } from "framer-motion";
 import RevealGroup from "./RevealGroup";
 import { CARD_REVEAL_VARIANTS } from "../utils/motion";
+import { FREE_SHIPPING_THRESHOLD, formatPrice } from "../utils/pricing";
 
 const MotionDiv = motion.div;
 
-// Only claims backed by real, working functionality — no free shipping,
-// no 24/7 support, no returns policy, no payment-method promises, since
-// none of those are actually implemented in this project.
-const SERVICE_VALUES = [
+// Brand notes, each backed by something the store really does: the curated
+// nine-collection catalog, the standard/express shipping with free delivery
+// over the threshold (utils/pricing.js), and order lookup by reference on
+// /profile. No returns policy, support hours or payment promises — none of
+// those exist. The cards are static, so they get no hover affordance.
+const SERVICE_NOTES = [
   {
     icon: Sparkles,
-    title: "Thoughtful Design",
+    title: "Selected with intent",
     description:
-      "Each piece selected for its form, materials, and everyday usefulness.",
+      "A focused edit across nine collections, each piece chosen for its form and materials.",
   },
   {
     icon: Truck,
-    title: "Considered Delivery",
-    description: "Choose standard or express shipping at checkout.",
+    title: "Delivered with care",
+    description: `Standard or express shipping, complimentary on orders over ${formatPrice(FREE_SHIPPING_THRESHOLD, { wholeUnits: true })}.`,
   },
   {
-    icon: ShoppingBag,
-    title: "Straightforward Checkout",
-    description: "A simple, guided checkout from cart to confirmation.",
-  },
-  {
-    icon: Search,
-    title: "Order Lookup",
-    description: "Search any order by ID, anytime.",
+    icon: PackageSearch,
+    title: "Always within reach",
+    description:
+      "Every order has its own reference, so you can look it up at any time.",
   },
 ];
 
-const ServiceValues = () => {
-  return (
-    <section className="bg-white border-b border-stone">
-      <section className="container-foundation section">
-        <RevealGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
-          {SERVICE_VALUES.map((item) => {
-            const Icon = item.icon;
-            return (
-              <MotionDiv
-                key={item.title}
-                variants={CARD_REVEAL_VARIANTS}
-                className="relative text-center sm:text-left bg-cream p-8 border border-stone hover:shadow-soft hover:-translate-y-1.5 transition-all duration-300"
-              >
-                <Icon
-                  className="mx-auto sm:mx-0 mb-4 text-brass"
-                  size={28}
-                  strokeWidth={1.5}
-                  aria-hidden="true"
-                />
-                <h3 className="font-medium text-lg text-charcoal mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-taupe text-sm leading-relaxed">
-                  {item.description}
-                </p>
-              </MotionDiv>
-            );
-          })}
-        </RevealGroup>
-      </section>
-    </section>
-  );
-};
+const ServiceValues = () => (
+  <section className="bg-cream border-b border-stone">
+    <div className="container-foundation section">
+      <RevealGroup className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+        {SERVICE_NOTES.map((item) => {
+          const Icon = item.icon;
+          return (
+            <MotionDiv
+              key={item.title}
+              variants={CARD_REVEAL_VARIANTS}
+              className="text-center md:text-left bg-ivory p-8 border border-stone"
+            >
+              <Icon
+                className="mx-auto md:mx-0 mb-4 text-brass"
+                size={28}
+                strokeWidth={1.5}
+                aria-hidden="true"
+              />
+              <h3 className="font-serif font-medium text-xl text-charcoal mb-2">
+                {item.title}
+              </h3>
+              <p className="text-taupe text-sm leading-relaxed">
+                {item.description}
+              </p>
+            </MotionDiv>
+          );
+        })}
+      </RevealGroup>
+    </div>
+  </section>
+);
 
 export default ServiceValues;
