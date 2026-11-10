@@ -1,161 +1,178 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import usePrefersReducedMotion from "../hooks/usePrefersReducedMotion";
 
-const CAROUSEL_TIERS = {
-  base: { active: { w: 240, h: 330 }, inactive: { w: 210, h: 290 }, gap: 16 },
-  sm: { active: { w: 330, h: 440 }, inactive: { w: 300, h: 400 }, gap: 32 },
-  lg: { active: { w: 404, h: 582 }, inactive: { w: 372, h: 486 }, gap: 48 },
-};
+// Lookbook carousel on a native CSS scroll-snap track: swipe/trackpad/
+// keyboard scrolling come from the browser, each look is rendered exactly
+// once (no looping clones in the accessibility tree or extra image
+// requests), and slide sizes are responsive classes rather than
+// matchMedia-driven pixel values. Prev/next/dots scroll the track to a real
+// slide; the active dot follows the scroll position.
+const SLIDE_WIDTH = "w-[240px] sm:w-[330px] lg:w-[404px]";
 
-function useCarouselTier() {
-  const [tier, setTier] = useState("base");
+const Carousel = ({ looks }) => {
+  const trackRef = useRef(null);
+  const slideRefs = useRef([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
+  // The active look is the slide whose left edge is nearest the track's
+  // scroll position (or the last one once scrolled to the end, since the
+  // final slides can't snap to the start).
   useEffect(() => {
-    const mqLg = window.matchMedia("(min-width: 1024px)");
-    const mqSm = window.matchMedia("(min-width: 640px)");
+    const track = trackRef.current;
+    if (!track) return;
 
+    let frame = 0;
     const update = () => {
-      if (mqLg.matches) setTier("lg");
-      else if (mqSm.matches) setTier("sm");
-      else setTier("base");
+      frame = 0;
+      const atEnd =
+        track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+      if (atEnd) {
+        setActiveIndex(looks.length - 1);
+        return;
+      }
+      const offsets = slideRefs.current.map(
+        (slide) => slide.offsetLeft - track.offsetLeft,
+      );
+      const nearest = offsets.reduce(
+        (best, offset, index) =>
+          Math.abs(offset - track.scrollLeft) <
+          Math.abs(offsets[best] - track.scrollLeft)
+            ? index
+            : best,
+        0,
+      );
+      setActiveIndex(nearest);
+    };
+    const handleScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
     };
 
-    update();
-    mqLg.addEventListener("change", update);
-    mqSm.addEventListener("change", update);
+    track.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
-      mqLg.removeEventListener("change", update);
-      mqSm.removeEventListener("change", update);
+      track.removeEventListener("scroll", handleScroll);
+      if (frame) cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [looks.length]);
 
-  return tier;
-}
-
-const Carousel = ({ children, clothes }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const navigate = useNavigate();
-
-  const tier = useCarouselTier();
-  const { active, inactive, gap } = CAROUSEL_TIERS[tier];
-  const pitch = inactive.w + gap;
-
-  const handleNext = () => {
-    const isLastSlide = currentIndex === children.length - 1;
-    const newIndex = isLastSlide ? 0 : currentIndex + 1;
-    setCurrentIndex(newIndex);
+  const goTo = (index) => {
+    const track = trackRef.current;
+    const slide = slideRefs.current[index];
+    if (!track || !slide) return;
+    track.scrollTo({
+      left: slide.offsetLeft - track.offsetLeft,
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    });
+    // Set immediately so the dots respond even when the target can't be
+    // scrolled to the start (the last slides on wide screens).
+    setActiveIndex(index);
   };
 
-  const handlePrevious = () => {
-    const isFirstSlide = currentIndex === 0;
-    const newIndex = isFirstSlide ? children.length - 1 : currentIndex - 1;
-    setCurrentIndex(newIndex);
-  };
-
-  // Create extended array to show images in a loop
-  const extendedChildren = [...children, ...children, ...children];
-  const offset = children.length;
+  const handlePrevious = () =>
+    goTo(activeIndex === 0 ? looks.length - 1 : activeIndex - 1);
+  const handleNext = () =>
+    goTo(activeIndex === looks.length - 1 ? 0 : activeIndex + 1);
 
   return (
-    <div className="relative">
-      <div>
-        <div
-          className="flex transition-transform duration-500 items-start"
-          style={{
-            gap: `${gap}px`,
-            transform: `translateX(-${(currentIndex + offset) * pitch}px)`,
-          }}
-        >
-          {extendedChildren.map((child, index) => {
-            const actualIndex = index % children.length;
-            const isActive = index === currentIndex + offset;
-            const size = isActive ? active : inactive;
-
-            return (
-              <div
-                key={index}
-                className="shrink-0 transition-all duration-500 relative"
-                style={{ width: size.w, height: size.h }}
-              >
-                {child}
-                {isActive && clothes && (
-                  <div className="absolute bottom-6 left-6 right-6 lg:right-auto bg-cream/90 backdrop-blur-sm p-4 ">
-                    <div className="flex items-center gap-3 mb-2 text-taupe text-sm">
-                      <span className="font-medium text-base">
-                        {"0"}
-                        {clothes[actualIndex].number}
-                      </span>
-                      <span>—</span>
-                      <span className="font-medium text-base">
-                        {clothes[actualIndex].category}
-                      </span>
-                    </div>
-                    <h3 className="font-serif text-3xl font-semibold text-espresso">
-                      {clothes[actualIndex].title}
-                    </h3>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        navigate(
-                          `/products?category=${clothes[actualIndex].categorySlug}`
-                        )
-                      }
-                      aria-label={`Shop ${clothes[actualIndex].category}`}
-                      className="absolute bottom-0 right-0 lg:-right-12 bg-brass hover:bg-brass/80 text-charcoal p-3 transition-colors inline-flex items-center justify-center cursor-pointer"
-                    >
-                      <ChevronRight className="w-6 h-6" aria-hidden="true" />
-                    </button>
-                  </div>
-                )}
+    <div
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Lookbook"
+      className="relative"
+    >
+      {/* tabIndex: a scrollable region must be keyboard-focusable so arrow
+          keys can scroll it. The scrollbar is hidden because the buttons
+          and dots below are the visible controls. */}
+      <div
+        ref={trackRef}
+        tabIndex={0}
+        className="flex gap-4 sm:gap-8 lg:gap-12 overflow-x-auto snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {looks.map((look, index) => {
+          const number = String(index + 1).padStart(2, "0");
+          return (
+            <div
+              key={look.categorySlug}
+              ref={(el) => (slideRefs.current[index] = el)}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${index + 1} of ${looks.length}: ${look.title}`}
+              className={`${SLIDE_WIDTH} shrink-0 snap-start relative aspect-4/5 bg-stone/20`}
+            >
+              <img
+                src={look.image}
+                srcSet={`${look.image.replace(".webp", "-480.webp")} 480w, ${look.image} 900w`}
+                // Matches SLIDE_WIDTH at each breakpoint.
+                sizes="(min-width: 1024px) 404px, (min-width: 640px) 330px, 240px"
+                alt={look.alt}
+                width="480"
+                height="600"
+                loading="lazy"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute bottom-4 left-4 right-4 bg-cream/90 backdrop-blur-sm p-4 flex items-end justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="flex items-center gap-3 mb-1 text-taupe text-sm font-medium">
+                    <span>{number}</span>
+                    <span aria-hidden="true">—</span>
+                    <span>{look.category}</span>
+                  </p>
+                  <h3 className="font-serif text-2xl sm:text-3xl font-semibold text-espresso">
+                    {look.title}
+                  </h3>
+                </div>
+                <Link
+                  to={`/products?category=${look.categorySlug}`}
+                  aria-label={`Shop ${look.category}`}
+                  className="shrink-0 bg-brass hover:bg-brass/80 text-charcoal p-3 transition-colors inline-flex items-center justify-center"
+                >
+                  <ChevronRight className="w-6 h-6" aria-hidden="true" />
+                </Link>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
 
-      <button
-        type="button"
-        onClick={handlePrevious}
-        aria-label="Previous look"
-        className="absolute left-1 lg:left-4 top-1/2 -translate-y-1/2 bg-cream hover:bg-stone/40 p-3 rounded-full shadow-soft transition-colors z-10 cursor-pointer"
-      >
-        <ChevronLeft className="w-6 h-6 text-brass" aria-hidden="true" />
-      </button>
-      <button
-        type="button"
-        onClick={handleNext}
-        aria-label="Next look"
-        className="absolute right-1 lg:right-4 top-1/2 -translate-y-1/2 bg-cream hover:bg-stone/40 p-3 rounded-full shadow-soft transition-colors z-10 cursor-pointer"
-      >
-        <ChevronRight className="w-6 h-6 text-brass" aria-hidden="true" />
-      </button>
-
-      <div
-        role="group"
-        aria-label="Choose a look"
-        className="mt-4 lg:mt-0 lg:absolute lg:left-[440px] lg:bottom-0 w-full lg:w-fit"
-      >
-        <div className="flex justify-center lg:justify-start gap-3">
-          {children.map((_, index) => (
+      <div className="mt-4 flex items-center justify-center lg:justify-start gap-2">
+        <button
+          type="button"
+          onClick={handlePrevious}
+          aria-label="Previous look"
+          className="bg-cream hover:bg-stone/40 p-3 rounded-full shadow-soft transition-colors cursor-pointer"
+        >
+          <ChevronLeft className="w-5 h-5 text-brass-ink" aria-hidden="true" />
+        </button>
+        <div role="group" aria-label="Choose a look" className="flex gap-1">
+          {looks.map((look, index) => (
             <button
-              key={index}
+              key={look.categorySlug}
               type="button"
-              onClick={() => setCurrentIndex(index)}
-              aria-label={`Go to look ${index + 1}`}
-              aria-pressed={currentIndex === index}
+              onClick={() => goTo(index)}
+              aria-label={`Go to look ${index + 1}: ${look.title}`}
+              aria-pressed={activeIndex === index}
               className={`cursor-pointer p-3 rounded-full ${
-                currentIndex === index ? "border border-brass" : ""
+                activeIndex === index ? "border border-brass" : ""
               }`}
             >
               <span
                 className={`block w-3 h-3 rounded-full ${
-                  currentIndex === index ? "bg-brass" : "bg-stone"
+                  activeIndex === index ? "bg-brass" : "bg-stone"
                 }`}
               />
             </button>
           ))}
         </div>
+        <button
+          type="button"
+          onClick={handleNext}
+          aria-label="Next look"
+          className="bg-cream hover:bg-stone/40 p-3 rounded-full shadow-soft transition-colors cursor-pointer"
+        >
+          <ChevronRight className="w-5 h-5 text-brass-ink" aria-hidden="true" />
+        </button>
       </div>
     </div>
   );

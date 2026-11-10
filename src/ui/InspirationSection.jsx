@@ -4,31 +4,34 @@ import Carousel from "./Carousel";
 import Reveal from "./Reveal";
 import { STAGGER_MS } from "../utils/motion";
 
-const clothes = [
+// Caption numbers come from this order (01-04), so reordering here keeps
+// them sequential. `alt` describes the photo itself; the caption already
+// carries the look's title and category.
+const looks = [
   {
     image: "/images/lookbook-dresses.webp",
-    number: "2",
+    alt: "Model in a champagne satin slip dress beside a sunlit linen curtain",
     category: "Dresses",
     title: "Golden Hour",
     categorySlug: "womens-dresses",
   },
   {
     image: "/images/lookbook-jewellery.webp",
-    number: "3",
+    alt: "Stacked gold rings and a fine gold pendant necklace resting on travertine",
     category: "Jewellery",
     title: "Fine Lines",
     categorySlug: "womens-jewellery",
   },
   {
     image: "/images/lookbook-shoes.webp",
-    number: "4",
+    alt: "Taupe leather block-heel pumps on a sunlit stone plinth",
     category: "Footwear",
     title: "Every Step",
     categorySlug: "womens-shoes",
   },
   {
     image: "/images/lookbook-bags.webp",
-    number: "1",
+    alt: "Structured camel tote on a travertine side table beside dried flowers",
     category: "Handbags",
     title: "The Structured Tote",
     categorySlug: "womens-bags",
@@ -67,24 +70,10 @@ const InspirationSection = () => {
           </Reveal>
         </div>
 
-        <div className="lg:col-span-2 w-full flex justify-center lg:block overflow-hidden">
-          <Carousel clothes={clothes}>
-            {clothes.map((clothing, idx) => (
-              <img
-                key={idx}
-                src={clothing.image}
-                srcSet={`${clothing.image.replace(".webp", "-480.webp")} 480w, ${clothing.image} 900w`}
-                // Matches Carousel.jsx's CAROUSEL_TIERS breakpoints — the
-                // active slide's width at each tier (inactive slides are
-                // smaller, but sizing for the largest keeps every instance
-                // sharp).
-                sizes="(min-width: 1024px) 404px, (min-width: 640px) 330px, 240px"
-                alt={clothing.title}
-                loading="lazy"
-                className="w-full h-full object-cover"
-              />
-            ))}
-          </Carousel>
+        {/* min-w-0 lets the grid cell shrink so the carousel's track
+            scrolls inside it instead of widening the page. */}
+        <div className="lg:col-span-2 min-w-0">
+          <Carousel looks={looks} />
         </div>
       </div>
     </section>
