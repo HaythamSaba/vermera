@@ -9,23 +9,19 @@ const linkClass = "hover:text-brass transition-colors duration-300";
 
 const Footer = () => {
   return (
-    <div className="relative isolate pt-50 overflow-x-hidden">
-      {/* Static watermark (it used to parallax, which loaded GSAP on every
-          route; the hero keeps the site's one parallax). Fluid size:
-          clamp(3.25rem,14vw,12.5rem) never overflows a 320px viewport and
-          reaches the original 200px from ~1428px up. */}
+    <div className="overflow-x-hidden">
+      {/* Static, in-flow watermark: it sizes its own band (no fixed 200px
+          spacer, no absolute positioning), so the gap above the footer is
+          just the wordmark. clamp(3rem,10vw,8rem) fits a 320px viewport
+          and caps at 128px on wide screens. */}
       <p
         aria-hidden="true"
-        className="absolute top-[12%] md:top-[2%] ml-20 left-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-[clamp(3.25rem,14vw,12.5rem)] text-taupe/40 text-center tracking-widest select-none pointer-events-none -z-10 whitespace-nowrap"
+        className="pt-12 font-serif leading-none text-[clamp(3rem,10vw,8rem)] text-taupe/40 text-center tracking-widest select-none whitespace-nowrap"
       >
         VERMERA
       </p>
 
-      <hr className="border-t border-stone" />
-
-      <footer
-        className="relative z-10 bg-cream text-charcoal shadow-[0_-10px_30px_10px_rgba(0,0,0,0.1)]"
-      >
+      <footer className="bg-cream text-charcoal border-t border-stone">
         <div className="container-foundation grid gap-10 sm:grid-cols-2 lg:grid-cols-3 py-12 lg:py-20">
           <div>
             <Logo size="default" className="mb-4" />
@@ -34,7 +30,7 @@ const Footer = () => {
             </p>
           </div>
 
-          <div aria-label="Shop">
+          <nav aria-label="Shop">
             <p className="text-taupe font-medium mb-4">Shop</p>
             <ul className="grid grid-cols-2 gap-3 ">
               <li>
@@ -50,9 +46,9 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
-          <div aria-label="Customer care">
+          <nav aria-label="Customer care">
             <p className="text-taupe font-medium mb-4">Customer Care</p>
             <ul className="flex flex-col gap-3">
               <li>
@@ -75,17 +71,23 @@ const Footer = () => {
                   Contact Us
                 </Link>
               </li>
-              <li>
-                <Link to="/about" className={linkClass}>
-                  About the developer
-                </Link>
-              </li>
             </ul>
-          </div>
+          </nav>
         </div>
+        {/* Colophon: the developer link is about the site, not customer
+            care, so it lives here rather than in a link group (D7). */}
         <div className="border-t border-stone">
-          <div className="container-foundation py-6 text-sm text-taupe text-center">
-            © {new Date().getFullYear()} Vermera. All rights reserved.
+          <div className="container-foundation py-6 text-sm text-taupe flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p>© {new Date().getFullYear()} Vermera. All rights reserved.</p>
+            <p>
+              A portfolio project ·{" "}
+              <Link
+                to="/about"
+                className="underline underline-offset-4 decoration-stone hover:text-charcoal hover:decoration-charcoal transition-colors"
+              >
+                About the developer
+              </Link>
+            </p>
           </div>
         </div>
       </footer>
