@@ -170,13 +170,12 @@ const About = () => {
             delay={STAGGER_MS * 2}
             className="text-taupe text-lg leading-relaxed"
           >
-            A few decisions I&apos;m glad I made along the way: filter, sort,
-            and category state all live in the URL, so results are shareable and
-            back/forward just works; every interactive element is a real,
-            keyboard-reachable control with correct ARIA rather than a styled
-            div; and scroll animation is deliberately split — GSAP and
-            ScrollTrigger for scroll-position effects, Framer Motion for
-            open/close state — instead of mixing the two on one element.
+            A few decisions I&apos;m glad I made along the way: category,
+            price, sort and search all live in the URL, so results are
+            shareable and back/forward just works; interactive elements are
+            real buttons and links, with a visible focus ring for keyboard
+            users; and all motion runs on one library, Framer Motion, scaled
+            back when someone prefers reduced motion.
           </Reveal>
         </div>
       </AboutSection>
