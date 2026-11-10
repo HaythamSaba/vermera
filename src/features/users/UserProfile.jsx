@@ -219,7 +219,7 @@ const Profile = () => {
                         <Icon className="w-5 h-5" aria-hidden="true" />
                         {label}
                       </dt>
-                      <dd className="text-charcoal min-w-0 break-words">
+                      <dd className="text-charcoal min-w-0 wrap-break-word">
                         {value || "—"}
                       </dd>
                     </div>
