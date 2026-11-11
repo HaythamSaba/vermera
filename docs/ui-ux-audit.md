@@ -236,7 +236,7 @@ _Decided 2026-11-11. These are now the requirements for the related fixes. No fi
 
 | # | Question | Decision | Affects |
 |---|---|---|---|
-| A | Keep quick-add on product cards? | **Remove quick-add from product cards entirely.** Cards show the image, name, price and the wishlist heart only. The quantity stepper exists only in the cart. | V3 |
+| A | Keep quick-add on product cards? | **Remove quick-add from product cards entirely.** Cards show the image, name, price and the wishlist heart only. The quantity stepper exists only in the cart. _Clarified while fixing V3: a quiet "Sold out" badge stays on the card; the category chip and the Low stock / New badges are removed (low stock still shows on the product page)._ | V3 |
 | B | "Bag" or "cart" in the copy? | **"Bag" everywhere:** labels, toasts, page titles, aria-labels, and the `ShoppingBag` icon. | V6 |
 | C | What is `/profile`? | **A persisted "Account" page:** details with the edit form, order history, and order lookup. Remove the name prompt and retire `userSlice.username`. | V4 |
 | D | Sizes on apparel and shoes? | **An honest note, no invented sizes.** On apparel and shoe product pages, put the line "One size — sizing isn't available in this demo catalog." inside the Details accordion, not near the price. | V9 |
