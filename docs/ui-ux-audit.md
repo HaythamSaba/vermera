@@ -232,16 +232,18 @@ The loop is short. The friction isn't the number of clicks. It's how the steps *
 
 ## 5. Decisions
 
-_Pending. Record each answer here; it then becomes the requirement for the related fix._
+_Decided 2026-11-11. These are now the requirements for the related fixes. No fixes have been started._
 
-| # | Question | Options | Decision | Affects |
-|---|---|---|---|---|
-| A | Keep quick-add on product cards? | Remove it (recommended) / a "Quick add" text link on desktop hover only / keep it as is | _Pending_ | V3 |
-| B | "Bag" or "cart" in the copy? | Bag (recommended) / Cart | _Pending_ | V6 |
-| C | What is `/profile`? | A persisted "Account" page with no name prompt (recommended) / keep the session name prompt | _Pending_ | V4 |
-| D | Sizes on apparel and shoes? | Honest "one size, demo catalog" note (recommended) / hide size-dependent categories / labelled demo sizes | _Pending_ | V9 |
-| E | Contact page frame? | Store "Client care" with an illustrative address / point to the About page and drop the form | _Pending_ | V12 |
-| F | Required checkout fields? | Email required, phone optional (recommended) / keep phone required | _Pending_ | V13 |
+| # | Question | Decision | Affects |
+|---|---|---|---|
+| A | Keep quick-add on product cards? | **Remove quick-add from product cards entirely.** Cards show the image, name, price and the wishlist heart only. The quantity stepper exists only in the cart. | V3 |
+| B | "Bag" or "cart" in the copy? | **"Bag" everywhere:** labels, toasts, page titles, aria-labels, and the `ShoppingBag` icon. | V6 |
+| C | What is `/profile`? | **A persisted "Account" page:** details with the edit form, order history, and order lookup. Remove the name prompt and retire `userSlice.username`. | V4 |
+| D | Sizes on apparel and shoes? | **An honest note, no invented sizes.** On apparel and shoe product pages, put the line "One size — sizing isn't available in this demo catalog." inside the Details accordion, not near the price. | V9 |
+| E | Contact page frame? | **Contact becomes a "Client care" page** with delivery and returns information and **no form**. Remove the personal email address. Add one line, "Vermera is a portfolio project by Haytham Saba", linking to the About the developer page. | V12 |
+| F | Required checkout fields? | **Email required, phone optional.** | V13 |
+
+**Note on A / V3:** this intentionally reverses the always-visible card action introduced by round 1's V6 (see the [archived audit](archive/ui-ux-audit-2026-11-05.md)). That action replaced a hover-only overlay at a time when the card wasn't a real link. Now the whole card is a real link to the product page, so the extra action is no longer needed.
 
 ---
 
