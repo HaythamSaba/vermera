@@ -26,7 +26,7 @@ const ProductsPage = () => {
   useMetaDescription(
     category
       ? `Shop ${getCategoryLabel(category).toLowerCase()} at Vermera — filter by price and sort by price or name.`
-      : "Shop the full Vermera catalog — bags, dresses, jewelry, shoes, watches, and beauty essentials. Filter by category and price, or sort and search.",
+      : "Shop the full Vermera catalog — bags, dresses, jewellery, shoes, watches, and beauty essentials. Filter by category and price, or sort and search.",
   );
   // Unknown or retired values (old links with ?sort=newest) read as Featured.
   const sort = normalizeSort(searchParams.get("sort"));

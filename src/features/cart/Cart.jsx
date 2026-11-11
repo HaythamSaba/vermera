@@ -32,7 +32,7 @@ const Cart = ({ embedded = false }) => {
       ? null
       : cart.length > 0
         ? `Your Vermera bag — Items: ${cartItemCount}, Subtotal: ${formatPrice(cartTotal)}. Review and proceed to checkout.`
-        : "Your Vermera bag is empty — browse the shop to add bags, dresses, jewelry, shoes, watches, and beauty essentials.",
+        : "Your Vermera bag is empty — browse the shop to add bags, dresses, jewellery, shoes, watches, and beauty essentials.",
   );
 
   const handleCheckout = () => {
