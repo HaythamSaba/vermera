@@ -178,6 +178,12 @@ const ProductItem = ({ product, staggerIndex = 0 }) => {
               // Decorative inside the link: the <h3> below already names it,
               // so a filled alt would make the link announce the name twice.
               alt=""
+              // Cards appear in grids of up to 8+ (Shop, The Edit, related,
+              // recently viewed), mostly below the fold. Lazy loading defers
+              // those; the 4:5 box above reserves the space, so there's no
+              // layout shift, and on-screen cards still load immediately.
+              loading="lazy"
+              decoding="async"
               // Hover is a gentle 1.02 zoom only. motion-safe/motion-reduce
               // gate the zoom and fade on the OS reduced-motion setting, since
               // CSS transitions aren't covered by framer's MotionConfig.
