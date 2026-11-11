@@ -32,8 +32,17 @@ const SERVICE_NOTES = [
 ];
 
 const ServiceValues = () => (
-  <section className="bg-cream border-b border-stone">
+  <section
+    aria-labelledby="service-notes-heading"
+    className="bg-cream border-b border-stone"
+  >
     <div className="container-foundation section">
+      {/* Screen-reader heading so the three note <h3>s sit under a section
+          <h2> instead of following the lookbook's slide headings in the
+          outline. Visually the cards speak for themselves. */}
+      <h2 id="service-notes-heading" className="sr-only">
+        Why Vermera
+      </h2>
       <RevealGroup className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
         {SERVICE_NOTES.map((item) => {
           const Icon = item.icon;

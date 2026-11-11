@@ -61,7 +61,7 @@ const SearchModal = ({ isOpen, onClose }) => {
         ref={modalRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Search products"
+        aria-labelledby="search-dialog-title"
         className="bg-cream shadow-soft p-8 w-full max-w-2xl mx-4 relative"
         onClick={(e) => e.stopPropagation()}
       >
@@ -74,7 +74,9 @@ const SearchModal = ({ isOpen, onClose }) => {
           <X size={24} className="cursor-pointer" aria-hidden="true" />
         </button>
 
-        <SectionHeader title="Search Products" icon="" />
+        {/* The dialog's accessible name comes from this visible heading
+            (aria-labelledby above), so the two can't drift apart. */}
+        <SectionHeader id="search-dialog-title" title="Search Products" />
 
         <form
           role="search"
