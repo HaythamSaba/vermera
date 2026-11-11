@@ -29,8 +29,6 @@ const MainButton = ({
       "bg-transparent text-espresso border border-espresso hover:bg-espresso hover:text-cream",
     ghost:
       "bg-transparent text-brass-ink border border-transparent hover:bg-brass/10",
-    danger:
-      "bg-cream text-red-600 border border-red-600/70 hover:text-cream hover:bg-red-600",
     quiet:
       "bg-espresso border border-espresso text-cream hover:bg-transparent hover:text-espresso",
     // Same idea as "quiet", inverted for use on dark surfaces (e.g. the

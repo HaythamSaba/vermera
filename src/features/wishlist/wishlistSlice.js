@@ -76,10 +76,32 @@ const wishlistSlice = createSlice({
       state.items = [];
       saveToLocalStorage(state.items);
     },
+
+    // Undo for a single removal: puts the exact item back at its old
+    // position (same contract as cartSlice's restoreItem).
+    restoreItem: (state, action) => {
+      const { item, index } = action.payload;
+      if (state.items.some((saved) => saved.sku === item.sku)) return;
+      const at = Math.min(Math.max(index, 0), state.items.length);
+      state.items.splice(at, 0, item);
+      saveToLocalStorage(state.items);
+    },
+
+    // Undo for "Clear all": restores the previous list, keeping anything
+    // saved since (so the undo can't drop a newer item).
+    restoreItems: (state, action) => {
+      const previous = action.payload;
+      const newer = state.items.filter(
+        (item) => !previous.some((saved) => saved.sku === item.sku),
+      );
+      state.items = [...previous, ...newer];
+      saveToLocalStorage(state.items);
+    },
   },
 });
 
-export const { addItem, removeItem, clearWishlist } = wishlistSlice.actions;
+export const { addItem, removeItem, clearWishlist, restoreItem, restoreItems } =
+  wishlistSlice.actions;
 
 export default wishlistSlice.reducer;
 

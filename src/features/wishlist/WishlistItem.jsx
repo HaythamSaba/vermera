@@ -34,22 +34,33 @@ const WishlistItem = ({ item }) => {
   };
 
   return (
-    <div className="flex gap-4 p-3 border border-stone hover:shadow-soft transition-shadow duration-300">
-      <Link to={`/products/${sku}`} className="shrink-0">
+    <div className="flex gap-4 p-3 border border-stone">
+      {/* Image and name both link to the product; the image link is
+          aria-hidden/untabbable so keyboard and screen-reader users get one
+          link per row, not two (same as CartItem). */}
+      <Link
+        to={`/products/${sku}`}
+        tabIndex={-1}
+        aria-hidden="true"
+        className="shrink-0"
+      >
         <img
           src={image}
-          alt={productName}
+          alt=""
           className="w-20 h-20 object-cover border border-stone"
         />
       </Link>
 
       <div className="flex-1">
         <div className="flex justify-between items-start mb-1">
-          <Link to={`/products/${sku}`}>
-            <h3 className="font-medium text-charcoal line-clamp-1">
+          <h3 className="font-medium text-charcoal line-clamp-1">
+            <Link
+              to={`/products/${sku}`}
+              className="hover:underline underline-offset-4 decoration-1"
+            >
               {productName}
-            </h3>
-          </Link>
+            </Link>
+          </h3>
           <RemoveWishlistItem sku={sku} />
         </div>
 

@@ -1,17 +1,19 @@
-import { Heart, Trash2 } from "lucide-react";
+import { Heart } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import WishlistItem from "./WishlistItem";
 import EmptyWishlist from "./EmptyWishlist";
-import { clearWishlist, getWishlist } from "./wishlistSlice";
+import { clearWishlist, getWishlist, restoreItems } from "./wishlistSlice";
 import MainButton from "../../ui/MainButton";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
+import { useToast } from "../../hooks/useToast";
 
 const Wishlist = () => {
   useDocumentTitle("Wishlist");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const showToast = useToast();
 
   const wishlist = useSelector(getWishlist);
   useMetaDescription(
@@ -20,10 +22,17 @@ const Wishlist = () => {
       : "Your Vermera wishlist is empty — browse the shop and save pieces you want to revisit.",
   );
 
+  // No confirm() dialog: clearing is instant and reversible from the
+  // toast's Undo, the same pattern as removing a single piece.
   const handleClearWishlist = () => {
-    if (window.confirm("Are you sure you want to clear your wishlist?")) {
-      dispatch(clearWishlist());
-    }
+    const previous = wishlist;
+    dispatch(clearWishlist());
+    showToast("Wishlist cleared", {
+      action: {
+        label: "Undo",
+        onClick: () => dispatch(restoreItems(previous)),
+      },
+    });
   };
 
   if (wishlist.length === 0) return <EmptyWishlist />;
@@ -31,19 +40,18 @@ const Wishlist = () => {
   return (
     <div className="container-foundation section max-w-2xl mx-auto">
       <div className="bg-cream border border-stone p-6 sm:p-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-serif font-medium text-espresso flex items-center">
-            <Heart className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
+        <div className="flex items-center justify-between gap-4 mb-4">
+          <h1 className="text-3xl font-serif font-medium text-espresso flex items-center">
+            <Heart className="w-6 h-6 mr-2 text-brass" aria-hidden="true" />
             Wishlist
-          </h2>
-          <MainButton
-            variant="danger"
+          </h1>
+          <button
+            type="button"
             onClick={handleClearWishlist}
-            title="Clear wishlist"
+            className="min-h-11 px-1 text-sm text-taupe underline underline-offset-4 decoration-stone hover:text-charcoal hover:decoration-charcoal transition-colors cursor-pointer"
           >
-            <Trash2 className="w-4 h-4" />
-            Clear Wishlist
-          </MainButton>
+            Clear all
+          </button>
         </div>
 
         <div className="space-y-4 mb-6 overflow-y-auto">
