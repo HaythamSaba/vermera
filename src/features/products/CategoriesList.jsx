@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router";
-import { CATEGORY_LABELS, supportedCategories } from "./categories";
+import { getCategoryLabel, supportedCategories } from "./categories";
 
 const tabClass = (isActive) =>
   `shrink-0 py-3 -mb-px border-b-2 whitespace-nowrap text-sm cursor-pointer transition-colors duration-300 ${
@@ -42,7 +42,7 @@ function CategoriesList() {
           className={tabClass(activeCategory === slug)}
           onClick={() => handleSelect(slug)}
         >
-          {slug === "all" ? "All" : (CATEGORY_LABELS[slug] ?? slug)}
+          {slug === "all" ? "All" : getCategoryLabel(slug)}
         </button>
       ))}
     </div>

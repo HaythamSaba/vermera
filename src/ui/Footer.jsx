@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import {
-  CATEGORY_LABELS,
+  getCategoryLabel,
   supportedCategories,
 } from "../features/products/categories";
 import Logo from "./Logo";
@@ -41,7 +41,7 @@ const Footer = () => {
               {supportedCategories.map((slug) => (
                 <li key={slug}>
                   <Link to={`/products?category=${slug}`} className={linkClass}>
-                    {CATEGORY_LABELS[slug] ?? slug}
+                    {getCategoryLabel(slug)}
                   </Link>
                 </li>
               ))}

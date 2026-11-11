@@ -3,7 +3,7 @@ import CategoriesList from "./CategoriesList";
 import Products from "./Products";
 import PriceFilterPanel from "./PriceFilterPanel";
 import ProductSearch from "./ProductSearch";
-import { CATEGORY_LABELS } from "./categories";
+import { getCategoryLabel } from "./categories";
 import { SORT_OPTIONS } from "./sortOptions";
 import FallbackCatalogNotice from "../../ui/FallbackCatalogNotice";
 import { formatPrice } from "../../utils/pricing";
@@ -17,7 +17,7 @@ function getActiveFilterChips({ category, minPrice, maxPrice, searchQuery }) {
   if (category) {
     chips.push({
       key: "category",
-      label: CATEGORY_LABELS[category] ?? category,
+      label: getCategoryLabel(category),
       remove: ["category"],
     });
   }

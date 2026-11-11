@@ -23,6 +23,7 @@ import {
   toWishlistItem,
 } from "../wishlist/wishlistSlice";
 import { formatPrice } from "../../utils/pricing";
+import { getCategoryLabel } from "./categories";
 
 const MotionDiv = motion.div;
 
@@ -195,7 +196,7 @@ const ProductItem = ({ product, staggerIndex = 0 }) => {
               background color. */}
           {category && (
             <span className="absolute bottom-3 left-3 z-10 bg-espresso/90 text-cream text-[11px] font-medium uppercase tracking-wider px-2 py-1 rounded-none">
-              {category}
+              {getCategoryLabel(category)}
             </span>
           )}
 

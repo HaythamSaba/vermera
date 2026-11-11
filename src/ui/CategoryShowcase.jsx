@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { getProducts } from "../services/apiProducts";
 import {
-  CATEGORY_LABELS,
+  getCategoryLabel,
   supportedCategories,
 } from "../features/products/categories";
 import Reveal from "./Reveal";
@@ -55,7 +55,7 @@ function CategoryShowcase() {
       <RevealGroup className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
         {supportedCategories.map((slug, index) => {
           const product = categoryProducts[slug];
-          const label = CATEGORY_LABELS[slug] ?? slug;
+          const label = getCategoryLabel(slug);
           const isFeatured = index === 0;
 
           return (

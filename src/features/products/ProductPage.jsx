@@ -9,7 +9,7 @@ import WishlistButton from "../../ui/WishlistButton";
 import ProductGallery from "./ProductGallery";
 import ProductItem from "./ProductItem";
 import QuantitySelector from "./QuantitySelector";
-import { CATEGORY_LABELS } from "./categories";
+import { getCategoryLabel } from "./categories";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
 import { useToast } from "../../hooks/useToast";
@@ -165,9 +165,7 @@ const ProductPage = () => {
     returnPolicy,
   } = product;
 
-  const categoryLabel =
-    CATEGORY_LABELS[category] ??
-    category.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  const categoryLabel = getCategoryLabel(category);
 
   const isOutOfStock = stock === 0;
   const isLowStock = !isOutOfStock && availabilityStatus === "Low Stock";

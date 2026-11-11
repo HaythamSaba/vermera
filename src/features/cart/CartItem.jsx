@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import DeleteItem from "./DeleteItem";
 import UpdateItemQuantity from "./UpdateItemQuantity";
 import { formatPrice } from "../../utils/pricing";
+import { getCategoryLabel } from "../products/categories";
 
 const CartItem = ({ item }) => {
   const {
@@ -46,7 +47,7 @@ const CartItem = ({ item }) => {
           <DeleteItem sku={sku} />
         </div>
 
-        <p className="text-sm text-taupe capitalize mb-2">{category}</p>
+        <p className="text-sm text-taupe mb-2">{getCategoryLabel(category)}</p>
 
         <div className="flex justify-between items-center">
           <UpdateItemQuantity sku={sku} quantity={quantity} max={stock} />

@@ -25,3 +25,18 @@ export const CATEGORY_LABELS = {
   beauty: "Beauty",
   sunglasses: "Sunglasses",
 };
+
+// The shopper-facing name for a category slug. Every place that displays a
+// category goes through this, so a raw DummyJSON slug ("womens-watches")
+// never reaches the screen. Unknown slugs (an edited ?category= URL, data
+// outside the allowlist) are title-cased rather than shown raw; a missing
+// value gives "".
+export function getCategoryLabel(slug) {
+  if (!slug) return "";
+  return (
+    CATEGORY_LABELS[slug] ??
+    String(slug)
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase())
+  );
+}

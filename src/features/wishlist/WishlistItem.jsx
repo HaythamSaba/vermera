@@ -6,6 +6,7 @@ import RemoveWishlistItem from "./RemoveWishlistItem";
 import { useToast } from "../../hooks/useToast";
 import { addItem, isInCart, toCartItem } from "../cart/cartSlice";
 import { formatPrice } from "../../utils/pricing";
+import { getCategoryLabel } from "../products/categories";
 
 const WishlistItem = ({ item }) => {
   const dispatch = useDispatch();
@@ -52,7 +53,7 @@ const WishlistItem = ({ item }) => {
           <RemoveWishlistItem sku={sku} />
         </div>
 
-        <p className="text-sm text-taupe capitalize mb-2">{category}</p>
+        <p className="text-sm text-taupe mb-2">{getCategoryLabel(category)}</p>
 
         <div className="flex justify-between items-center gap-3">
           <div>

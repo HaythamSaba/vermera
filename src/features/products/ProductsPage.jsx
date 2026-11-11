@@ -10,7 +10,7 @@ import { useState } from "react";
 import ProductsSection from "./ProductsSection";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
-import { CATEGORY_LABELS } from "./categories";
+import { getCategoryLabel } from "./categories";
 import { DEFAULT_SORT, normalizeSort } from "./sortOptions";
 
 const PAGE_SIZE = 8;
@@ -25,7 +25,7 @@ const ProductsPage = () => {
   const category = searchParams.get("category");
   useMetaDescription(
     category
-      ? `Shop ${(CATEGORY_LABELS[category] ?? category.replace(/-/g, " ")).toLowerCase()} at Vermera — filter by price and sort by price or name.`
+      ? `Shop ${getCategoryLabel(category).toLowerCase()} at Vermera — filter by price and sort by price or name.`
       : "Shop the full Vermera catalog — bags, dresses, jewelry, shoes, watches, and beauty essentials. Filter by category and price, or sort and search.",
   );
   // Unknown or retired values (old links with ?sort=newest) read as Featured.

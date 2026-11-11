@@ -4,6 +4,7 @@ import { STORAGE_KEYS } from "../../utils/storageKeys";
 import { useLoaderData, useNavigate } from "react-router";
 import MainButton from "../../ui/MainButton";
 import UpdateOrder from "./UpdateOrder";
+import { getCategoryLabel } from "../products/categories";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
 import {
@@ -149,9 +150,11 @@ const OrderConfirmation = () => {
                   <h3 className="font-medium text-charcoal">
                     {item.productName}
                   </h3>
-                  <p className="text-sm text-taupe capitalize">
-                    Category: {item.category}
-                  </p>
+                  {item.category && (
+                    <p className="text-sm text-taupe">
+                      {getCategoryLabel(item.category)}
+                    </p>
+                  )}
                   <div className="flex justify-between items-center mt-2">
                     <span className="text-sm text-taupe">
                       {formatPrice(item.price)} × {item.quantity}

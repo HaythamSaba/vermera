@@ -274,7 +274,7 @@ _Decided 2026-11-11. These are now the requirements for the related fixes. No fi
 2. **V2, mobile listing.** Two columns and no blurred template banner. This is the first screen a recruiter sees on a phone, and it would immediately look like a real store.
 3. **V3, quiet product cards.** Image, name and price only. Of all the changes here, it moves the look furthest toward the quiet-luxury direction.
 
-V4 (the account page) is a close fourth: it's the last visible remnant of the Redux-demo origins.
+V4 (the account page) is a close fourth: it's the last visibV1le remnant of the Redux-demo origins.
 
 ---
 
