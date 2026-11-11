@@ -98,7 +98,7 @@ const HeaderMobileDrawer = ({
                   </button>
                 </li>
                 <li>
-                  <CartIcon onClick={onClose}>Cart</CartIcon>
+                  <CartIcon onClick={onClose}>Bag</CartIcon>
                 </li>
               </ul>
             </nav>

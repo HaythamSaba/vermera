@@ -1,4 +1,4 @@
-import { ShoppingCart } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
 import AnimatedCount from "./AnimatedCount";
@@ -14,10 +14,10 @@ const CartIcon = ({ className = "", onClick, children }) => {
       to="/cart"
       onClick={onClick}
       className={`inline-flex items-center gap-3 ${className}`}
-      aria-label={`Cart, ${totalCartQuantity} item${totalCartQuantity === 1 ? "" : "s"}`}
+      aria-label={`Bag, ${totalCartQuantity} item${totalCartQuantity === 1 ? "" : "s"}`}
     >
       <span className="relative inline-flex">
-        <ShoppingCart className="cursor-pointer" aria-hidden="true" />
+        <ShoppingBag className="cursor-pointer" aria-hidden="true" />
         {totalCartQuantity > 0 && (
           <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-brass text-charcoal text-[10px] font-semibold leading-none">
             <AnimatedCount value={totalCartQuantity} />

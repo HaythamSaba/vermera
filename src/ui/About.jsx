@@ -162,7 +162,7 @@ const About = () => {
             Vermera is a portfolio project, not a real store — a &quot;quiet
             luxury&quot; fashion catalog built to demonstrate frontend and
             product-engineering skills. There&apos;s no backend: the catalog is
-            sourced live from DummyJSON, and the cart, wishlist, and order
+            sourced live from DummyJSON, and the bag, wishlist, and order
             records all persist to localStorage.
           </Reveal>
           <Reveal

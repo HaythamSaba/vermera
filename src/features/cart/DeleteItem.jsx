@@ -26,7 +26,7 @@ const DeleteItem = ({ sku }) => {
     <button
       type="button"
       onClick={handleDelete}
-      aria-label={`Remove ${cart.find((line) => line.sku === sku)?.productName ?? "item"} from cart`}
+      aria-label={`Remove ${cart.find((line) => line.sku === sku)?.productName ?? "item"} from bag`}
       className="min-h-11 px-1 text-sm text-taupe underline underline-offset-4 decoration-stone hover:text-charcoal hover:decoration-charcoal transition-colors cursor-pointer"
     >
       Remove

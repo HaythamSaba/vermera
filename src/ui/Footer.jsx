@@ -53,7 +53,7 @@ const Footer = () => {
             <ul className="flex flex-col gap-3">
               <li>
                 <Link to="/cart" className={linkClass}>
-                  Cart
+                  Bag
                 </Link>
               </li>
               <li>

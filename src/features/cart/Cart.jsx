@@ -1,4 +1,4 @@
-import { ShoppingCart } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import CartItem from "./CartItem";
@@ -21,7 +21,7 @@ import {
 // reuse inside another page's own layout (e.g. the Profile sidebar). When
 // embedded, the host page owns the document title, so skip setting our own.
 const Cart = ({ embedded = false }) => {
-  useDocumentTitle(embedded ? null : "Cart");
+  useDocumentTitle(embedded ? null : "Bag");
   const navigate = useNavigate();
 
   const cart = useSelector(getCart);
@@ -31,8 +31,8 @@ const Cart = ({ embedded = false }) => {
     embedded
       ? null
       : cart.length > 0
-        ? `Your Vermera cart — Items: ${cartItemCount}, Subtotal: ${formatPrice(cartTotal)}. Review and proceed to checkout.`
-        : "Your Vermera cart is empty — browse the shop to add bags, dresses, jewelry, shoes, watches, and beauty essentials.",
+        ? `Your Vermera bag — Items: ${cartItemCount}, Subtotal: ${formatPrice(cartTotal)}. Review and proceed to checkout.`
+        : "Your Vermera bag is empty — browse the shop to add bags, dresses, jewelry, shoes, watches, and beauty essentials.",
   );
 
   const handleCheckout = () => {
@@ -55,11 +55,11 @@ const Cart = ({ embedded = false }) => {
               embedded ? "text-xl" : "text-3xl"
             }`}
           >
-            <ShoppingCart
+            <ShoppingBag
               className={`${embedded ? "w-5 h-5" : "w-6 h-6"} mr-2 text-brass`}
               aria-hidden="true"
             />
-            Your cart
+            Your bag
           </Heading>
         </div>
 
@@ -113,7 +113,7 @@ const Cart = ({ embedded = false }) => {
           onClick={handleCheckout}
           className="mt-6"
         >
-          <ShoppingCart size={18} />
+          <ShoppingBag size={18} aria-hidden="true" />
         </MainButton>
 
         <MainButton

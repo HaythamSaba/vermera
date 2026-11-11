@@ -223,7 +223,7 @@ const Products = ({
           )}
           {totalCartQuantity > 0 && (
             <MainButton
-              content={`View Cart (${totalCartQuantity})`}
+              content={`View Bag (${totalCartQuantity})`}
               onClick={handleViewCart}
               className="ml-4"
               variant="outline"

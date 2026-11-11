@@ -1,4 +1,4 @@
-import { ImageOff, ShoppingCart } from "lucide-react";
+import { ImageOff, ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 import AddToCartButton from "../../ui/AddToCartButton";
@@ -81,8 +81,8 @@ const ProductItem = ({ product, staggerIndex = 0 }) => {
     e.preventDefault();
     if (isOutOfStock) return;
     dispatch(addItem(toCartItem(product)));
-    showToast(`${productName} added to cart`, {
-      action: { label: "View cart", to: "/cart" },
+    showToast(`${productName} added to your bag`, {
+      action: { label: "View bag", to: "/cart" },
     });
     // Briefly confirms "Added" on this same button before the card swaps to
     // the permanent quantity stepper below (see the isItemInCart branch),
@@ -126,7 +126,7 @@ const ProductItem = ({ product, staggerIndex = 0 }) => {
           an href (open in new tab, middle-click, Enter), the sitewide focus
           ring, and works for sold-out items too (the PDP handles them).
           `group` lives here rather than on the card so the hover treatment
-          only fires over the link itself, not over the Add to Cart row. */}
+          only fires over the link itself, not over the Add to Bag row. */}
       <Link
         to={`/products/${sku}`}
         className="group relative flex flex-col flex-1"
@@ -254,8 +254,8 @@ const ProductItem = ({ product, staggerIndex = 0 }) => {
             variant="outline"
             size="small"
             className="w-full min-h-11"
-            icon={<ShoppingCart size={18} aria-hidden="true" />}
-            label="Add to Cart"
+            icon={<ShoppingBag size={18} aria-hidden="true" />}
+            label="Add to Bag"
           />
         )}
       </div>

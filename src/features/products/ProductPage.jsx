@@ -63,7 +63,7 @@ const AddToCartControls = ({
       )}
       <AddToCartButton
         justAdded={justAdded}
-        label={isOutOfStock ? "Sold Out" : "Add to Cart"}
+        label={isOutOfStock ? "Sold Out" : "Add to Bag"}
         variant="quiet"
         disabled={isOutOfStock}
         onClick={handleAdd}
@@ -128,7 +128,7 @@ const MobileBuyBar = ({ isVisible, productName, price, onAdd }) => {
       </div>
       <AddToCartButton
         justAdded={justAdded}
-        label="Add to Cart"
+        label="Add to Bag"
         variant="quiet"
         size="small"
         className="min-h-11 shrink-0"
@@ -225,8 +225,8 @@ const ProductPage = () => {
   const handleAddToCart = (quantity) => {
     if (isOutOfStock) return;
     dispatch(addItem(toCartItem(product, quantity)));
-    showToast(`${productName} added to cart`, {
-      action: { label: "View cart", to: "/cart" },
+    showToast(`${productName} added to your bag`, {
+      action: { label: "View bag", to: "/cart" },
     });
   };
 

@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import MainButton from "../../ui/MainButton";
 import RemoveWishlistItem from "./RemoveWishlistItem";
 import { useToast } from "../../hooks/useToast";
@@ -28,8 +28,8 @@ const WishlistItem = ({ item }) => {
   const handleAddToCart = () => {
     if (isOutOfStock) return;
     dispatch(addItem(toCartItem(item)));
-    showToast(`${productName} added to cart`, {
-      action: { label: "View cart", to: "/cart" },
+    showToast(`${productName} added to your bag`, {
+      action: { label: "View bag", to: "/cart" },
     });
   };
 
@@ -82,12 +82,12 @@ const WishlistItem = ({ item }) => {
             size="small"
             variant={isItemInCart ? "outline" : "quiet"}
             content={
-              isOutOfStock ? "Sold Out" : isItemInCart ? "In Cart" : "Add to Cart"
+              isOutOfStock ? "Sold Out" : isItemInCart ? "In Bag" : "Add to Bag"
             }
             disabled={isOutOfStock || isItemInCart}
             onClick={handleAddToCart}
           >
-            <ShoppingCart size={16} aria-hidden="true" />
+            <ShoppingBag size={16} aria-hidden="true" />
           </MainButton>
         </div>
       </div>

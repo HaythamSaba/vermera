@@ -18,7 +18,7 @@ const Wishlist = () => {
   const wishlist = useSelector(getWishlist);
   useMetaDescription(
     wishlist.length > 0
-      ? `Your saved Vermera pieces — ${wishlist.length} item${wishlist.length === 1 ? "" : "s"} favorited, ready to revisit or add to cart.`
+      ? `Your saved Vermera pieces — ${wishlist.length} item${wishlist.length === 1 ? "" : "s"} favorited, ready to revisit or add to your bag.`
       : "Your Vermera wishlist is empty — browse the shop and save pieces you want to revisit.",
   );
 
