@@ -12,6 +12,7 @@ import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
 import { getCategoryLabel } from "./categories";
 import { DEFAULT_SORT, normalizeSort } from "./sortOptions";
+import { searchProducts } from "./searchProducts";
 
 const PAGE_SIZE = 8;
 
@@ -67,16 +68,12 @@ const ProductsPage = () => {
   // Client-side filter on top of whatever category/sort/price fetch already
   // produced — no extra network round trip, so results update every
   // keystroke. `products` (raw, unfiltered) is still what re-fetches write
-  // to via setProducts; this derived list is only for display.
-  const q = searchQuery.trim().toLowerCase();
-  const visibleProducts = q
-    ? products.filter(
-        (p) =>
-          p.productName.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q) ||
-          p.description.toLowerCase().includes(q),
-      )
-    : products;
+  // to via setProducts; this derived list is only for display. Under
+  // Featured, results are ordered by match strength (name, then category,
+  // then description); a sort the shopper picked keeps its own order.
+  const visibleProducts = searchProducts(products, searchQuery, {
+    ranked: sort === DEFAULT_SORT,
+  });
 
   const updateParams = (updates, navigateOptions) => {
     const next = new URLSearchParams(searchParams);
