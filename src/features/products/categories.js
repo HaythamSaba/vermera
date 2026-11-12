@@ -26,6 +26,13 @@ export const CATEGORY_LABELS = {
   sunglasses: "Sunglasses",
 };
 
+// Apparel and shoes: categories a shopper expects to choose a size for.
+// DummyJSON has no size data, so their product pages say so plainly rather
+// than inventing sizes (audit decision D).
+const SIZED_CATEGORIES = new Set(["womens-dresses", "tops", "womens-shoes"]);
+
+export const isSizedCategory = (slug) => SIZED_CATEGORIES.has(slug);
+
 // The shopper-facing name for a category slug. Every place that displays a
 // category goes through this, so a raw DummyJSON slug ("womens-watches")
 // never reaches the screen. Unknown slugs (an edited ?category= URL, data

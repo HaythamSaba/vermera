@@ -9,7 +9,10 @@ import WishlistButton from "../../ui/WishlistButton";
 import ProductGallery from "./ProductGallery";
 import ProductItem from "./ProductItem";
 import QuantitySelector from "./QuantitySelector";
-import { getCategoryLabel } from "./categories";
+import { getCategoryLabel, isSizedCategory } from "./categories";
+
+// Decision D: an honest note in Details, never invented sizes.
+const ONE_SIZE_NOTE = "One size — sizing isn't available in this demo catalog.";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useMetaDescription from "../../hooks/useMetaDescription";
 import { useToast } from "../../hooks/useToast";
@@ -242,6 +245,7 @@ const ProductPage = () => {
 
   const detailRows = [
     ["Brand", brand],
+    ["Size", isSizedCategory(category) && ONE_SIZE_NOTE],
     ["Material", woodType],
     [
       "Dimensions",
