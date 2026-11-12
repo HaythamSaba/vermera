@@ -1,11 +1,8 @@
 import { STORAGE_KEYS } from "../../utils/storageKeys";
 import { useEffect, useRef, useState } from "react";
-import { Package, MapPin, Phone, Mail, Pencil } from "lucide-react";
-import { useSelector } from "react-redux";
+import { Package, MapPin, Phone, Mail, Pencil, User } from "lucide-react";
 import { Link } from "react-router";
-import CreateUser from "./CreateUser";
 import OrderLookup from "../order/OrderLookup";
-import Cart from "../cart/Cart";
 import MainButton from "../../ui/MainButton";
 import InputField from "../../ui/InputField";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
@@ -22,10 +19,12 @@ const orderTotal = (order) => {
   return subtotal + (order.shipping ?? fallback.shipping) + (order.tax ?? fallback.tax);
 };
 
+// The Account page (audit decision C): built only from what's persisted in
+// this browser — saved details (with the edit form), order history, and
+// order lookup. There are no accounts or sign-in, so nothing here asks for
+// a name up front; the name is just one of the saved details.
 const Profile = () => {
-  const username = useSelector((state) => state.user.username);
-
-  useDocumentTitle(username ? "Profile" : "Welcome");
+  useDocumentTitle("Account");
 
   // Persisted to localStorage on save, same pattern as cart/orders — reads
   // back on mount so edits survive a reload.
@@ -45,9 +44,7 @@ const Profile = () => {
   });
 
   useMetaDescription(
-    username
-      ? `Your Vermera profile — saved shipping details and ${orders.length} order${orders.length === 1 ? "" : "s"}.`
-      : "Enter your name to start shopping with Vermera and keep track of your orders.",
+    "Your Vermera account — saved contact and shipping details, order history, and order tracking.",
   );
 
   const [isEditing, setIsEditing] = useState(false);
@@ -89,23 +86,13 @@ const Profile = () => {
     setIsEditing(false);
   };
 
-  // Order lookup sits outside the name prompt too, so the footer's "Track
-  // an order" link (/profile#track-order) works without entering a name.
-  if (!username)
-    return (
-      <>
-        <CreateUser />
-        <div className="container-foundation pb-16">
-          <div className="max-w-md mx-auto">
-            <OrderLookup />
-          </div>
-        </div>
-      </>
-    );
-
-  const initial = username.trim().charAt(0).toUpperCase();
+  const name = String(user.name ?? "").trim();
+  const hasDetails = Object.values(user).some((value) =>
+    String(value ?? "").trim(),
+  );
 
   const details = [
+    { label: "Name", icon: User, value: user.name },
     { label: "Email", icon: Mail, value: user.email },
     { label: "Phone", icon: Phone, value: user.phone },
     { label: "Address", icon: MapPin, value: user.address },
@@ -113,19 +100,27 @@ const Profile = () => {
 
   return (
     <div className="container-foundation section">
-      <div className="bg-cream border border-stone p-6 mb-6 flex items-center gap-4">
-        {/* Quiet monogram instead of a generic user icon. Decorative: the
-            name is right beside it. */}
-        <div
-          aria-hidden="true"
-          className="w-16 h-16 shrink-0 rounded-full border border-stone flex items-center justify-center font-serif text-2xl text-espresso"
-        >
-          {initial}
+      <header className="mb-8 flex items-center gap-4">
+        {/* Quiet monogram, only once there's a saved name to draw it from.
+            Decorative: the name is right beside it. */}
+        {name && (
+          <div
+            aria-hidden="true"
+            className="w-16 h-16 shrink-0 rounded-full border border-stone flex items-center justify-center font-serif text-2xl text-espresso"
+          >
+            {name.charAt(0).toUpperCase()}
+          </div>
+        )}
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-serif font-medium text-espresso">
+            Account
+          </h1>
+          <p className="text-taupe mt-1">
+            {name ? `${name} · ` : ""}Your details and orders are saved in
+            this browser.
+          </p>
         </div>
-        <h1 className="text-3xl font-serif font-semibold text-espresso">
-          {username}
-        </h1>
-      </div>
+      </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
@@ -138,7 +133,7 @@ const Profile = () => {
                 id="personal-info-heading"
                 className="text-xl font-serif font-medium text-espresso"
               >
-                Personal Information
+                Your details
               </h2>
               {!isEditing && (
                 <button
@@ -148,7 +143,7 @@ const Profile = () => {
                   className="min-h-11 inline-flex items-center gap-2 text-sm text-charcoal underline underline-offset-4 decoration-stone hover:decoration-charcoal transition-colors cursor-pointer"
                 >
                   <Pencil className="w-4 h-4" aria-hidden="true" />
-                  Edit details
+                  {hasDetails ? "Edit details" : "Add details"}
                 </button>
               )}
             </div>
@@ -157,6 +152,16 @@ const Profile = () => {
               <form onSubmit={handleSave} className="space-y-4">
                 <InputField
                   ref={firstFieldRef}
+                  id="profile-name"
+                  type="text"
+                  name="name"
+                  hasLabel
+                  labelText="Full name"
+                  autoComplete="name"
+                  value={editedUser.name}
+                  onChange={updateField("name")}
+                />
+                <InputField
                   id="profile-email"
                   type="email"
                   name="email"
@@ -207,7 +212,7 @@ const Profile = () => {
                   </button>
                 </div>
               </form>
-            ) : (
+            ) : hasDetails ? (
               <dl className="space-y-4">
                 {details.map(({ label, icon, value }) => {
                   // Capitalised local so ESLint sees the JSX usage (same
@@ -226,11 +231,22 @@ const Profile = () => {
                   );
                 })}
               </dl>
+            ) : (
+              <p className="text-taupe">
+                No details saved yet. Add them once and checkout will fill
+                them in for you.
+              </p>
             )}
           </section>
 
-          <div className="bg-cream border border-stone p-6">
-            <h2 className="text-xl font-serif font-medium text-espresso mb-4 flex items-center">
+          <section
+            aria-labelledby="order-history-heading"
+            className="bg-cream border border-stone p-6"
+          >
+            <h2
+              id="order-history-heading"
+              className="text-xl font-serif font-medium text-espresso mb-4 flex items-center"
+            >
               <Package className="w-5 h-5 mr-2 text-brass" aria-hidden="true" />
               Order History
             </h2>
@@ -264,14 +280,21 @@ const Profile = () => {
                   </Link>
                 ))
               ) : (
-                <p className="text-taupe">No orders found.</p>
+                <p className="text-taupe">
+                  No orders yet.{" "}
+                  <Link
+                    to="/products"
+                    className="text-charcoal underline underline-offset-4 decoration-stone hover:decoration-charcoal"
+                  >
+                    Browse the shop
+                  </Link>
+                </p>
               )}
             </div>
-          </div>
+          </section>
         </div>
 
-        <div className="space-y-6">
-          <Cart embedded />
+        <div>
           <OrderLookup />
         </div>
       </div>

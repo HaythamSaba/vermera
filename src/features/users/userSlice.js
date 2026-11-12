@@ -40,8 +40,11 @@ export const fetchUserAddress = createAsyncThunk(
   }
 );
 
+// Session-only state for checkout's "Get My Address" geolocation lookup.
+// The shopper's name and saved details live in localStorage instead
+// (profileStorage.js); the old in-memory `username` was retired with the
+// /profile name prompt (audit decision C).
 const initialState = {
-  username: "",
   status: "idle",
   position: {
     latitude: 0,
@@ -61,11 +64,7 @@ const initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    updateUsername(state, action) {
-      state.username = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) =>
     builder
       .addCase(fetchUserAddress.pending, (state) => {
@@ -85,7 +84,5 @@ const userSlice = createSlice({
           "There was an error fetching your address. make sure to fill in your address manually.";
       }),
 });
-
-export const { updateUsername } = userSlice.actions;
 
 export default userSlice.reducer;

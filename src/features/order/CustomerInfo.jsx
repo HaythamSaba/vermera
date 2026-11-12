@@ -1,7 +1,7 @@
 import InputField from "../../ui/InputField";
 
-// Uncontrolled fields: the defaults (from the saved profile, or the name
-// entered on the Profile page this session) are known at mount and never
+// Uncontrolled fields: the defaults (from the details saved on the Account
+// page) are known at mount and never
 // change while the form is open, so defaultValue is enough. Validation and
 // blur/change handling live on the parent <Form> (events bubble), so this
 // only renders `errors`.

@@ -76,7 +76,7 @@ const HeaderMobileDrawer = ({
                       size={20}
                       aria-hidden="true"
                     />
-                    Profile
+                    Account
                   </Link>
                 </li>
                 <li>

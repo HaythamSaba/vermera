@@ -53,7 +53,6 @@ const CreateOrder = () => {
   const dispatch = useDispatch();
 
   const {
-    username,
     status: addressStatus,
     position,
     addressComponents,
@@ -181,7 +180,7 @@ const CreateOrder = () => {
 
               <CustomerInfo
                 errors={errors}
-                defaultName={savedProfile.name || username}
+                defaultName={savedProfile.name}
                 defaultPhone={savedProfile.phone}
                 defaultEmail={savedProfile.email}
               />
