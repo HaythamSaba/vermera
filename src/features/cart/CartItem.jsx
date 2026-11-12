@@ -17,7 +17,7 @@ const CartItem = ({ item }) => {
   } = item;
 
   return (
-    <div className="flex gap-4 p-3 border border-stone hover:shadow-soft transition-shadow duration-300">
+    <div className="flex gap-4 p-3 border border-stone bg-cream">
       {/* Image and name both link back to the product; the image link is
           aria-hidden/untabbable so keyboard and screen-reader users get one
           link per line, not two. */}
@@ -50,7 +50,12 @@ const CartItem = ({ item }) => {
         <p className="text-sm text-taupe mb-2">{getCategoryLabel(category)}</p>
 
         <div className="flex justify-between items-center">
-          <UpdateItemQuantity sku={sku} quantity={quantity} max={stock} />
+          <UpdateItemQuantity
+            sku={sku}
+            productName={productName}
+            quantity={quantity}
+            max={stock}
+          />
 
           <div className="text-right">
             <p className="text-sm text-taupe">{formatPrice(NewPrice)} each</p>

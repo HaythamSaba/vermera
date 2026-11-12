@@ -104,16 +104,12 @@ const cartSlice = createSlice({
     },
 
     decreaseItemQuantity: (state, action) => {
-      // payload = sku
+      // payload = sku. Floors at 1: removing a line is DeleteItem's job,
+      // since that path offers Undo and a silent removal here would not.
       const item = state.cart.find((item) => item.sku === action.payload);
-      if (item) {
-        if (item.quantity === 1) {
-          // Remove item if quantity would be 0
-          cartSlice.caseReducers.deleteItem(state, action);
-        } else {
-          item.quantity--;
-          item.totalPrice = parseFloat(item.NewPrice) * item.quantity;
-        }
+      if (item && item.quantity > 1) {
+        item.quantity--;
+        item.totalPrice = parseFloat(item.NewPrice) * item.quantity;
         saveToLocalStorage(state.cart);
       }
     },
