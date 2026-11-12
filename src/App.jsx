@@ -6,6 +6,8 @@ import {
 } from "./features/products/ProductsLoader";
 
 import AppLayout from "./ui/AppLayout";
+import SiteLayout from "./ui/SiteLayout";
+import CheckoutLayout from "./ui/CheckoutLayout";
 import Error from "./ui/Error";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -18,101 +20,113 @@ const router = createBrowserRouter([
     errorElement: <Error />,
     children: [
       {
-        path: "/",
-        lazy: () =>
-          import("./ui/MainPageContent").then((m) => ({
-            Component: m.default,
-          })),
-        loader: productsLoader,
-        errorElement: <Error />,
+        element: <SiteLayout />,
+        children: [
+          {
+            path: "/",
+            lazy: () =>
+              import("./ui/MainPageContent").then((m) => ({
+                Component: m.default,
+              })),
+            loader: productsLoader,
+            errorElement: <Error />,
+          },
+          {
+            path: "/products",
+            lazy: () =>
+              import("./features/products/ProductsPage").then((m) => ({
+                Component: m.default,
+              })),
+            loader: productsLoader,
+            // The search box writes ?q= on every keystroke; that only filters
+            // the already-loaded list client-side, so skip re-running the loader
+            // (and the top progress bar) when nothing but q changed.
+            shouldRevalidate: ({ currentUrl, nextUrl, defaultShouldRevalidate }) => {
+              if (currentUrl.pathname !== nextUrl.pathname) {
+                return defaultShouldRevalidate;
+              }
+              const withoutQuery = (url) => {
+                const params = new URLSearchParams(url.search);
+                params.delete("q");
+                return params.toString();
+              };
+              return withoutQuery(currentUrl) !== withoutQuery(nextUrl)
+                ? defaultShouldRevalidate
+                : false;
+            },
+            errorElement: <Error />,
+          },
+          {
+            path: "/products/:sku",
+            lazy: () =>
+              import("./features/products/ProductPage").then((m) => ({
+                Component: m.default,
+              })),
+            loader: productLoader,
+            errorElement: <Error />,
+          },
+          {
+            path: "/cart",
+            lazy: () =>
+              import("./features/cart/Cart").then((m) => ({
+                Component: m.default,
+              })),
+          },
+          {
+            path: "/wishlist",
+            lazy: () =>
+              import("./features/wishlist/Wishlist").then((m) => ({
+                Component: m.default,
+              })),
+          },
+          {
+            path: "/contact",
+            lazy: () =>
+              import("./ui/Contact").then((m) => ({ Component: m.default })),
+          },
+          {
+            path: "/about",
+            lazy: () =>
+              import("./ui/About").then((m) => ({ Component: m.default })),
+          },
+          {
+            path: "/order/:orderId",
+            errorElement: <Error />,
+            lazy: async () => {
+              const [orderConfirmation, updateOrder] = await Promise.all([
+                import("./features/order/OrderConfirmation"),
+                import("./features/order/UpdateOrder"),
+              ]);
+              return {
+                Component: orderConfirmation.default,
+                loader: orderConfirmation.loader,
+                action: updateOrder.action,
+              };
+            },
+          },
+          {
+            path: "/profile",
+            lazy: () =>
+              import("./features/users/UserProfile").then((m) => ({
+                Component: m.default,
+              })),
+          },
+        ],
       },
+      // Checkout gets slim chrome (logo + "Back to bag", no nav/footer
+      // links) so the only way forward is completing the order (audit V13).
       {
-        path: "/products",
-        lazy: () =>
-          import("./features/products/ProductsPage").then((m) => ({
-            Component: m.default,
-          })),
-        loader: productsLoader,
-        // The search box writes ?q= on every keystroke; that only filters
-        // the already-loaded list client-side, so skip re-running the loader
-        // (and the top progress bar) when nothing but q changed.
-        shouldRevalidate: ({ currentUrl, nextUrl, defaultShouldRevalidate }) => {
-          if (currentUrl.pathname !== nextUrl.pathname) {
-            return defaultShouldRevalidate;
-          }
-          const withoutQuery = (url) => {
-            const params = new URLSearchParams(url.search);
-            params.delete("q");
-            return params.toString();
-          };
-          return withoutQuery(currentUrl) !== withoutQuery(nextUrl)
-            ? defaultShouldRevalidate
-            : false;
-        },
-        errorElement: <Error />,
-      },
-      {
-        path: "/products/:sku",
-        lazy: () =>
-          import("./features/products/ProductPage").then((m) => ({
-            Component: m.default,
-          })),
-        loader: productLoader,
-        errorElement: <Error />,
-      },
-      {
-        path: "/cart",
-        lazy: () =>
-          import("./features/cart/Cart").then((m) => ({
-            Component: m.default,
-          })),
-      },
-      {
-        path: "/wishlist",
-        lazy: () =>
-          import("./features/wishlist/Wishlist").then((m) => ({
-            Component: m.default,
-          })),
-      },
-      {
-        path: "/contact",
-        lazy: () =>
-          import("./ui/Contact").then((m) => ({ Component: m.default })),
-      },
-      {
-        path: "/about",
-        lazy: () =>
-          import("./ui/About").then((m) => ({ Component: m.default })),
-      },
-      {
-        path: "/order/newOrder",
-        lazy: () =>
-          import("./features/order/CreateOrder").then((m) => ({
-            Component: m.default,
-            action: m.action,
-          })),
-      },
-      {
-        path: "/order/:orderId",
-        errorElement: <Error />,
-        lazy: async () => {
-          const [orderConfirmation, updateOrder] = await Promise.all([
-            import("./features/order/OrderConfirmation"),
-            import("./features/order/UpdateOrder"),
-          ]);
-          return {
-            Component: orderConfirmation.default,
-            loader: orderConfirmation.loader,
-            action: updateOrder.action,
-          };
-        },
-      },
-      {
-        path: "/profile",
-        lazy: () =>
-          import("./features/users/UserProfile").then((m) => ({
-            Component: m.default,
-          })),
+        element: <CheckoutLayout />,
+        children: [
+          {
+            path: "/order/newOrder",
+            lazy: () =>
+              import("./features/order/CreateOrder").then((m) => ({
+                Component: m.default,
+                action: m.action,
+              })),
+          },
+        ],
       },
     ],
   },

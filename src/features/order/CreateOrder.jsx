@@ -263,8 +263,8 @@ export async function action({ request }) {
     id: orderId,
     customer: {
       name: data.fullName,
-      email: data.email || undefined,
-      phone: data.phoneNumber,
+      email: data.email,
+      phone: data.phoneNumber || undefined,
       address: data.address,
       city: data.city,
       zipCode: data.zipCode,

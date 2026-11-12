@@ -1,10 +1,10 @@
 import { Outlet, useNavigation } from "react-router";
 import { MotionConfig } from "framer-motion";
-import Header from "./Header";
-import Footer from "./Footer";
-import AnnouncementBar from "./AnnouncementBar";
 import { ToastProvider } from "../context/ToastContext";
 
+// Root shell shared by every route: motion config, toasts and the navigation
+// progress bar. The visible chrome comes from the child layout route —
+// SiteLayout (full header/footer) or CheckoutLayout (slim, audit V13).
 const AppLayout = () => {
   const navigation = useNavigation();
   const isLoading = navigation.state === "loading";
@@ -27,12 +27,7 @@ const AppLayout = () => {
               className="fixed top-0 left-0 right-0 z-70 h-[3px] bg-brass animate-pulse"
             />
           )}
-          <AnnouncementBar />
-          <Header />
-          <main>
-            <Outlet />
-          </main>
-          <Footer />
+          <Outlet />
         </div>
       </ToastProvider>
     </MotionConfig>

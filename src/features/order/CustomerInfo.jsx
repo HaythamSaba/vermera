@@ -39,32 +39,32 @@ const CustomerInfo = ({
         />
 
         <InputField
-          id="phoneNumber"
-          type="tel"
-          name="phoneNumber"
-          isRequired
-          hideRequiredMark
-          defaultValue={defaultPhone}
-          hasLabel
-          labelText="Phone number"
-          autoComplete="tel"
-          inputMode="tel"
-          enterKeyHint="next"
-          error={errors.phoneNumber}
-        />
-
-        <InputField
           id="email"
           type="email"
           name="email"
+          isRequired
+          hideRequiredMark
           defaultValue={defaultEmail}
           hasLabel
           labelText="Email"
-          hint="(optional)"
           autoComplete="email"
           inputMode="email"
           enterKeyHint="next"
           error={errors.email}
+        />
+
+        <InputField
+          id="phoneNumber"
+          type="tel"
+          name="phoneNumber"
+          defaultValue={defaultPhone}
+          hasLabel
+          labelText="Phone number"
+          hint="(optional)"
+          autoComplete="tel"
+          inputMode="tel"
+          enterKeyHint="next"
+          error={errors.phoneNumber}
         />
       </div>
     </section>

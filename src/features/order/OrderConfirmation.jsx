@@ -113,9 +113,13 @@ const OrderConfirmation = () => {
             <h2 className="text-xs font-medium uppercase tracking-[0.2em] text-taupe mb-4">Contact</h2>
             <div className="space-y-2 text-sm">
               <p className="text-charcoal font-medium">{order.customer.name}</p>
-              <p className="text-taupe">{order.customer.phone}</p>
+              {/* Either may be missing: older orders made email optional,
+                  newer ones make phone optional (audit decision F). */}
               {order.customer.email && (
                 <p className="text-taupe">{order.customer.email}</p>
+              )}
+              {order.customer.phone && (
+                <p className="text-taupe">{order.customer.phone}</p>
               )}
             </div>
           </div>

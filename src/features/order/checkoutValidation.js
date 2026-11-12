@@ -9,18 +9,20 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const required = (label) => (value) =>
   value.trim() ? "" : `Please enter your ${label}.`;
 
+// Email is required (it's the order-confirmation channel); phone is
+// optional and only checked when given (audit decision F).
 const rules = {
   fullName: required("full name"),
-  phoneNumber: (value) => {
-    if (!value.trim()) return "Please enter your phone number.";
-    return PHONE_PATTERN.test(value.trim())
+  email: (value) => {
+    if (!value.trim()) return "Please enter your email address.";
+    return EMAIL_PATTERN.test(value.trim())
       ? ""
-      : "Enter a valid phone number, e.g. +353 1 555 0100.";
+      : "Enter a valid email address, e.g. name@example.com.";
   },
-  email: (value) =>
-    !value.trim() || EMAIL_PATTERN.test(value.trim())
+  phoneNumber: (value) =>
+    !value.trim() || PHONE_PATTERN.test(value.trim())
       ? ""
-      : "Enter a valid email address, e.g. name@example.com.",
+      : "Enter a valid phone number, e.g. +353 1 555 0100.",
   address: required("street address"),
   city: required("city"),
   zipCode: required("postcode"),
