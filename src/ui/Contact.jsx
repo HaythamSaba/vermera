@@ -1,5 +1,5 @@
 import { Mail } from "lucide-react";
-import CoverBackgroundSection from "./CoverBackgroundSection";
+import PageHeader from "./PageHeader";
 import InputField from "./InputField";
 import MainButton from "./MainButton";
 import useDocumentTitle from "../hooks/useDocumentTitle";
@@ -29,7 +29,7 @@ const Contact = () => {
 
   return (
     <div>
-      <CoverBackgroundSection title="Contact" path={["Home", "Contact"]} size="primary" />
+      <PageHeader title="Contact" />
 
       <div className="container-foundation section grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div>

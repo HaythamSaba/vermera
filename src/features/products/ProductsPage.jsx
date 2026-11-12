@@ -1,4 +1,4 @@
-import CoverBackgroundSection from "../../ui/CoverBackgroundSection";
+import PageHeader from "../../ui/PageHeader";
 import {
   useLoaderData,
   useLocation,
@@ -120,7 +120,10 @@ const ProductsPage = () => {
 
   return (
     <div>
-      <CoverBackgroundSection title={"Shop"} path={["Home", "Shop"]} size="primary" />
+      <PageHeader
+        eyebrow="Shop"
+        title={category ? getCategoryLabel(category) : "All pieces"}
+      />
 
       <ProductsSection
         navigate={navigate}

@@ -329,7 +329,7 @@ const ProductPage = () => {
           <h2 className="font-serif text-espresso font-semibold text-2xl sm:text-3xl mb-8">
             You May Also Like
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-8">
             {relatedProducts.map((related) => (
               <ProductItem
                 key={related.sku || related.id}
@@ -345,7 +345,7 @@ const ProductPage = () => {
           <h2 className="font-serif text-espresso font-semibold text-2xl sm:text-3xl mb-8">
             Recently Viewed
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-8">
             {recentlyViewed.map((viewed) => (
               <ProductItem key={viewed.sku} product={viewed} />
             ))}

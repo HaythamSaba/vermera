@@ -60,7 +60,7 @@ function TheEdit() {
 
       {isFallbackCatalog && <FallbackCatalogNotice className="-mt-6 mb-8" />}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-8">
         {pieces.map((product) => (
           <ProductItem key={product.sku} product={product} />
         ))}

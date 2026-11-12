@@ -12,7 +12,7 @@ import { GRID_STAGGER_CAP } from "../../utils/motion";
 const MotionDiv = motion.div;
 
 const PRODUCT_GRID_CLASSES =
-  "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8 w-full";
+  "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-8 mb-8 w-full";
 const SKELETON_COUNT = 8;
 
 // `products`/`setProducts`/`loading`/`setLoading` are optional: pass them in

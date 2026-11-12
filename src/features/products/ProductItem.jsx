@@ -74,7 +74,7 @@ const ProductItem = ({ product, staggerIndex = 0 }) => {
         isActive={isItemInWishlist}
         onToggle={handleToggleWishlist}
         iconSize={18}
-        className="absolute top-4 left-4 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-cream/90 text-charcoal hover:text-brass transition-colors cursor-pointer"
+        className="absolute top-2 left-2 sm:top-4 sm:left-4 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-cream/90 text-charcoal hover:text-brass transition-colors cursor-pointer"
       />
 
       {/* The card is image, name and price as one real link, plus the
@@ -92,7 +92,7 @@ const ProductItem = ({ product, staggerIndex = 0 }) => {
             photo of unknown colour. Low stock is shown on the product page
             only. */}
         {isOutOfStock && (
-          <span className="absolute top-4 right-4 z-20 rounded-none py-1 px-2 text-[11px] font-medium uppercase tracking-wider bg-espresso text-cream">
+          <span className="absolute top-2 right-2 sm:top-4 sm:right-4 z-20 rounded-none py-1 px-2 text-[11px] font-medium uppercase tracking-wider bg-espresso text-cream">
             Sold out
           </span>
         )}
@@ -148,18 +148,18 @@ const ProductItem = ({ product, staggerIndex = 0 }) => {
           }`}
         >
           <h3
-            className="font-serif font-medium text-lg leading-snug text-charcoal line-clamp-1 decoration-1 underline-offset-4 group-hover:underline"
+            className="font-serif font-medium text-base sm:text-lg leading-snug text-charcoal line-clamp-1 decoration-1 underline-offset-4 group-hover:underline"
             title={productName}
           >
             {productName}
           </h3>
 
           <div className="flex items-baseline gap-2 mt-2">
-            <span className="font-medium text-base text-charcoal">
+            <span className="font-medium text-sm sm:text-base text-charcoal">
               {formatPrice(NewPrice)}
             </span>
             {OldPrice && (
-              <span className="text-sm text-taupe line-through">
+              <span className="text-xs sm:text-sm text-taupe line-through">
                 {formatPrice(OldPrice)}
               </span>
             )}

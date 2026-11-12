@@ -80,24 +80,9 @@ async function lookbookMobileVariant() {
   }
 }
 
-async function productsBackground() {
-  // CoverBackgroundSection.jsx shows this as a bg-cover CSS background
-  // inside a fixed 316px-tall band, permanently under backdrop-blur-md —
-  // compression artifacts are invisible under that blur, so this can take
-  // a much more aggressive pass than a normal photo. Source was an
-  // unresized 3024x4032 (12MP) phone photo.
-  await writeResized(
-    "products-background.webp",
-    "products-background.webp",
-    1600,
-    65,
-  );
-}
-
 (async () => {
   await heroPortrait();
   // Already applied in an earlier pass — uncomment only if you have a fresh
   // full-resolution source to re-derive these from.
   // await lookbookMobileVariant();
-  // await productsBackground();
 })();
