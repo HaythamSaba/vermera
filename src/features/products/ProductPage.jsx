@@ -274,7 +274,9 @@ const ProductPage = () => {
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
-        <ProductGallery images={images} productName={productName} />
+        {/* key: a new product starts on its first image, not the previous
+            product's index/scroll position. */}
+        <ProductGallery key={sku} images={images} productName={productName} />
 
         {/* Order: category → name → price (+ stock note) → description →
             buy controls → details accordions. */}
