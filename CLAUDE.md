@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 - `npm run dev` — start the Vite dev server (port 5173; if occupied, Vite auto-binds the next free port such as 5174 — check the terminal output for the actual port, and never kill a dev-server PID you didn't start yourself).
-- `npm run build` — production build (also runs ESLint via `vite-plugin-eslint`; treat build failures as real errors, not just lint noise).
+- `npm run build` — production build (also runs ESLint via `vite-plugin-eslint`; treat build failures as real errors, not just lint noise). Its `prebuild` step runs `scripts/generate-sitemap.js`, which writes `public/sitemap.xml` (gitignored) from the static pages plus one `/products/:sku` per catalog product. It falls back to the mock snapshot when DummyJSON is unreachable, and never fails the build. `?category=` views are left out because the canonical drops query strings. Per-product share cards are a known limitation (scrapers don't run JS; it would need prerendering/SSR), so every route shares the `index.html` card (audit V20).
 - `npm run lint` — ESLint only (flat config in `eslint.config.js`; `.eslintrc.json` at the repo root is a stale leftover and not actually used).
 - `npm run preview` — serve the production build locally.
 - There is no test suite/framework configured in this repo.
