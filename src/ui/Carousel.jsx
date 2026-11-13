@@ -112,9 +112,9 @@ const Carousel = ({ looks }) => {
                 loading="lazy"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute bottom-4 left-4 right-4 bg-cream/90 backdrop-blur-sm p-4 flex items-end justify-between gap-3">
+              <div className="absolute bottom-4 left-4 right-4 bg-babyblue/60 backdrop-blur-sm p-4 flex items-end justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="flex items-center gap-3 mb-1 text-taupe text-sm font-medium">
+                  <p className="flex items-center gap-3 mb-1 text-espresso text-sm font-medium">
                     <span>{number}</span>
                     <span aria-hidden="true">—</span>
                     <span>{look.category}</span>

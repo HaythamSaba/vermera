@@ -17,6 +17,15 @@
   --color-taupe: #756c64;
   --color-stone: #d9d1c7;
   --color-brass: #a3845b;
+  /* Cool accent tint, for surfaces only (section bands, panels): it's
+     ~1.45:1 against ivory, so it can't carry meaning as a button fill or
+     outline on its own. Text on it must be dark: charcoal/espresso
+     (~10:1), or --color-babyblue-ink for small labels. Taupe and brass-ink
+     only reach ~3.2:1 on it and fail AA. */
+  --color-babyblue: #b0d1e8;
+  /* Dark, same-hue counterpart for eyebrows and labels on babyblue
+     (~5.8:1), like brass-ink is for brass. */
+  --color-babyblue-ink: #2e4a5e;
   /* Text-only counterpart to --color-brass, for when brass is the literal
      foreground color of small/normal-weight text on a light surface (an
      eyebrow label, a button's outlined/ghost variant, an inline price
