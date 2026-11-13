@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import WishlistButton from "../../ui/WishlistButton";
 import { useDispatch, useSelector } from "react-redux";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { DURATION, EASE, GRID_STAGGER_MS } from "../../utils/motion";
 import { useToast } from "../../hooks/useToast";
 import {
@@ -14,7 +14,7 @@ import {
 } from "../wishlist/wishlistSlice";
 import { formatPrice } from "../../utils/pricing";
 
-const MotionDiv = motion.div;
+const MotionDiv = m.div;
 
 // staggerIndex: position within the grid's current stagger group (set by
 // Products.jsx); only matters where a parent drives the "visible" variant.

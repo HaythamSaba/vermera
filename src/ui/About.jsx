@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import {
   Briefcase,
   Check,
@@ -22,9 +22,9 @@ import { CARD_REVEAL_VARIANTS, STAGGER_MS } from "../utils/motion";
 
 // Matches the codebase convention elsewhere (AnnouncementBar, Header,
 // Products, ProductItem) — aliasing to a plain identifier
-// before using it as a JSX tag, rather than `<motion.div>` directly, is what
+// before using it as a JSX tag, rather than `<m.div>` directly, is what
 // lets no-unused-vars recognize the import as used.
-const MotionDiv = motion.div;
+const MotionDiv = m.div;
 
 const CONTACT_EMAIL = "haythamsaba@gmail.com";
 

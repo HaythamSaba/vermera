@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import { Link } from "react-router";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { ToastContext } from "./toastStore";
 
@@ -12,7 +12,7 @@ const ACTION_TOAST_DURATION = 6000;
 const actionClass =
   "ml-1 font-medium underline underline-offset-4 decoration-cream/60 hover:decoration-cream cursor-pointer";
 
-const MotionDiv = motion.div;
+const MotionDiv = m.div;
 
 // Single provider mounted once in AppLayout so any route/component can fire
 // a transient confirmation (e.g. "added to cart") without prop-drilling.

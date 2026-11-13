@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { CARD_REVEAL_VARIANTS } from "../utils/motion";
 
-const MotionA = motion.a;
+const MotionA = m.a;
 
 // One GitHub/LinkedIn/Website contact card — the bordered icon+label+value
 // row rendered for each entry in About.jsx's CONTACT_LINKS. The email row

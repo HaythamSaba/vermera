@@ -16,12 +16,7 @@ export default defineConfig({
         // reusing this chunk across app-code updates instead of
         // re-downloading it inside a newly-hashed bundle every time.
         manualChunks: {
-          "react-vendor": [
-            "react",
-            "react-dom",
-            "react-router",
-            "react-router-dom",
-          ],
+          "react-vendor": ["react", "react-dom", "react-router"],
           "redux-vendor": ["@reduxjs/toolkit", "react-redux"],
         },
       },

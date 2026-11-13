@@ -1,11 +1,11 @@
 import { Link } from "react-router";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { navLinkClass } from "./HeaderDesktopNav";
 import { EASE } from "../utils/motion";
 import BrandMark from "./BrandMark";
 import { SIZE_CLASSES, MARK_SIZE_CLASSES } from "../utils/motion";
 
-const MotionSpan = motion.span;
+const MotionSpan = m.span;
 
 const Logo = ({
   size = "primary",

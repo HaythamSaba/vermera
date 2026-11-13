@@ -1,11 +1,11 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { Menu, Search } from "lucide-react";
 import HeaderDesktopNav, { iconHitAreaClass } from "./HeaderDesktopNav";
 import HeaderDesktopIcons from "./HeaderDesktopIcons";
 import CartIcon from "./CartIcon";
 import Logo from "./Logo";
 
-const MotionHeader = motion.header;
+const MotionHeader = m.header;
 
 // Mounts only once scrolled, sliding down and fading in instead of snapping
 // into place. Shares all state/handlers with the primary header, so there

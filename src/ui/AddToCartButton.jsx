@@ -1,8 +1,8 @@
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { Check } from "lucide-react";
 import MainButton from "./MainButton";
 
-const MotionSpan = motion.span;
+const MotionSpan = m.span;
 
 // Wraps MainButton with a brief "Added ✓" crossfade confirmation on a
 // successful add — layered on top of (not replacing) the global toast, for

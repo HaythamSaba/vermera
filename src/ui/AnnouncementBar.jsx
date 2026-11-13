@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { X } from "lucide-react";
 import { FREE_SHIPPING_THRESHOLD, formatPrice } from "../utils/pricing";
 
@@ -22,7 +22,7 @@ function readDismissed() {
   }
 }
 
-const MotionDiv = motion.div;
+const MotionDiv = m.div;
 
 const AnnouncementBar = () => {
   const [isDismissed, setIsDismissed] = useState(readDismissed);

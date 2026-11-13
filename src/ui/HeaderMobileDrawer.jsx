@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { Search, User, X } from "lucide-react";
 import { Link } from "react-router";
 import { iconHitAreaClass, navLinkClass } from "./HeaderDesktopNav";
@@ -6,12 +6,12 @@ import WishlistIcon from "./WishlistIcon";
 import CartIcon from "./CartIcon";
 import Logo from "./Logo";
 
-const MotionDiv = motion.div;
+const MotionDiv = m.div;
 
 // Slide-out mobile nav + its backdrop overlay — bundled together since they
 // always open/close in lockstep. The outer wrapper stays mounted every
 // render so its aria-hidden/inert reflect isOpen immediately, even while
-// the inner motion.div is still playing its exit animation (AnimatePresence
+// the inner m.div is still playing its exit animation (AnimatePresence
 // freezes the exiting element's own props).
 const HeaderMobileDrawer = ({
   isOpen,

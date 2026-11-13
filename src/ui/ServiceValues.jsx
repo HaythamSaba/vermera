@@ -1,10 +1,10 @@
 import { PackageSearch, Sparkles, Truck } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import RevealGroup from "./RevealGroup";
 import { CARD_REVEAL_VARIANTS } from "../utils/motion";
 import { FREE_SHIPPING_THRESHOLD, formatPrice } from "../utils/pricing";
 
-const MotionDiv = motion.div;
+const MotionDiv = m.div;
 
 // Brand notes, each backed by something the store really does: the curated
 // nine-collection catalog, the standard/express shipping with free delivery

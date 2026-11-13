@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { revealGroupVariants, STAGGER_MS } from "../utils/motion";
 
-const MotionDiv = motion.div;
+const MotionDiv = m.div;
 
 // Reveals its children as one staggered scroll entrance, triggered once when
 // the group first enters the viewport. Children must be motion elements with

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { getProducts } from "../services/apiProducts";
 import {
   getCategoryLabel,
@@ -10,7 +10,7 @@ import Reveal from "./Reveal";
 import RevealGroup from "./RevealGroup";
 import { revealItemVariants } from "../utils/motion";
 
-const MotionLink = motion.create(Link);
+const MotionLink = m.create(Link);
 const tileVariants = revealItemVariants({ distance: 32, durationMs: 850 });
 
 function CategoryShowcase() {

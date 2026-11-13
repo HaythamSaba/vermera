@@ -1,14 +1,14 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { ImageOff } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import MainButton from "./MainButton";
 import useParallax from "../hooks/useParallax";
 import { DURATION, EASE } from "../utils/motion";
 
-const MotionP = motion.p;
-const MotionH1 = motion.h1;
-const MotionDiv = motion.div;
+const MotionP = m.p;
+const MotionH1 = m.h1;
+const MotionDiv = m.div;
 
 // Above-the-fold copy enters as whole blocks (fade + 12px rise, 600ms), all
 // within 200ms of each other, so the headline and CTA are readable almost

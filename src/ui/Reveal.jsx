@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { DURATION, EASE } from "../utils/motion";
 
 // Thin scroll-entrance wrapper: fades + rises an element into place the first
@@ -15,7 +15,7 @@ const Reveal = ({
   children,
   ...rest
 }) => {
-  const Component = motion[as];
+  const Component = m[as];
 
   return (
     <Component

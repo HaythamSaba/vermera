@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 import { Heart } from "lucide-react";
-import { motion, useAnimate, useReducedMotion } from "framer-motion";
+import { m, useAnimate, useReducedMotion } from "framer-motion";
 import { EASE } from "../utils/motion";
 
-const MotionSpan = motion.span;
+const MotionSpan = m.span;
 
 // Shared wishlist heart toggle used on both the product card (ProductItem)
 // and the product detail page (ProductPage) — same

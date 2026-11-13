@@ -1,6 +1,6 @@
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 
-const MotionSpan = motion.span;
+const MotionSpan = m.span;
 
 // Small "tick" pop played when a header badge count changes (cart/wishlist
 // add or remove) — kept subtle and short since this fires on every mutation.

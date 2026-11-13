@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { m, useInView } from "framer-motion";
 import ProductItem from "./ProductItem";
 import MainButton from "../../ui/MainButton";
 import ProductCardSkeleton from "./ProductCardSkeleton";
@@ -9,7 +9,7 @@ import { useNavigate } from "react-router";
 import { getTotalCartQuantity } from "../cart/cartSlice";
 import { GRID_STAGGER_CAP } from "../../utils/motion";
 
-const MotionDiv = motion.div;
+const MotionDiv = m.div;
 
 const PRODUCT_GRID_CLASSES =
   "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-8 mb-8 w-full";
