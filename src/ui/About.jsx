@@ -106,15 +106,12 @@ const About = () => {
             >
               Turning company values into websites users trust.
             </Reveal>
-            <Reveal
-              as="p"
-              delay={STAGGER_MS * 3}
-              className="text-taupe text-lg leading-relaxed"
-            >
+            {/* Body copy doesn't reveal (audit V17), only the heading lines. */}
+            <p className="text-taupe text-lg leading-relaxed">
               Software Engineering graduate targeting frontend and full-stack
               roles in Ljubljana and the broader European market. Long-term
               goal: becoming a Product Engineer.
-            </Reveal>
+            </p>
           </div>
           <MotionDiv
             initial={{ opacity: 0, y: 50, filter: "blur(20px)" }}
@@ -134,7 +131,7 @@ const About = () => {
       <AboutSection>
         <div className="max-w-2xl">
           <AboutSectionHeading>Background</AboutSectionHeading>
-          <Reveal delay={STAGGER_MS} className="flex items-start gap-4">
+          <div className="flex items-start gap-4">
             <Briefcase
               className="w-5 h-5 text-brass mt-1 shrink-0"
               aria-hidden="true"
@@ -147,36 +144,28 @@ const About = () => {
               inside a structured pull-request and code-review workflow
               alongside senior developers.
             </p>
-          </Reveal>
+          </div>
         </div>
       </AboutSection>
 
       <AboutSection tinted>
         <div className="max-w-2xl">
           <AboutSectionHeading>About This Project</AboutSectionHeading>
-          <Reveal
-            as="p"
-            delay={STAGGER_MS}
-            className="text-taupe text-lg leading-relaxed mb-4"
-          >
+          <p className="text-taupe text-lg leading-relaxed mb-4">
             Vermera is a portfolio project, not a real store — a &quot;quiet
             luxury&quot; fashion catalog built to demonstrate frontend and
             product-engineering skills. There&apos;s no backend: the catalog is
             sourced live from DummyJSON, and the bag, wishlist, and order
             records all persist to localStorage.
-          </Reveal>
-          <Reveal
-            as="p"
-            delay={STAGGER_MS * 2}
-            className="text-taupe text-lg leading-relaxed"
-          >
+          </p>
+          <p className="text-taupe text-lg leading-relaxed">
             A few decisions I&apos;m glad I made along the way: category,
             price, sort and search all live in the URL, so results are
             shareable and back/forward just works; interactive elements are
             real buttons and links, with a visible focus ring for keyboard
             users; and all motion runs on one library, Framer Motion, scaled
             back when someone prefers reduced motion.
-          </Reveal>
+          </p>
         </div>
       </AboutSection>
 
@@ -185,14 +174,10 @@ const About = () => {
           <AboutSectionHeading className="mb-4">
             Get in Touch
           </AboutSectionHeading>
-          <Reveal
-            as="p"
-            delay={STAGGER_MS}
-            className="text-taupe text-lg leading-relaxed"
-          >
+          <p className="text-taupe text-lg leading-relaxed">
             Open to frontend and full-stack roles — reach out through any of
             these.
-          </Reveal>
+          </p>
         </div>
 
         {/* Contact cards reveal as one staggered group, same pattern as

@@ -2,7 +2,6 @@ import { useNavigate } from "react-router";
 import MainButton from "./MainButton";
 import Carousel from "./Carousel";
 import Reveal from "./Reveal";
-import { STAGGER_MS } from "../utils/motion";
 
 // Caption numbers come from this order (01-04), so reordering here keeps
 // them sequential. `alt` describes the photo itself; the caption already
@@ -52,22 +51,18 @@ const InspirationSection = () => {
           >
             Looks worth revisiting
           </Reveal>
-          <Reveal
-            as="p"
-            delay={STAGGER_MS}
-            className="text-taupe text-lg leading-relaxed mb-8"
-          >
+          {/* Only the heading reveals (audit V17); copy and button are
+              simply there. */}
+          <p className="text-taupe text-lg leading-relaxed mb-8">
             Four edits from our latest arrivals, styled to inspire your next
             outfit.
-          </Reveal>
-          <Reveal delay={STAGGER_MS * 2}>
-            <MainButton
-              content="Explore More"
-              size="medium"
-              variant="quiet"
-              onClick={() => navigate("/products")}
-            />
-          </Reveal>
+          </p>
+          <MainButton
+            content="Explore More"
+            size="medium"
+            variant="quiet"
+            onClick={() => navigate("/products")}
+          />
         </div>
 
         {/* min-w-0 lets the grid cell shrink so the carousel's track

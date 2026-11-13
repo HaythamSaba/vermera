@@ -53,7 +53,7 @@ Focus states: a single sitewide `:focus-visible` rule in `src/index.css` (Tailwi
 
 Icon library is `lucide-react` only — don't add another icon package.
 
-Motion library is Framer Motion only (audit decision D3; GSAP was removed). Scroll entrances use `src/ui/Reveal.jsx` (single element) and `src/ui/RevealGroup.jsx` + the variants in `src/utils/motion.js` (staggered groups); the hero parallax is `src/hooks/useParallax.js`. `MotionConfig reducedMotion="user"` in `AppLayout` covers animations, but values bound through `style` (like the parallax) must check `usePrefersReducedMotion()` themselves.
+Motion library is Framer Motion only (audit decision D3; GSAP was removed). Scroll entrances use `src/ui/Reveal.jsx` (single element) and `src/ui/RevealGroup.jsx` + the variants in `src/utils/motion.js` (staggered groups). Reveal only section headings (with their eyebrow/subtitle) and image or card groups; running body copy and buttons render plainly (audit V17). The hero parallax is `src/hooks/useParallax.js`. `MotionConfig reducedMotion="user"` in `AppLayout` covers animations, but values bound through `style` (like the parallax) must check `usePrefersReducedMotion()` themselves.
 
 ### Ongoing redesign effort
 
