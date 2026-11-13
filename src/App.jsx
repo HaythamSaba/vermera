@@ -111,6 +111,15 @@ const router = createBrowserRouter([
                 Component: m.default,
               })),
           },
+          // Unknown URLs 404 inside SiteLayout, so the error page keeps the
+          // header, search and footer instead of the bare root fallback.
+          {
+            path: "*",
+            loader: () => {
+              throw new Response("Not Found", { status: 404 });
+            },
+            errorElement: <Error />,
+          },
         ],
       },
       // Checkout gets slim chrome (logo + "Back to bag", no nav/footer
